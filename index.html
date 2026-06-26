@@ -277,7 +277,6 @@
             line-height: 1.4;
         }
 
-        /* Кнопка заказа, появляющаяся внутри карточки */
         .menu-item .order-btn {
             display: none;
             margin-top: 12px;
@@ -489,6 +488,91 @@
             transform: scale(1.05);
         }
 
+        /* МОДАЛЬНОЕ ОКНО ЗАКАЗА */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: #1a1410;
+            border: 1px solid #c89b7b;
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: modalPop 0.3s ease-out;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal .emoji-big {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .modal h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #e8c9b0;
+            margin-bottom: 10px;
+        }
+
+        .modal .order-dish {
+            font-size: 1.3rem;
+            color: #f5d6b3;
+            font-weight: 700;
+            margin: 6px 0;
+        }
+
+        .modal .message {
+            font-size: 1.1rem;
+            color: #cbb2a0;
+            margin: 15px 0 20px;
+            line-height: 1.6;
+        }
+
+        .modal .thanks {
+            font-size: 1.2rem;
+            color: #c89b7b;
+            font-weight: 700;
+        }
+
+        .modal .close-modal-btn {
+            background: #c89b7b;
+            color: #0d0907;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 15px;
+        }
+
+        .modal .close-modal-btn:hover {
+            background: #d4a88a;
+            transform: scale(1.02);
+        }
+
         /* Мобильная адаптация */
         @media (max-width: 768px) {
             .hero {
@@ -562,6 +646,10 @@
                 height: 44px;
                 font-size: 1.4rem;
             }
+
+            .modal {
+                padding: 30px 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -619,8 +707,7 @@
         <!-- МЕНЮ -->
         <section id="menu" class="section">
             <h2 class="section-title">Наше меню</h2>
-            <div class="menu-grid" id="menuGrid">
-                <!-- Каждая карточка теперь имеет data-атрибут и кнопку -->
+            <div class="menu-grid">
                 <div class="menu-item" data-id="1">
                     <span class="emoji">☕</span>
                     <h3>Чай</h3>
@@ -757,7 +844,7 @@
             </div>
         </section>
 
-        <!-- АКЦИИ (обновлены) -->
+        <!-- АКЦИИ (обновлено комбо) -->
         <section id="promo" class="section">
             <h2 class="section-title">Акции и спецпредложения</h2>
             <div class="promo-grid">
@@ -769,8 +856,8 @@
                 </div>
                 <div class="promo-card">
                     <div class="icon">🍽️</div>
-                    <h3>Комбо «Вкус дня»</h3>
-                    <p>Суп, горячее, салат и напиток — всего за 15 рублей. Меню меняется каждый день.</p>
+                    <h3>Комбо «Вивайли + Чай + Вафли»</h3>
+                    <p>Трубочки вафельные Вивайли, чай с бергамотом и хрустящие вафли — всего за 60 копеек!</p>
                     <span class="badge">Ежедневно с 12:00 до 16:00</span>
                 </div>
                 <div class="promo-card">
@@ -863,6 +950,21 @@
     <!-- Кнопка наверх -->
     <button class="back-to-top" id="backToTop" aria-label="Наверх">↑</button>
 
+    <!-- МОДАЛЬНОЕ ОКНО -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal">
+            <span class="emoji-big">🍽️</span>
+            <h2>Заказ принят!</h2>
+            <div class="order-dish" id="modalDishName">Название блюда</div>
+            <div class="message">
+                Ожидайте, скоро будет готово!<br>
+                Мы уже начали готовить ваш заказ.
+            </div>
+            <div class="thanks">Спасибо, что выбрали «Вкусовщину»!</div>
+            <button class="close-modal-btn" id="closeModalBtn">Отлично!</button>
+        </div>
+    </div>
+
     <script>
         (function() {
             // Бургер
@@ -905,13 +1007,40 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
+            // ===== МОДАЛЬНОЕ ОКНО =====
+            const modal = document.getElementById('orderModal');
+            const modalDishName = document.getElementById('modalDishName');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+
+            // Функция открытия модалки с названием блюда
+            function openModal(dishName) {
+                modalDishName.textContent = dishName;
+                modal.classList.add('open');
+            }
+
+            // Закрытие
+            function closeModal() {
+                modal.classList.remove('open');
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('open')) {
+                    closeModal();
+                }
+            });
+
             // ===== ИНТЕРАКТИВ МЕНЮ =====
             const menuItems = document.querySelectorAll('.menu-item');
 
             menuItems.forEach(function(item) {
-                // При клике на карточку показываем кнопку заказа
+                // Клик по карточке — показываем кнопку
                 item.addEventListener('click', function(e) {
-                    // Если кликнули именно по кнопке, не переключаем показ (чтобы не скрыть её)
                     if (e.target.classList.contains('order-btn')) return;
 
                     // Скрываем все кнопки
@@ -919,24 +1048,27 @@
                         btn.classList.remove('show');
                     });
 
-                    // Показываем кнопку внутри текущей карточки
                     const btn = this.querySelector('.order-btn');
                     if (btn) {
                         btn.classList.add('show');
                     }
                 });
 
-                // Обработчик клика по кнопке "Заказать"
+                // Клик по кнопке "Заказать"
                 const orderBtn = item.querySelector('.order-btn');
                 if (orderBtn) {
                     orderBtn.addEventListener('click', function(e) {
-                        e.stopPropagation(); // предотвращаем всплытие, чтобы не скрыть кнопку
-                        alert('Ожидайте, скоро будет готово!');
+                        e.stopPropagation();
+                        // Получаем название блюда из h3
+                        const dishName = this.closest('.menu-item').querySelector('h3').textContent;
+                        openModal(dishName);
+                        // После заказа скрываем кнопку (опционально)
+                        this.classList.remove('show');
                     });
                 }
             });
 
-            // Если кликнуть в любое место страницы вне карточки — скрыть все кнопки
+            // Клик вне меню — скрываем все кнопки
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.menu-item')) {
                     document.querySelectorAll('.order-btn').forEach(function(btn) {
