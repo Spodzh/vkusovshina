@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Вкусовщина | Ресторан домашней кухни</title>
     <style>
-        /* Шрифты */
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Roboto:wght@300;400;700&display=swap');
 
         * {
             margin: 0;
@@ -27,10 +26,10 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* HERO */
+        /* HERO — минималистично */
         .hero {
             position: relative;
-            min-height: 100vh;
+            min-height: 85vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -47,7 +46,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(13, 9, 7, 0.8) 0%, rgba(26, 20, 16, 0.6) 100%);
+            background: rgba(13, 9, 7, 0.7);
             z-index: 1;
         }
 
@@ -58,65 +57,54 @@
 
         .hero h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(3.5rem, 12vw, 6rem);
-            font-weight: 700;
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 600;
             color: #f5e6d3;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
-            letter-spacing: 6px;
+            letter-spacing: 4px;
             margin-bottom: 0.1em;
-            animation: fadeUp 1.2s ease-out;
         }
 
         .hero .subtitle {
-            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-size: clamp(1rem, 3vw, 1.4rem);
             color: #e8c9b0;
-            letter-spacing: 8px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
-            margin-top: -8px;
-            animation: fadeUp 1.4s ease-out;
+            font-weight: 300;
         }
 
         .hero .owner {
-            margin-top: 20px;
-            font-size: clamp(1rem, 2.5vw, 1.4rem);
-            color: #d4b8a4;
+            margin-top: 12px;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: #b8957a;
             font-style: italic;
-            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
-            animation: fadeUp 1.6s ease-out;
         }
 
         .hero .scroll-down {
             position: absolute;
-            bottom: 30px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
             color: #c89b7b;
-            font-size: 2rem;
+            font-size: 1.8rem;
             animation: bounce 2s infinite;
             cursor: pointer;
-        }
-
-        @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+            opacity: 0.6;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
+            50% { transform: translateX(-50%) translateY(8px); }
         }
 
-        /* НАВИГАЦИЯ */
+        /* НАВИГАЦИЯ — минималистичная */
         .nav {
             background: rgba(13, 9, 7, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 12px 24px;
+            padding: 10px 24px;
             position: sticky;
             top: 0;
             z-index: 200;
-            border-bottom: 1px solid #3a2820;
+            border-bottom: 1px solid #2a1f1a;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -125,9 +113,9 @@
 
         .nav .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: #e8c9b0;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-decoration: none;
         }
 
@@ -139,29 +127,29 @@
             display: none;
             flex-direction: column;
             cursor: pointer;
-            padding: 5px;
+            padding: 4px;
             background: none;
             border: none;
-            gap: 6px;
+            gap: 5px;
         }
 
         .nav .menu-toggle span {
             display: block;
-            width: 30px;
-            height: 3px;
+            width: 28px;
+            height: 2px;
             background: #d4b8a4;
-            border-radius: 3px;
+            border-radius: 2px;
             transition: 0.3s;
         }
 
         .nav .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
+            transform: rotate(45deg) translate(5px, 5px);
         }
         .nav .menu-toggle.active span:nth-child(2) {
             opacity: 0;
         }
         .nav .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
+            transform: rotate(-45deg) translate(5px, -5px);
         }
 
         .nav .nav-links {
@@ -171,168 +159,103 @@
         }
 
         .nav .nav-links a {
-            color: #d4b8a4;
+            color: #b8957a;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
+            font-weight: 400;
+            font-size: 0.95rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: color 0.3s, transform 0.2s;
+            letter-spacing: 1.5px;
+            transition: color 0.3s;
             padding: 6px 0;
-            position: relative;
-        }
-
-        .nav .nav-links a::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0;
-            height: 2px;
-            background: #c89b7b;
-            transition: width 0.3s;
         }
 
         .nav .nav-links a:hover {
             color: #f5d6b3;
         }
 
-        .nav .nav-links a:hover::after {
-            width: 100%;
-        }
-
         /* Контейнер */
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
         /* Секции */
         .section {
-            margin-bottom: 70px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 0.8s forwards;
+            margin-bottom: 60px;
         }
-
-        .section:nth-child(2) { animation-delay: 0.1s; }
-        .section:nth-child(3) { animation-delay: 0.2s; }
-        .section:nth-child(4) { animation-delay: 0.3s; }
 
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.2rem, 6vw, 3.2rem);
+            font-size: clamp(2rem, 5vw, 2.6rem);
             color: #e8c9b0;
             text-align: center;
             margin-bottom: 30px;
-            position: relative;
-        }
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 70px;
-            height: 4px;
-            background: linear-gradient(90deg, #c89b7b, transparent);
-            margin: 12px auto 0;
-            border-radius: 2px;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
-        /* О нас */
+        /* О нас — минималистично */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
             align-items: center;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 24px;
-            padding: 30px;
-            border: 1px solid #2a1f1a;
+            padding: 20px 0;
         }
 
         .about-text {
-            font-size: clamp(1rem, 2vw, 1.2rem);
+            font-size: clamp(0.95rem, 1.8vw, 1.1rem);
             color: #cbb2a0;
             line-height: 1.8;
         }
 
         .about-text strong {
             color: #e8c9b0;
-        }
-
-        .about-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-weight: 400;
         }
 
         .about-image img {
             max-width: 100%;
-            border-radius: 20px;
-            border: 2px solid #c89b7b;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-            transition: transform 0.4s;
+            border-radius: 16px;
+            border: 1px solid #3a2820;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: block;
         }
 
-        .about-image img:hover {
-            transform: scale(1.02);
-        }
-
-        /* Меню */
+        /* Меню — эмодзи, минималистичные карточки */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
         }
 
         .menu-item {
             background: #1a1410;
-            border-radius: 20px;
-            padding: 24px 20px;
+            border-radius: 16px;
+            padding: 20px 16px;
             border: 1px solid #2a1f1a;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            transition: border-color 0.3s, transform 0.2s;
             text-align: center;
         }
 
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #c89b7b, #e8c9b0);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s;
-        }
-
-        .menu-item:hover::before {
-            transform: scaleX(1);
-        }
-
         .menu-item:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
             border-color: #c89b7b;
+            transform: translateY(-4px);
         }
 
-        .menu-item .icon-img {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 10px;
+        .menu-item .emoji {
+            font-size: 2.4rem;
             display: block;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            margin-bottom: 6px;
         }
 
         .menu-item h3 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-size: 1.2rem;
             color: #f5d6b3;
-            margin-bottom: 4px;
+            font-weight: 600;
+            margin-bottom: 2px;
         }
 
         .menu-item .price {
@@ -340,26 +263,26 @@
             background: #c89b7b;
             color: #0d0907;
             font-weight: 700;
-            padding: 2px 18px;
-            border-radius: 30px;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
+            padding: 0 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 6px 0 8px;
         }
 
         .menu-item p {
             color: #ac9482;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.4;
         }
 
-        /* Контакты */
+        /* Контакты — минималистично */
         .contacts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 25px;
             background: #1a1410;
-            padding: 35px 25px;
-            border-radius: 24px;
+            padding: 30px 20px;
+            border-radius: 16px;
             border: 1px solid #2a1f1a;
         }
 
@@ -368,61 +291,69 @@
         }
 
         .contact-item .icon {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
-        }
-
-        .contact-item .social-logo {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 8px;
-            transition: transform 0.3s;
-        }
-
-        .contact-item .social-logo:hover {
-            transform: scale(1.1);
+            font-size: 1.8rem;
+            margin-bottom: 4px;
         }
 
         .contact-item .label {
             color: #8c6d58;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
         }
 
         .contact-item .value {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
-            font-weight: 700;
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            font-weight: 400;
             color: #f5d6b3;
-            word-break: break-word;
         }
 
         .contact-item .value small {
-            font-weight: 400;
-            font-size: 0.9rem;
+            font-weight: 300;
+            font-size: 0.8rem;
             color: #cbb2a0;
             display: block;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .contact-item .value a {
             color: #f5d6b3;
             text-decoration: none;
-            transition: color 0.3s;
+            border-bottom: 1px dashed #6b5445;
+            transition: border-color 0.3s;
         }
 
         .contact-item .value a:hover {
-            color: #c89b7b;
+            border-color: #c89b7b;
+        }
+
+        /* Логотипы соцсетей (иконки) */
+        .social-icon {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            margin-bottom: 4px;
+            transition: transform 0.2s;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .social-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #d4b8a4;
         }
 
         /* Подвал */
         .footer {
             background: #0d0907;
             text-align: center;
-            padding: 30px 20px;
-            border-top: 1px solid #2a1f1a;
+            padding: 25px 20px;
+            border-top: 1px solid #1a1410;
             color: #6b5445;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .footer span {
@@ -430,7 +361,7 @@
         }
 
         .footer .socials {
-            margin-top: 12px;
+            margin-top: 10px;
             display: flex;
             justify-content: center;
             gap: 20px;
@@ -438,23 +369,22 @@
 
         .footer .socials a {
             display: inline-block;
-            transition: transform 0.3s;
+            transition: transform 0.2s;
         }
 
         .footer .socials a:hover {
             transform: scale(1.1);
         }
 
-        .footer .socials .social-logo {
-            width: 32px;
-            height: 32px;
-            display: block;
+        .footer .socials .social-icon {
+            width: 28px;
+            height: 28px;
         }
 
         /* Мобильная адаптация */
         @media (max-width: 768px) {
             .hero {
-                min-height: 80vh;
+                min-height: 70vh;
                 background-attachment: scroll;
             }
 
@@ -467,10 +397,10 @@
                 width: 100%;
                 flex-direction: column;
                 align-items: center;
-                gap: 8px;
-                padding: 20px 0 10px;
-                border-top: 1px solid #3a2820;
-                margin-top: 12px;
+                gap: 5px;
+                padding: 15px 0 5px;
+                border-top: 1px solid #2a1f1a;
+                margin-top: 10px;
             }
 
             .nav .nav-links.open {
@@ -478,21 +408,15 @@
             }
 
             .nav .nav-links a {
-                font-size: 1.2rem;
-                padding: 12px 0;
+                font-size: 1rem;
+                padding: 10px 0;
                 width: 100%;
                 text-align: center;
-                border-radius: 8px;
-            }
-
-            .nav .nav-links a:active {
-                background: #2a1f1a;
             }
 
             .about-grid {
                 grid-template-columns: 1fr;
-                padding: 20px;
-                gap: 20px;
+                gap: 25px;
             }
 
             .about-image {
@@ -500,62 +424,31 @@
             }
 
             .menu-grid {
-                grid-template-columns: 1fr;
-                gap: 18px;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
             }
 
             .contacts-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 20px;
-                padding: 25px 15px;
+                padding: 20px 15px;
             }
 
             .container {
-                padding: 30px 15px;
+                padding: 25px 15px;
             }
 
             .section {
-                margin-bottom: 50px;
+                margin-bottom: 40px;
             }
         }
 
         @media (max-width: 480px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
             .contacts-grid {
                 grid-template-columns: 1fr;
-                gap: 18px;
-            }
-
-            .hero h1 {
-                letter-spacing: 2px;
-            }
-            .hero .subtitle {
-                letter-spacing: 4px;
-            }
-        }
-
-        @media (hover: none) {
-            .menu-item:hover {
-                transform: none;
-                box-shadow: none;
-                border-color: #2a1f1a;
-            }
-            .menu-item:hover::before {
-                transform: scaleX(0);
-            }
-            .about-image img:hover {
-                transform: none;
-            }
-            .nav .nav-links a:hover::after {
-                width: 0;
-            }
-            .contact-item .value a:hover {
-                color: #f5d6b3;
-            }
-            .contact-item .social-logo:hover {
-                transform: none;
-            }
-            .footer .socials a:hover {
-                transform: none;
             }
         }
     </style>
@@ -593,7 +486,7 @@
             <div class="about-grid">
                 <div class="about-text">
                     <p>Добро пожаловать в <strong>«Вкусовщину»</strong> — ресторан, где каждая деталь пропитана заботой и страстью к кулинарии. Основатель <strong>Родион</strong> лично контролирует качество каждого блюда. У нас вы почувствуете атмосферу уюта и настоящий вкус жизни.</p>
-                    <p style="margin-top: 15px; color: #ac9482;">Мы готовим с душой, используя только свежие продукты. Приходите — убедитесь сами!</p>
+                    <p style="margin-top: 12px; color: #ac9482;">Мы готовим с душой, используя только свежие продукты. Приходите — убедитесь сами!</p>
                 </div>
                 <div class="about-image">
                     <img src="https://i.ibb.co/N61v7gZB/image.png" alt="Интерьер ресторана" loading="lazy">
@@ -601,120 +494,120 @@
             </div>
         </section>
 
-        <!-- МЕНЮ -->
+        <!-- МЕНЮ (с эмодзи) -->
         <section id="menu" class="section">
             <h2 class="section-title">Наше меню</h2>
             <div class="menu-grid">
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/tea.png" alt="Чай" class="icon-img">
+                    <span class="emoji">☕</span>
                     <h3>Чай</h3>
                     <span class="price">20 коп.</span>
                     <p>Ароматный чёрный чай с бергамотом</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/waffle.png" alt="Вафли" class="icon-img">
+                    <span class="emoji">🧇</span>
                     <h3>Вафли</h3>
                     <span class="price">25 коп.</span>
                     <p>Хрустящие вафли с варёной сгущёнкой</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/candy.png" alt="Конфеты" class="icon-img">
+                    <span class="emoji">🍬</span>
                     <h3>Конфеты</h3>
                     <span class="price">15 коп.</span>
                     <p>Ассорти шоколадных конфет</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/sandwich.png" alt="Бутерброд" class="icon-img">
+                    <span class="emoji">🥪</span>
                     <h3>Бутерброд с колбасой и батоном</h3>
                     <span class="price">30 коп.</span>
-                    <p>Классический бутерброд с докторской колбасой на свежем батоне</p>
+                    <p>Классический бутерброд с докторской колбасой</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/fried-egg.png" alt="Яичница" class="icon-img">
+                    <span class="emoji">🍳</span>
                     <h3>Жареное яйцо</h3>
                     <span class="price">25 коп.</span>
                     <p>Яичница-глазунья с зеленью</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/water.png" alt="Вода" class="icon-img">
+                    <span class="emoji">💧</span>
                     <h3>Вода</h3>
                     <span class="price">10 коп.</span>
                     <p>Питьевая вода без газа</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/coca-cola.png" alt="Кола" class="icon-img">
+                    <span class="emoji">🥤</span>
                     <h3>Кола</h3>
                     <span class="price">20 коп.</span>
                     <p>Освежающий газированный напиток</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/apple.png" alt="Яблоко" class="icon-img">
+                    <span class="emoji">🍏</span>
                     <h3>Яблоко</h3>
                     <span class="price">20 коп.</span>
                     <p>Сочное яблоко (сорт «Гренни Смит»)</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/lemonade.png" alt="Квас" class="icon-img">
+                    <span class="emoji">🍺</span>
                     <h3>Квас</h3>
                     <span class="price">15 коп.</span>
                     <p>Домашний квас на ржаном хлебе</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/coffee.png" alt="Кофе" class="icon-img">
+                    <span class="emoji">☕</span>
                     <h3>Кофе</h3>
                     <span class="price">15 коп.</span>
                     <p>Чёрный кофе из свежемолотых зёрен</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/french-fries.png" alt="Картошка фри" class="icon-img">
+                    <span class="emoji">🍟</span>
                     <h3>Картошка фри</h3>
                     <span class="price">30 коп.</span>
                     <p>Золотистая картошка фри с солью</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/toast.png" alt="Гренки" class="icon-img">
+                    <span class="emoji">🍞</span>
                     <h3>Гренки</h3>
                     <span class="price">20 коп.</span>
                     <p>Хрустящие гренки с чесноком</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/waffle.png" alt="Трубочки вафельные" class="icon-img">
+                    <span class="emoji">🧇</span>
                     <h3>Трубочки вафельные Вивайли</h3>
                     <span class="price">45 коп.</span>
                     <p>Вафельные трубочки с кремовой начинкой</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/dumpling.png" alt="Пельмени" class="icon-img">
+                    <span class="emoji">🥟</span>
                     <h3>Пельмени</h3>
                     <span class="price">10 коп.</span>
-                    <p>Домашние пельмени с мясом, подаются со сметаной</p>
+                    <p>Домашние пельмени с мясом, со сметаной</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/chips.png" alt="Чипсы" class="icon-img">
+                    <span class="emoji">🍟</span>
                     <h3>Чипсы</h3>
                     <span class="price">1 руб.</span>
                     <p>Хрустящие картофельные чипсы (паприка)</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/chewing-gum.png" alt="Жвачка Love is" class="icon-img">
+                    <span class="emoji">🍬</span>
                     <h3>Жвачка Love is</h3>
                     <span class="price">10 коп.</span>
                     <p>Жевательная резинка со вкусом мяты</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/bread.png" alt="Булочки" class="icon-img">
+                    <span class="emoji">🥐</span>
                     <h3>Булочки</h3>
                     <span class="price">50 коп.</span>
                     <p>Сдобные булочки с маком</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/watermelon.png" alt="Жвачка арбузная" class="icon-img">
+                    <span class="emoji">🍉</span>
                     <h3>Жвачка арбузная</h3>
                     <span class="price">5 коп.</span>
                     <p>Жевательная резинка со вкусом арбуза</p>
                 </div>
                 <div class="menu-item">
-                    <img src="https://img.icons8.com/color/100/000000/juice.png" alt="Сок с трубочкой" class="icon-img">
+                    <span class="emoji">🧃</span>
                     <h3>Сок с трубочкой</h3>
                     <span class="price">30 коп.</span>
                     <p>Яблочный сок с трубочкой</p>
@@ -749,21 +642,29 @@
                     <div class="label">Шеф-повар</div>
                     <div class="value">Родион Жуков</div>
                 </div>
-                <!-- Telegram -->
+                <!-- Telegram – иконка через SVG -->
                 <div class="contact-item">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Telegram_black_logo.svg/120px-Telegram_black_logo.svg.png" alt="Telegram" class="social-logo">
+                    <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+                        <span class="social-icon">
+                            <svg viewBox="0 0 24 24" fill="#d4b8a4">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18-.06-.05-.15-.03-.22-.02-.09.01-1.5.95-4.24 2.8-.4.27-.76.4-1.08.39-.36-.01-1.05-.2-1.56-.37-.63-.2-1.13-.31-1.08-.66.03-.18.27-.37.75-.56 2.94-1.28 4.9-2.13 5.88-2.56 2.8-1.22 3.38-1.43 3.76-1.43.08 0 .21.02.3.07.08.05.13.13.14.23.01.1-.01.23-.03.36z"/>
+                            </svg>
+                        </span>
+                    </a>
                     <div class="label">Telegram</div>
-                    <div class="value">
-                        <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer">@dnevnikrodiona</a>
-                    </div>
+                    <div class="value"><a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer">@dnevnikrodiona</a></div>
                 </div>
-                <!-- TikTok -->
+                <!-- TikTok – иконка SVG -->
                 <div class="contact-item">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Tiktok_logo_text.svg/120px-Tiktok_logo_text.svg.png" alt="TikTok" class="social-logo">
+                    <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
+                        <span class="social-icon">
+                            <svg viewBox="0 0 24 24" fill="#d4b8a4">
+                                <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.44 1.18-2.6 2.6-2.6.26 0 .51.04.74.12v-3.2a5.68 5.68 0 0 0-.74-.06c-3.19 0-5.78 2.59-5.78 5.78s2.59 5.78 5.78 5.78 5.78-2.59 5.78-5.78V9.63c1.2.87 2.69 1.38 4.29 1.38V7.84c-.95 0-1.83-.35-2.51-.93z"/>
+                            </svg>
+                        </span>
+                    </a>
                     <div class="label">TikTok</div>
-                    <div class="value">
-                        <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a>
-                    </div>
+                    <div class="value"><a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a></div>
                 </div>
             </div>
         </section>
@@ -773,13 +674,21 @@
     <!-- ПОДВАЛ -->
     <footer class="footer">
         <p>© 2026 <span>«Вкусовщина»</span> — Ресторан домашней кухни. Все права защищены.</p>
-        <p style="margin-top: 5px; font-size: 0.8rem;">Шеф-повар <span>Родион Жуков</span></p>
+        <p style="margin-top: 4px; font-size: 0.75rem;">Шеф-повар <span>Родион Жуков</span></p>
         <div class="socials">
             <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Telegram_black_logo.svg/120px-Telegram_black_logo.svg.png" alt="Telegram" class="social-logo">
+                <span class="social-icon">
+                    <svg viewBox="0 0 24 24" fill="#6b5445">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18-.06-.05-.15-.03-.22-.02-.09.01-1.5.95-4.24 2.8-.4.27-.76.4-1.08.39-.36-.01-1.05-.2-1.56-.37-.63-.2-1.13-.31-1.08-.66.03-.18.27-.37.75-.56 2.94-1.28 4.9-2.13 5.88-2.56 2.8-1.22 3.38-1.43 3.76-1.43.08 0 .21.02.3.07.08.05.13.13.14.23.01.1-.01.23-.03.36z"/>
+                    </svg>
+                </span>
             </a>
             <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Tiktok_logo_text.svg/120px-Tiktok_logo_text.svg.png" alt="TikTok" class="social-logo">
+                <span class="social-icon">
+                    <svg viewBox="0 0 24 24" fill="#6b5445">
+                        <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.44 1.18-2.6 2.6-2.6.26 0 .51.04.74.12v-3.2a5.68 5.68 0 0 0-.74-.06c-3.19 0-5.78 2.59-5.78 5.78s2.59 5.78 5.78 5.78 5.78-2.59 5.78-5.78V9.63c1.2.87 2.69 1.38 4.29 1.38V7.84c-.95 0-1.83-.35-2.51-.93z"/>
+                    </svg>
+                </span>
             </a>
         </div>
     </footer>
