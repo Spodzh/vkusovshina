@@ -488,7 +488,7 @@
             transform: scale(1.05);
         }
 
-        /* МОДАЛЬНОЕ ОКНО ЗАКАЗА */
+        /* Модальное окно заказа */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -844,7 +844,7 @@
             </div>
         </section>
 
-        <!-- АКЦИИ (обновлено комбо) -->
+        <!-- АКЦИИ -->
         <section id="promo" class="section">
             <h2 class="section-title">Акции и спецпредложения</h2>
             <div class="promo-grid">
@@ -967,7 +967,41 @@
 
     <script>
         (function() {
-            // Бургер
+            // ===== НАСТРОЙКИ TELEGRAM (ваши данные) =====
+            const TELEGRAM_BOT_TOKEN = '8752139780:AAEIbtDqq2F3FJ2TqFWcINLWg6Zml8UyAQI';
+            const TELEGRAM_CHAT_ID = '7892506421';
+            // =============================================
+
+            // Функция отправки в Telegram
+            function sendTelegramMessage(dishName) {
+                const message = `🆕 Новый заказ!\n\n🍽️ Блюдо: ${dishName}\n🕒 Время: ${new Date().toLocaleString('ru-RU')}\n\n📋 Статус: ожидает подтверждения.`;
+
+                const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+                return fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'HTML',
+                        disable_web_page_preview: true,
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.ok) throw new Error(data.description || 'Неизвестная ошибка');
+                    console.log('✅ Уведомление в Telegram отправлено');
+                })
+                .catch(error => {
+                    console.error('❌ Ошибка отправки в Telegram:', error);
+                });
+            }
+
+            // ===== БУРГЕР =====
             const toggle = document.getElementById('menuToggle');
             const links = document.getElementById('navLinks');
             const nav = document.querySelector('.nav');
@@ -994,7 +1028,7 @@
                 });
             }
 
-            // Кнопка наверх
+            // ===== КНОПКА НАВЕРХ =====
             const backBtn = document.getElementById('backToTop');
             window.addEventListener('scroll', function() {
                 if (window.scrollY > 300) {
@@ -1012,63 +1046,51 @@
             const modalDishName = document.getElementById('modalDishName');
             const closeModalBtn = document.getElementById('closeModalBtn');
 
-            // Функция открытия модалки с названием блюда
             function openModal(dishName) {
                 modalDishName.textContent = dishName;
                 modal.classList.add('open');
+                // Отправляем уведомление в Telegram
+                sendTelegramMessage(dishName);
             }
 
-            // Закрытие
             function closeModal() {
                 modal.classList.remove('open');
             }
 
             closeModalBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    closeModal();
-                }
+                if (e.target === modal) closeModal();
             });
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.classList.contains('open')) {
-                    closeModal();
-                }
+                if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
             });
 
             // ===== ИНТЕРАКТИВ МЕНЮ =====
             const menuItems = document.querySelectorAll('.menu-item');
 
             menuItems.forEach(function(item) {
-                // Клик по карточке — показываем кнопку
                 item.addEventListener('click', function(e) {
                     if (e.target.classList.contains('order-btn')) return;
 
-                    // Скрываем все кнопки
                     document.querySelectorAll('.order-btn').forEach(function(btn) {
                         btn.classList.remove('show');
                     });
 
                     const btn = this.querySelector('.order-btn');
-                    if (btn) {
-                        btn.classList.add('show');
-                    }
+                    if (btn) btn.classList.add('show');
                 });
 
-                // Клик по кнопке "Заказать"
                 const orderBtn = item.querySelector('.order-btn');
                 if (orderBtn) {
                     orderBtn.addEventListener('click', function(e) {
                         e.stopPropagation();
-                        // Получаем название блюда из h3
                         const dishName = this.closest('.menu-item').querySelector('h3').textContent;
                         openModal(dishName);
-                        // После заказа скрываем кнопку (опционально)
                         this.classList.remove('show');
                     });
                 }
             });
 
-            // Клик вне меню — скрываем все кнопки
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.menu-item')) {
                     document.querySelectorAll('.order-btn').forEach(function(btn) {
