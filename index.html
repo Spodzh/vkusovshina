@@ -368,6 +368,18 @@
             margin-bottom: 8px;
         }
 
+        /* Стили для логотипов соцсетей */
+        .contact-item .social-logo {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 8px;
+            transition: transform 0.3s;
+        }
+
+        .contact-item .social-logo:hover {
+            transform: scale(1.1);
+        }
+
         .contact-item .label {
             color: #8c6d58;
             text-transform: uppercase;
@@ -422,14 +434,18 @@
         }
 
         .footer .socials a {
-            color: #6b5445;
-            font-size: 1.5rem;
-            transition: color 0.3s;
-            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s;
         }
 
         .footer .socials a:hover {
-            color: #c89b7b;
+            transform: scale(1.1);
+        }
+
+        .footer .socials .social-logo {
+            width: 32px;
+            height: 32px;
+            display: block;
         }
 
         /* Мобильная адаптация */
@@ -531,6 +547,12 @@
             }
             .contact-item .value a:hover {
                 color: #f5d6b3;
+            }
+            .contact-item .social-logo:hover {
+                transform: none;
+            }
+            .footer .socials a:hover {
+                transform: none;
             }
         }
     </style>
@@ -724,10 +746,18 @@
                     <div class="label">Шеф-повар</div>
                     <div class="value">Родион Жуков</div>
                 </div>
-                <!-- НОВЫЙ КОНТАКТ: Telegram (ссылка на указанный URL) -->
+                <!-- Telegram -->
                 <div class="contact-item">
-                    <div class="icon">✈️</div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Telegram_black_logo.svg/120px-Telegram_black_logo.svg.png" alt="Telegram" class="social-logo">
                     <div class="label">Telegram</div>
+                    <div class="value">
+                        <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer">@dnevnikrodiona</a>
+                    </div>
+                </div>
+                <!-- TikTok -->
+                <div class="contact-item">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Tiktok_logo_text.svg/120px-Tiktok_logo_text.svg.png" alt="TikTok" class="social-logo">
+                    <div class="label">TikTok</div>
                     <div class="value">
                         <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a>
                     </div>
@@ -742,9 +772,12 @@
         <p>© 2026 <span>«Вкусовщина»</span> — Ресторан домашней кухни. Все права защищены.</p>
         <p style="margin-top: 5px; font-size: 0.8rem;">Шеф-повар <span>Родион Жуков</span></p>
         <div class="socials">
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="VK">📘</a>
-            <a href="https://www.tiktok.com/@rodimisimus" aria-label="Telegram">✈️</a>
+            <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Telegram_black_logo.svg/120px-Telegram_black_logo.svg.png" alt="Telegram" class="social-logo">
+            </a>
+            <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Tiktok_logo_text.svg/120px-Tiktok_logo_text.svg.png" alt="TikTok" class="social-logo">
+            </a>
         </div>
     </footer>
 
