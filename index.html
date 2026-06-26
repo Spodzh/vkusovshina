@@ -26,7 +26,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* HERO — минималистично */
+        /* HERO */
         .hero {
             position: relative;
             min-height: 85vh;
@@ -97,7 +97,7 @@
             50% { transform: translateX(-50%) translateY(8px); }
         }
 
-        /* НАВИГАЦИЯ — минималистичная */
+        /* НАВИГАЦИЯ */
         .nav {
             background: rgba(13, 9, 7, 0.95);
             padding: 10px 24px;
@@ -195,7 +195,7 @@
             letter-spacing: 1px;
         }
 
-        /* О нас — минималистично */
+        /* О нас */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -223,7 +223,7 @@
             display: block;
         }
 
-        /* Меню — эмодзи, минималистичные карточки */
+        /* Меню */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -237,6 +237,8 @@
             border: 1px solid #2a1f1a;
             transition: border-color 0.3s, transform 0.2s;
             text-align: center;
+            cursor: pointer;
+            position: relative;
         }
 
         .menu-item:hover {
@@ -275,7 +277,81 @@
             line-height: 1.4;
         }
 
-        /* Контакты — минималистично */
+        /* Кнопка заказа, появляющаяся внутри карточки */
+        .menu-item .order-btn {
+            display: none;
+            margin-top: 12px;
+            background: #c89b7b;
+            color: #0d0907;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            width: 100%;
+        }
+
+        .menu-item .order-btn:hover {
+            background: #d4a88a;
+            transform: scale(1.02);
+        }
+
+        .menu-item .order-btn.show {
+            display: block;
+        }
+
+        /* Акции */
+        .promo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .promo-card {
+            background: #1a1410;
+            border-radius: 16px;
+            padding: 25px 20px;
+            border: 1px solid #2a1f1a;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+
+        .promo-card:hover {
+            border-color: #c89b7b;
+            transform: translateY(-4px);
+        }
+
+        .promo-card .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .promo-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #f5d6b3;
+            margin-bottom: 6px;
+        }
+
+        .promo-card p {
+            color: #ac9482;
+            font-size: 0.95rem;
+        }
+
+        .promo-card .badge {
+            display: inline-block;
+            background: #c89b7b;
+            color: #0d0907;
+            font-weight: 700;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        /* Контакты */
         .contacts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -327,7 +403,6 @@
             border-color: #c89b7b;
         }
 
-        /* Логотипы соцсетей (иконки) */
         .social-icon {
             display: inline-block;
             width: 36px;
@@ -381,6 +456,39 @@
             height: 28px;
         }
 
+        /* Кнопка наверх */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #c89b7b;
+            color: #0d0907;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: #d4a88a;
+            transform: scale(1.05);
+        }
+
         /* Мобильная адаптация */
         @media (max-width: 768px) {
             .hero {
@@ -428,6 +536,11 @@
                 gap: 15px;
             }
 
+            .promo-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
             .contacts-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 20px;
@@ -440,6 +553,14 @@
 
             .section {
                 margin-bottom: 40px;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 44px;
+                height: 44px;
+                font-size: 1.4rem;
             }
         }
 
@@ -474,6 +595,7 @@
         <div class="nav-links" id="navLinks">
             <a href="#about">О нас</a>
             <a href="#menu">Меню</a>
+            <a href="#promo">Акции</a>
             <a href="#contacts">Контакты</a>
         </div>
     </nav>
@@ -494,123 +616,168 @@
             </div>
         </section>
 
-        <!-- МЕНЮ (с эмодзи) -->
+        <!-- МЕНЮ -->
         <section id="menu" class="section">
             <h2 class="section-title">Наше меню</h2>
-            <div class="menu-grid">
-                <div class="menu-item">
+            <div class="menu-grid" id="menuGrid">
+                <!-- Каждая карточка теперь имеет data-атрибут и кнопку -->
+                <div class="menu-item" data-id="1">
                     <span class="emoji">☕</span>
                     <h3>Чай</h3>
                     <span class="price">20 коп.</span>
                     <p>Ароматный чёрный чай с бергамотом</p>
+                    <button class="order-btn" data-id="1">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="2">
                     <span class="emoji">🧇</span>
                     <h3>Вафли</h3>
                     <span class="price">25 коп.</span>
                     <p>Хрустящие вафли с варёной сгущёнкой</p>
+                    <button class="order-btn" data-id="2">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="3">
                     <span class="emoji">🍬</span>
                     <h3>Конфеты</h3>
                     <span class="price">15 коп.</span>
                     <p>Ассорти шоколадных конфет</p>
+                    <button class="order-btn" data-id="3">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="4">
                     <span class="emoji">🥪</span>
                     <h3>Бутерброд с колбасой и батоном</h3>
                     <span class="price">30 коп.</span>
                     <p>Классический бутерброд с докторской колбасой</p>
+                    <button class="order-btn" data-id="4">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="5">
                     <span class="emoji">🍳</span>
                     <h3>Жареное яйцо</h3>
                     <span class="price">25 коп.</span>
                     <p>Яичница-глазунья с зеленью</p>
+                    <button class="order-btn" data-id="5">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="6">
                     <span class="emoji">💧</span>
                     <h3>Вода</h3>
                     <span class="price">10 коп.</span>
                     <p>Питьевая вода без газа</p>
+                    <button class="order-btn" data-id="6">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="7">
                     <span class="emoji">🥤</span>
                     <h3>Кола</h3>
                     <span class="price">20 коп.</span>
                     <p>Освежающий газированный напиток</p>
+                    <button class="order-btn" data-id="7">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="8">
                     <span class="emoji">🍏</span>
                     <h3>Яблоко</h3>
                     <span class="price">20 коп.</span>
                     <p>Сочное яблоко (сорт «Гренни Смит»)</p>
+                    <button class="order-btn" data-id="8">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="9">
                     <span class="emoji">🍺</span>
                     <h3>Квас</h3>
                     <span class="price">15 коп.</span>
                     <p>Домашний квас на ржаном хлебе</p>
+                    <button class="order-btn" data-id="9">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="10">
                     <span class="emoji">☕</span>
                     <h3>Кофе</h3>
                     <span class="price">15 коп.</span>
                     <p>Чёрный кофе из свежемолотых зёрен</p>
+                    <button class="order-btn" data-id="10">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="11">
                     <span class="emoji">🍟</span>
                     <h3>Картошка фри</h3>
                     <span class="price">30 коп.</span>
                     <p>Золотистая картошка фри с солью</p>
+                    <button class="order-btn" data-id="11">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="12">
                     <span class="emoji">🍞</span>
                     <h3>Гренки</h3>
                     <span class="price">20 коп.</span>
                     <p>Хрустящие гренки с чесноком</p>
+                    <button class="order-btn" data-id="12">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="13">
                     <span class="emoji">🧇</span>
                     <h3>Трубочки вафельные Вивайли</h3>
                     <span class="price">45 коп.</span>
                     <p>Вафельные трубочки с кремовой начинкой</p>
+                    <button class="order-btn" data-id="13">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="14">
                     <span class="emoji">🥟</span>
                     <h3>Пельмени</h3>
                     <span class="price">10 коп.</span>
                     <p>Домашние пельмени с мясом, со сметаной</p>
+                    <button class="order-btn" data-id="14">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="15">
                     <span class="emoji">🍟</span>
                     <h3>Чипсы</h3>
                     <span class="price">1 руб.</span>
                     <p>Хрустящие картофельные чипсы (паприка)</p>
+                    <button class="order-btn" data-id="15">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="16">
                     <span class="emoji">🍬</span>
                     <h3>Жвачка Love is</h3>
                     <span class="price">10 коп.</span>
                     <p>Жевательная резинка со вкусом мяты</p>
+                    <button class="order-btn" data-id="16">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="17">
                     <span class="emoji">🥐</span>
                     <h3>Булочки</h3>
                     <span class="price">50 коп.</span>
                     <p>Сдобные булочки с маком</p>
+                    <button class="order-btn" data-id="17">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="18">
                     <span class="emoji">🍉</span>
                     <h3>Жвачка арбузная</h3>
                     <span class="price">5 коп.</span>
                     <p>Жевательная резинка со вкусом арбуза</p>
+                    <button class="order-btn" data-id="18">Заказать</button>
                 </div>
-                <div class="menu-item">
+                <div class="menu-item" data-id="19">
                     <span class="emoji">🧃</span>
                     <h3>Сок с трубочкой</h3>
                     <span class="price">30 коп.</span>
                     <p>Яблочный сок с трубочкой</p>
+                    <button class="order-btn" data-id="19">Заказать</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- АКЦИИ (обновлены) -->
+        <section id="promo" class="section">
+            <h2 class="section-title">Акции и спецпредложения</h2>
+            <div class="promo-grid">
+                <div class="promo-card">
+                    <div class="icon">🎁</div>
+                    <h3>Скидка 40% на первый заказ дня</h3>
+                    <p>Первый заказ в нашем ресторане — скидка 40% на всё меню!</p>
+                    <span class="badge">Действует ежедневно</span>
+                </div>
+                <div class="promo-card">
+                    <div class="icon">🍽️</div>
+                    <h3>Комбо «Вкус дня»</h3>
+                    <p>Суп, горячее, салат и напиток — всего за 15 рублей. Меню меняется каждый день.</p>
+                    <span class="badge">Ежедневно с 12:00 до 16:00</span>
+                </div>
+                <div class="promo-card">
+                    <div class="icon">🎂</div>
+                    <h3>Скидка 50% для именинников</h3>
+                    <p>В день рождения — скидка 50% на весь заказ. Не забудьте паспорт!</p>
+                    <span class="badge">По предъявлению документа</span>
                 </div>
             </div>
         </section>
@@ -642,7 +809,7 @@
                     <div class="label">Шеф-повар</div>
                     <div class="value">Родион Жуков</div>
                 </div>
-                <!-- Telegram – иконка через SVG -->
+                <!-- Telegram -->
                 <div class="contact-item">
                     <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
                         <span class="social-icon">
@@ -654,7 +821,7 @@
                     <div class="label">Telegram</div>
                     <div class="value"><a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer">@dnevnikrodiona</a></div>
                 </div>
-                <!-- TikTok – иконка SVG -->
+                <!-- TikTok -->
                 <div class="contact-item">
                     <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
                         <span class="social-icon">
@@ -693,9 +860,12 @@
         </div>
     </footer>
 
-    <!-- БУРГЕР-СКРИПТ -->
+    <!-- Кнопка наверх -->
+    <button class="back-to-top" id="backToTop" aria-label="Наверх">↑</button>
+
     <script>
         (function() {
+            // Бургер
             const toggle = document.getElementById('menuToggle');
             const links = document.getElementById('navLinks');
             const nav = document.querySelector('.nav');
@@ -721,6 +891,60 @@
                     }
                 });
             }
+
+            // Кнопка наверх
+            const backBtn = document.getElementById('backToTop');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 300) {
+                    backBtn.classList.add('visible');
+                } else {
+                    backBtn.classList.remove('visible');
+                }
+            });
+            backBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // ===== ИНТЕРАКТИВ МЕНЮ =====
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            menuItems.forEach(function(item) {
+                // При клике на карточку показываем кнопку заказа
+                item.addEventListener('click', function(e) {
+                    // Если кликнули именно по кнопке, не переключаем показ (чтобы не скрыть её)
+                    if (e.target.classList.contains('order-btn')) return;
+
+                    // Скрываем все кнопки
+                    document.querySelectorAll('.order-btn').forEach(function(btn) {
+                        btn.classList.remove('show');
+                    });
+
+                    // Показываем кнопку внутри текущей карточки
+                    const btn = this.querySelector('.order-btn');
+                    if (btn) {
+                        btn.classList.add('show');
+                    }
+                });
+
+                // Обработчик клика по кнопке "Заказать"
+                const orderBtn = item.querySelector('.order-btn');
+                if (orderBtn) {
+                    orderBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // предотвращаем всплытие, чтобы не скрыть кнопку
+                        alert('Ожидайте, скоро будет готово!');
+                    });
+                }
+            });
+
+            // Если кликнуть в любое место страницы вне карточки — скрыть все кнопки
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.menu-item')) {
+                    document.querySelectorAll('.order-btn').forEach(function(btn) {
+                        btn.classList.remove('show');
+                    });
+                }
+            });
+
         })();
     </script>
 
