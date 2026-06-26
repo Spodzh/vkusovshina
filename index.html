@@ -8,7 +8,6 @@
         /* Шрифты */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
 
-        /* Общие сбросы и базовые стили */
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +27,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* HERO-СЕКЦИЯ (шапка с фото) */
+        /* HERO */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -220,7 +219,6 @@
         .section:nth-child(2) { animation-delay: 0.1s; }
         .section:nth-child(3) { animation-delay: 0.2s; }
         .section:nth-child(4) { animation-delay: 0.3s; }
-        .section:nth-child(5) { animation-delay: 0.4s; }
 
         .section-title {
             font-family: 'Playfair Display', serif;
@@ -280,35 +278,7 @@
             transform: scale(1.02);
         }
 
-        /* Персонал (фото) */
-        .staff-card {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #1a1410;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid #3a2820;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .staff-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-bottom: 3px solid #c89b7b;
-        }
-
-        .staff-card .staff-caption {
-            padding: 20px;
-            text-align: center;
-            font-size: clamp(1rem, 2.5vw, 1.4rem);
-            color: #d4b8a4;
-            font-style: italic;
-            letter-spacing: 2px;
-            background: #0d0907;
-        }
-
-        /* Меню — улучшенные карточки */
+        /* Меню */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -378,10 +348,10 @@
             line-height: 1.4;
         }
 
-        /* Контакты — улучшенный блок */
+        /* Контакты */
         .contacts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 30px;
             background: #1a1410;
             padding: 35px 25px;
@@ -418,6 +388,16 @@
             color: #cbb2a0;
             display: block;
             margin-top: 4px;
+        }
+
+        .contact-item .value a {
+            color: #f5d6b3;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-item .value a:hover {
+            color: #c89b7b;
         }
 
         /* Подвал */
@@ -534,7 +514,6 @@
             }
         }
 
-        /* Убираем hover-эффекты на тач-устройствах */
         @media (hover: none) {
             .menu-item:hover {
                 transform: none;
@@ -549,6 +528,9 @@
             }
             .nav .nav-links a:hover::after {
                 width: 0;
+            }
+            .contact-item .value a:hover {
+                color: #f5d6b3;
             }
         }
     </style>
@@ -573,7 +555,6 @@
         </button>
         <div class="nav-links" id="navLinks">
             <a href="#about">О нас</a>
-            <a href="#staff">Персонал</a>
             <a href="#menu">Меню</a>
             <a href="#contacts">Контакты</a>
         </div>
@@ -590,18 +571,8 @@
                     <p style="margin-top: 15px; color: #ac9482;">Мы готовим с душой, используя только свежие продукты. Приходите — убедитесь сами!</p>
                 </div>
                 <div class="about-image">
-                    <!-- Можно использовать ту же картинку или другую, но для демонстрации оставим -->
                     <img src="https://i.ibb.co/N61v7gZB/image.png" alt="Интерьер ресторана" loading="lazy">
                 </div>
-            </div>
-        </section>
-
-        <!-- ПЕРСОНАЛ -->
-        <section id="staff" class="section">
-            <h2 class="section-title">Наш персонал</h2>
-            <div class="staff-card">
-                <img src="https://i.ibb.co/N61v7gZB/image.png" alt="Весь персонал ресторана Вкусовщина" loading="lazy">
-                <div class="staff-caption">Весь персонал ресторана «Вкусовщина»</div>
             </div>
         </section>
 
@@ -609,7 +580,6 @@
         <section id="menu" class="section">
             <h2 class="section-title">Наше меню</h2>
             <div class="menu-grid">
-                <!-- Добавил эмодзи для наглядности -->
                 <div class="menu-item">
                     <span class="icon">☕</span>
                     <h3>Чай</h3>
@@ -754,6 +724,14 @@
                     <div class="label">Шеф-повар</div>
                     <div class="value">Родион Жуков</div>
                 </div>
+                <!-- НОВЫЙ КОНТАКТ: Telegram (ссылка на указанный URL) -->
+                <div class="contact-item">
+                    <div class="icon">✈️</div>
+                    <div class="label">Telegram</div>
+                    <div class="value">
+                        <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -766,7 +744,7 @@
         <div class="socials">
             <a href="#" aria-label="Instagram">📷</a>
             <a href="#" aria-label="VK">📘</a>
-            <a href="#" aria-label="Telegram">📩</a>
+            <a href="https://www.tiktok.com/@rodimisimus" aria-label="Telegram">✈️</a>
         </div>
     </footer>
 
@@ -775,6 +753,7 @@
         (function() {
             const toggle = document.getElementById('menuToggle');
             const links = document.getElementById('navLinks');
+            const nav = document.querySelector('.nav');
 
             if (toggle && links) {
                 toggle.addEventListener('click', function(e) {
@@ -783,7 +762,6 @@
                     links.classList.toggle('open');
                 });
 
-                // Закрываем при клике на ссылку
                 links.querySelectorAll('a').forEach(function(link) {
                     link.addEventListener('click', function() {
                         toggle.classList.remove('active');
@@ -791,9 +769,8 @@
                     });
                 });
 
-                // Закрываем при клике вне меню
                 document.addEventListener('click', function(e) {
-                    if (!nav.contains(e.target)) {
+                    if (nav && !nav.contains(e.target)) {
                         toggle.classList.remove('active');
                         links.classList.remove('open');
                     }
