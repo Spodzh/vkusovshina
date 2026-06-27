@@ -105,15 +105,12 @@
     function showOrderSuccess() {
         const modal = document.getElementById('orderSuccessModal');
         modal.classList.add('open');
-        // Закрытие по кнопке
         document.getElementById('closeSuccessBtn').onclick = function() {
             modal.classList.remove('open');
         };
-        // Закрытие по клику вне
         modal.onclick = function(e) {
             if (e.target === modal) modal.classList.remove('open');
         };
-        // Закрытие по Escape
         document.addEventListener('keydown', function esc(e) {
             if (e.key === 'Escape' && modal.classList.contains('open')) {
                 modal.classList.remove('open');
@@ -133,9 +130,7 @@
         const msg = `🛒 Новый заказ из корзины!\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n\n💰 Итого: ${total} коп.\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
         sendTelegramMessage(msg);
         clearCart();
-        // Закрываем корзину
         document.getElementById('cartModal').classList.remove('open');
-        // Показываем красивое окно успеха
         showOrderSuccess();
     }
 
@@ -381,7 +376,6 @@
             const userName = localStorage.getItem('userName') || 'Гость';
             const msg = `🎡 Заказ с Колеса Вкуса!\n\n👤 Имя: ${userName}\n🍽️ Блюдо: ${fullDish ? fullDish.emoji + ' ' + fullDish.name : dish.emoji}\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
             sendTelegramMessage(msg);
-            // Показываем красивое окно успеха
             showOrderSuccess();
         };
         document.getElementById('wheelCancelBtn').onclick = function() {
@@ -466,6 +460,27 @@
     }
     if (!userName) {
         setTimeout(askForName, 300);
+    }
+
+    // ===== ЗАКРЫТИЕ ОВЕРЛЕЯ =====
+    const overlay = document.getElementById('closedOverlay');
+    const closeOverlayBtn = document.getElementById('closeOverlayBtn');
+
+    if (overlay && closeOverlayBtn) {
+        closeOverlayBtn.addEventListener('click', function() {
+            overlay.classList.add('hidden');
+        });
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                overlay.classList.add('hidden');
+            }
+        });
+        document.addEventListener('keydown', function esc(e) {
+            if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+                overlay.classList.add('hidden');
+                document.removeEventListener('keydown', esc);
+            }
+        });
     }
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
