@@ -8,6 +8,17 @@
 </head>
 <body>
 
+    <!-- ОВЕРЛЕЙ ВРЕМЕННОГО ЗАКРЫТИЯ -->
+    <div class="overlay-closed" id="closedOverlay">
+        <div class="closed-modal">
+            <span class="closed-icon">🚧</span>
+            <h2>Ресторан временно закрыт</h2>
+            <p>Мы работаем над улучшением нашего меню и сервиса.<br>Скоро откроемся с новыми вкусами!</p>
+            <p style="margin-top: 6px; font-size: 0.9rem; color: var(--text-muted);">Следите за обновлениями в соцсетях</p>
+            <button class="close-overlay-btn" id="closeOverlayBtn">Понятно</button>
+        </div>
+    </div>
+
     <!-- HERO -->
     <section class="hero" id="home">
         <h1>Вкусовщина</h1>
@@ -146,14 +157,18 @@
                     <div class="label">TikTok</div>
                     <div class="value"><a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a></div>
                 </div>
-                <!-- НОВЫЙ БЛОК: Споджиславие (кликабельный, логотип увеличен) -->
-<div class="contact-item sponsor-item">
-    <a href="https://spodzh.github.io/spodzhislavia/index.html" target="_blank" rel="noopener noreferrer">
-        <img src="https://i.ibb.co/d4G3b1pc/21312.png" alt="Споджиславие" class="sponsor-logo">
-    </a>
-    <div class="label">При поддержке</div>
-    <div class="value">Споджиславие</div>
-</div>
+                <!-- СПОНСОРСКИЙ БЛОК -->
+                <div class="contact-item sponsor-item">
+                    <a href="https://spodzh.github.io/spodzhislavia/index.html" target="_blank" rel="noopener noreferrer">
+                        <img src="https://i.ibb.co/d4G3b1pc/21312.png" alt="Споджиславие" class="sponsor-logo">
+                    </a>
+                    <div class="label">При поддержке</div>
+                    <div class="value">Споджиславие</div>
+                </div>
+            </div>
+        </section>
+
+    </div>
 
     <footer class="footer">
         <p>© 2026 <span>«Вкусовщина»</span> — Ресторан домашней кухни. Все права защищены.</p>
@@ -190,7 +205,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА УСПЕШНОГО ЗАКАЗА (НОВАЯ) -->
+    <!-- МОДАЛКА УСПЕШНОГО ЗАКАЗА -->
     <div class="modal-overlay" id="orderSuccessModal">
         <div class="modal">
             <span class="emoji-big">✅</span>
