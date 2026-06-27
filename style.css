@@ -415,14 +415,18 @@ body {
 
 /* Спонсорский блок */
 .sponsor-item .sponsor-logo {
-    width: 56px;
-    height: 56px;
+    width: 80px;  /* было 56px */
+    height: 80px; /* было 56px */
     object-fit: contain;
     margin-bottom: 6px;
     display: block;
     margin-left: auto;
     margin-right: auto;
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+    transition: transform 0.3s;
+}
+.sponsor-item .sponsor-logo:hover {
+    transform: scale(1.05);
 }
 body.light .sponsor-item .sponsor-logo {
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.05));
