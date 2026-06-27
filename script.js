@@ -462,26 +462,8 @@
         setTimeout(askForName, 300);
     }
 
-    // ===== ЗАКРЫТИЕ ОВЕРЛЕЯ =====
-    const overlay = document.getElementById('closedOverlay');
-    const closeOverlayBtn = document.getElementById('closeOverlayBtn');
-
-    if (overlay && closeOverlayBtn) {
-        closeOverlayBtn.addEventListener('click', function() {
-            overlay.classList.add('hidden');
-        });
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                overlay.classList.add('hidden');
-            }
-        });
-        document.addEventListener('keydown', function esc(e) {
-            if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
-                overlay.classList.add('hidden');
-                document.removeEventListener('keydown', esc);
-            }
-        });
-    }
+    // ===== ВСЁ, ЧТО СВЯЗАНО С ЗАКРЫТИЕМ ОВЕРЛЕЯ – УДАЛЕНО =====
+    // Оверлей теперь всегда виден, и его нельзя закрыть
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
     renderMenu();
