@@ -5,27 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Вкусовщина | Ресторан домашней кухни</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Roboto:wght@300;400;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ===== ПЕРЕМЕННЫЕ ===== */
+        :root {
+            --bg-primary: #0d0907;
+            --bg-secondary: #1a1410;
+            --bg-card: #1a1410;
+            --border-color: #2a1f1a;
+            --text-primary: #f5e6d3;
+            --text-secondary: #cbb2a0;
+            --text-muted: #ac9482;
+            --accent: #c89b7b;
+            --accent-hover: #d4a88a;
+            --shadow: 0 4px 15px rgba(0,0,0,0.4);
+            --transition: 0.3s;
         }
 
-        html {
-            scroll-behavior: smooth;
+        /* Вечерний режим */
+        body.evening {
+            --bg-primary: #1a0f0a;
+            --bg-secondary: #2a1a12;
+            --bg-card: #2a1a12;
+            --border-color: #4a3020;
+            --text-primary: #f5e6d3;
+            --text-secondary: #d4b8a4;
+            --text-muted: #b8957a;
+            --accent: #e8b88a;
+            --accent-hover: #f0c8a0;
+            --shadow: 0 4px 20px rgba(200, 150, 100, 0.3);
+        }
+        body.evening .hero::before {
+            background: rgba(26, 15, 10, 0.8);
+        }
+        body.evening .hero h1,
+        body.evening .hero .subtitle,
+        body.evening .hero .owner {
+            text-shadow: 0 0 30px rgba(200, 150, 100, 0.3);
+        }
+        body.evening .menu-item,
+        body.evening .popular-item,
+        body.evening .promo-card,
+        body.evening .contacts-grid,
+        body.evening .modal {
+            border-color: #4a3020;
+            box-shadow: 0 0 20px rgba(200, 150, 100, 0.05);
         }
 
+        /* ===== БАЗА ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #0d0907;
-            color: #f5e6d3;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.5s, color 0.5s;
         }
 
+        /* HERO */
         .hero {
             position: relative;
             min-height: 85vh;
@@ -39,84 +77,124 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            transition: 0.5s;
         }
-
         .hero::before {
             content: '';
             position: absolute;
             inset: 0;
             background: rgba(13, 9, 7, 0.7);
             z-index: 1;
+            transition: 0.5s;
         }
-
-        .hero * {
-            position: relative;
-            z-index: 2;
-        }
-
+        .hero * { position: relative; z-index: 2; }
         .hero h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(3rem, 10vw, 5rem);
             font-weight: 600;
-            color: #f5e6d3;
+            color: var(--text-primary);
             letter-spacing: 4px;
             margin-bottom: 0.1em;
         }
-
         .hero .subtitle {
             font-size: clamp(1rem, 3vw, 1.4rem);
-            color: #e8c9b0;
+            color: var(--accent);
             letter-spacing: 4px;
             text-transform: uppercase;
             font-weight: 300;
         }
-
         .hero .owner {
             margin-top: 12px;
             font-size: clamp(0.9rem, 2vw, 1.1rem);
-            color: #b8957a;
+            color: var(--text-muted);
             font-style: italic;
         }
-
         .hero .scroll-down {
             position: absolute;
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
-            color: #c89b7b;
+            color: var(--accent);
             font-size: 1.8rem;
             animation: bounce 2s infinite;
             cursor: pointer;
             opacity: 0.6;
         }
-
         @keyframes bounce {
             0%, 100% { transform: translateX(-50%) translateY(0); }
             50% { transform: translateX(-50%) translateY(8px); }
         }
 
+        /* НАВИГАЦИЯ */
         .nav {
             background: rgba(13, 9, 7, 0.95);
+            backdrop-filter: blur(10px);
             padding: 10px 24px;
             position: sticky;
             top: 0;
             z-index: 200;
-            border-bottom: 1px solid #2a1f1a;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            transition: background 0.5s;
         }
-
+        body.evening .nav {
+            background: rgba(26, 15, 10, 0.95);
+        }
         .nav .logo {
             font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
-            color: #e8c9b0;
+            color: var(--text-primary);
             letter-spacing: 2px;
             text-decoration: none;
         }
-        .nav .logo span { color: #c89b7b; }
+        .nav .logo span { color: var(--accent); }
+
+        .nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: transform 0.3s;
+            padding: 4px;
+        }
+        .nav .theme-toggle:hover { transform: scale(1.1); }
+
+        .nav .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: transform 0.3s;
+            padding: 4px;
+        }
+        .nav .cart-btn:hover { transform: scale(1.1); }
+        .nav .cart-btn .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--accent);
+            color: #0d0907;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .nav .menu-toggle {
             display: none;
@@ -131,7 +209,7 @@
             display: block;
             width: 28px;
             height: 2px;
-            background: #d4b8a4;
+            background: var(--text-secondary);
             border-radius: 2px;
             transition: 0.3s;
         }
@@ -145,7 +223,7 @@
             align-items: center;
         }
         .nav .nav-links a {
-            color: #b8957a;
+            color: var(--text-secondary);
             text-decoration: none;
             font-weight: 400;
             font-size: 0.95rem;
@@ -154,44 +232,38 @@
             transition: color 0.3s;
             padding: 6px 0;
         }
-        .nav .nav-links a:hover { color: #f5d6b3; }
+        .nav .nav-links a:hover { color: var(--accent); }
 
+        /* Контейнер */
         .container {
             max-width: 1100px;
             margin: 0 auto;
             padding: 40px 20px;
         }
-
-        .section {
-            margin-bottom: 60px;
-        }
-
+        .section { margin-bottom: 60px; }
         .section-title {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2rem, 5vw, 2.6rem);
-            color: #e8c9b0;
+            color: var(--text-primary);
             text-align: center;
             margin-bottom: 30px;
             font-weight: 600;
             letter-spacing: 1px;
         }
 
-        /* О нас (без картинки) */
+        /* О нас */
         .about-text {
             max-width: 800px;
             margin: 0 auto;
             font-size: clamp(1rem, 1.8vw, 1.2rem);
-            color: #cbb2a0;
+            color: var(--text-secondary);
             line-height: 1.8;
             text-align: center;
             padding: 20px 0;
         }
-        .about-text strong {
-            color: #e8c9b0;
-            font-weight: 400;
-        }
+        .about-text strong { color: var(--accent); font-weight: 400; }
 
-        /* Сетка для меню и популярных блюд */
+        /* Сетки */
         .menu-grid, .popular-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -199,18 +271,18 @@
         }
 
         .menu-item, .popular-item {
-            background: #1a1410;
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 20px 16px;
-            border: 1px solid #2a1f1a;
-            transition: border-color 0.3s, transform 0.2s;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
             text-align: center;
-            cursor: pointer;
             position: relative;
         }
         .menu-item:hover, .popular-item:hover {
-            border-color: #c89b7b;
+            border-color: var(--accent);
             transform: translateY(-4px);
+            box-shadow: var(--shadow);
         }
         .menu-item .emoji, .popular-item .emoji {
             font-size: 2.4rem;
@@ -220,13 +292,13 @@
         .menu-item h3, .popular-item h3 {
             font-family: 'Playfair Display', serif;
             font-size: 1.2rem;
-            color: #f5d6b3;
+            color: var(--text-primary);
             font-weight: 600;
             margin-bottom: 2px;
         }
         .menu-item .price, .popular-item .price {
             display: inline-block;
-            background: #c89b7b;
+            background: var(--accent);
             color: #0d0907;
             font-weight: 700;
             padding: 0 14px;
@@ -235,17 +307,16 @@
             margin: 6px 0 8px;
         }
         .menu-item p, .popular-item p {
-            color: #ac9482;
+            color: var(--text-muted);
             font-size: 0.85rem;
             line-height: 1.4;
         }
-        .menu-item .order-btn, .popular-item .order-btn {
-            display: none;
+        .menu-item .add-to-cart, .popular-item .add-to-cart {
             margin-top: 12px;
-            background: #c89b7b;
+            background: var(--accent);
             color: #0d0907;
             border: none;
-            padding: 8px 20px;
+            padding: 8px 16px;
             border-radius: 30px;
             font-weight: 700;
             font-size: 0.9rem;
@@ -253,12 +324,9 @@
             transition: background 0.3s, transform 0.2s;
             width: 100%;
         }
-        .menu-item .order-btn:hover, .popular-item .order-btn:hover {
-            background: #d4a88a;
+        .menu-item .add-to-cart:hover, .popular-item .add-to-cart:hover {
+            background: var(--accent-hover);
             transform: scale(1.02);
-        }
-        .menu-item .order-btn.show, .popular-item .order-btn.show {
-            display: block;
         }
 
         /* Акции */
@@ -268,34 +336,28 @@
             gap: 25px;
         }
         .promo-card {
-            background: #1a1410;
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 25px 20px;
-            border: 1px solid #2a1f1a;
+            border: 1px solid var(--border-color);
             text-align: center;
             transition: border-color 0.3s, transform 0.2s;
         }
         .promo-card:hover {
-            border-color: #c89b7b;
+            border-color: var(--accent);
             transform: translateY(-4px);
         }
-        .promo-card .icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
+        .promo-card .icon { font-size: 3rem; margin-bottom: 10px; }
         .promo-card h3 {
             font-family: 'Playfair Display', serif;
             font-size: 1.4rem;
-            color: #f5d6b3;
+            color: var(--text-primary);
             margin-bottom: 6px;
         }
-        .promo-card p {
-            color: #ac9482;
-            font-size: 0.95rem;
-        }
+        .promo-card p { color: var(--text-muted); font-size: 0.95rem; }
         .promo-card .badge {
             display: inline-block;
-            background: #c89b7b;
+            background: var(--accent);
             color: #0d0907;
             font-weight: 700;
             padding: 4px 16px;
@@ -309,20 +371,15 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 25px;
-            background: #1a1410;
+            background: var(--bg-card);
             padding: 30px 20px;
             border-radius: 16px;
-            border: 1px solid #2a1f1a;
+            border: 1px solid var(--border-color);
         }
-        .contact-item {
-            text-align: center;
-        }
-        .contact-item .icon {
-            font-size: 1.8rem;
-            margin-bottom: 4px;
-        }
+        .contact-item { text-align: center; }
+        .contact-item .icon { font-size: 1.8rem; margin-bottom: 4px; }
         .contact-item .label {
-            color: #8c6d58;
+            color: var(--text-muted);
             text-transform: uppercase;
             font-size: 0.7rem;
             letter-spacing: 1px;
@@ -330,22 +387,22 @@
         .contact-item .value {
             font-size: clamp(0.95rem, 2vw, 1.1rem);
             font-weight: 400;
-            color: #f5d6b3;
+            color: var(--text-primary);
         }
         .contact-item .value small {
             font-weight: 300;
             font-size: 0.8rem;
-            color: #cbb2a0;
+            color: var(--text-secondary);
             display: block;
             margin-top: 2px;
         }
         .contact-item .value a {
-            color: #f5d6b3;
+            color: var(--text-primary);
             text-decoration: none;
-            border-bottom: 1px dashed #6b5445;
+            border-bottom: 1px dashed var(--text-muted);
             transition: border-color 0.3s;
         }
-        .contact-item .value a:hover { border-color: #c89b7b; }
+        .contact-item .value a:hover { border-color: var(--accent); }
 
         .social-icon {
             display: inline-block;
@@ -358,18 +415,20 @@
         .social-icon svg {
             width: 100%;
             height: 100%;
-            fill: #d4b8a4;
+            fill: var(--text-secondary);
         }
 
+        /* Подвал */
         .footer {
-            background: #0d0907;
+            background: var(--bg-primary);
             text-align: center;
             padding: 25px 20px;
-            border-top: 1px solid #1a1410;
-            color: #6b5445;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 0.8rem;
+            transition: background 0.5s;
         }
-        .footer span { color: #c89b7b; }
+        .footer span { color: var(--accent); }
         .footer .socials {
             margin-top: 10px;
             display: flex;
@@ -386,20 +445,21 @@
             height: 28px;
         }
 
+        /* Кнопка наверх */
         .back-to-top {
             position: fixed;
             bottom: 30px;
             right: 30px;
             width: 50px;
             height: 50px;
-            background: #c89b7b;
+            background: var(--accent);
             color: #0d0907;
             border: none;
             border-radius: 50%;
             font-size: 1.8rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: var(--shadow);
+            transition: opacity 0.3s, transform 0.3s, background 0.3s;
             opacity: 0;
             transform: translateY(20px);
             z-index: 100;
@@ -412,16 +472,16 @@
             transform: translateY(0);
         }
         .back-to-top:hover {
-            background: #d4a88a;
+            background: var(--accent-hover);
             transform: scale(1.05);
         }
 
-        /* Модалки */
+        /* ===== МОДАЛКИ ===== */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(5px);
             z-index: 300;
             justify-content: center;
@@ -431,8 +491,8 @@
         .modal-overlay.open { display: flex; }
 
         .modal {
-            background: #1a1410;
-            border: 1px solid #c89b7b;
+            background: var(--bg-card);
+            border: 1px solid var(--accent);
             border-radius: 24px;
             padding: 40px 30px;
             max-width: 480px;
@@ -440,42 +500,40 @@
             text-align: center;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             animation: modalPop 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         @keyframes modalPop {
             0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .modal .emoji-big {
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 10px;
-        }
+        .modal .emoji-big { font-size: 4rem; display: block; margin-bottom: 10px; }
         .modal h2 {
             font-family: 'Playfair Display', serif;
             font-size: 2rem;
-            color: #e8c9b0;
+            color: var(--text-primary);
             margin-bottom: 10px;
         }
         .modal .order-dish {
             font-size: 1.3rem;
-            color: #f5d6b3;
+            color: var(--accent);
             font-weight: 700;
             margin: 6px 0;
         }
         .modal .message {
             font-size: 1.1rem;
-            color: #cbb2a0;
+            color: var(--text-secondary);
             margin: 15px 0 20px;
             line-height: 1.6;
         }
         .modal .thanks {
             font-size: 1.2rem;
-            color: #c89b7b;
+            color: var(--accent);
             font-weight: 700;
         }
         .modal .close-modal-btn {
-            background: #c89b7b;
+            background: var(--accent);
             color: #0d0907;
             border: none;
             padding: 12px 30px;
@@ -487,10 +545,70 @@
             margin-top: 15px;
         }
         .modal .close-modal-btn:hover {
-            background: #d4a88a;
+            background: var(--accent-hover);
             transform: scale(1.02);
         }
 
+        /* Модалка корзины */
+        .cart-modal .modal {
+            max-width: 500px;
+            text-align: left;
+        }
+        .cart-modal .cart-items {
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .cart-modal .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .cart-modal .cart-item .name {
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+        .cart-modal .cart-item .remove-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            padding: 0 6px;
+        }
+        .cart-modal .cart-item .remove-btn:hover { color: #e74c3c; }
+        .cart-modal .cart-total {
+            text-align: center;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .cart-modal .order-cart-btn {
+            background: var(--accent);
+            color: #0d0907;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .cart-modal .order-cart-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+        .cart-modal .empty-cart {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 20px 0;
+        }
+
+        /* Модалка имени */
         .name-input-modal .modal {
             max-width: 400px;
         }
@@ -498,20 +616,18 @@
             width: 100%;
             padding: 12px;
             border-radius: 8px;
-            border: 1px solid #3a2820;
-            background: #0d0907;
-            color: #f5e6d3;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
             font-size: 1rem;
             margin-top: 10px;
             margin-bottom: 15px;
             outline: none;
             transition: border-color 0.3s;
         }
-        .name-input-modal input:focus {
-            border-color: #c89b7b;
-        }
+        .name-input-modal input:focus { border-color: var(--accent); }
         .name-input-modal .save-name-btn {
-            background: #c89b7b;
+            background: var(--accent);
             color: #0d0907;
             border: none;
             padding: 10px 30px;
@@ -522,10 +638,69 @@
             transition: background 0.3s, transform 0.2s;
         }
         .name-input-modal .save-name-btn:hover {
-            background: #d4a88a;
+            background: var(--accent-hover);
             transform: scale(1.02);
         }
 
+        /* ===== КОЛЕСО ФОРТУНЫ ===== */
+        .wheel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .wheel-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        .wheel-wrapper canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(200, 150, 100, 0.2);
+        }
+        .wheel-wrapper .spin-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--accent);
+            color: #0d0907;
+            border: none;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .wheel-wrapper .spin-btn:hover {
+            background: var(--accent-hover);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        .wheel-wrapper .spin-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .wheel-timer {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+        .wheel-timer span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Мобильная адаптация */
         @media (max-width: 768px) {
             .hero { min-height: 70vh; background-attachment: scroll; }
             .nav .menu-toggle { display: flex; }
@@ -536,7 +711,7 @@
                 align-items: center;
                 gap: 5px;
                 padding: 15px 0 5px;
-                border-top: 1px solid #2a1f1a;
+                border-top: 1px solid var(--border-color);
                 margin-top: 10px;
             }
             .nav .nav-links.open { display: flex; }
@@ -553,6 +728,7 @@
             .section { margin-bottom: 40px; }
             .back-to-top { bottom: 20px; right: 20px; width: 44px; height: 44px; font-size: 1.4rem; }
             .modal { padding: 30px 20px; }
+            .wheel-wrapper .spin-btn { width: 60px; height: 60px; font-size: 0.9rem; }
         }
         @media (max-width: 480px) {
             .menu-grid, .popular-grid { grid-template-columns: 1fr; }
@@ -573,13 +749,21 @@
     <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="#home" class="logo">Вкусов<span>щина</span></a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
-            <span></span><span></span><span></span>
-        </button>
+        <div class="nav-right">
+            <button class="theme-toggle" id="themeToggle" aria-label="Вечерний режим">🌙</button>
+            <button class="cart-btn" id="cartBtn" aria-label="Корзина">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
         <div class="nav-links" id="navLinks">
             <a href="#about">О нас</a>
             <a href="#popular">Популярное</a>
             <a href="#menu">Меню</a>
+            <a href="#wheel">Колесо Вкуса</a>
             <a href="#promo">Акции</a>
             <a href="#contacts">Контакты</a>
         </div>
@@ -587,12 +771,12 @@
 
     <div class="container">
 
-        <!-- О НАС (без картинки) -->
+        <!-- О НАС -->
         <section id="about" class="section">
             <h2 class="section-title">О ресторане</h2>
             <div class="about-text">
                 <p>Добро пожаловать в <strong>«Вкусовщину»</strong> — ресторан, где каждая деталь пропитана заботой и страстью к кулинарии. Основатель <strong>Родион</strong> лично контролирует качество каждого блюда. У нас вы почувствуете атмосферу уюта и настоящий вкус жизни.</p>
-                <p style="margin-top: 12px; color: #ac9482;">Мы готовим с душой, используя только свежие продукты. Приходите — убедитесь сами!</p>
+                <p style="margin-top: 12px; color: var(--text-muted);">Мы готовим с душой, используя только свежие продукты. Приходите — убедитесь сами!</p>
             </div>
         </section>
 
@@ -600,146 +784,27 @@
         <section id="popular" class="section">
             <h2 class="section-title">⭐ Популярные блюда</h2>
             <div class="popular-grid">
-                <div class="popular-item" data-id="popular1">
-                    <span class="emoji">🧇</span>
-                    <h3>Трубочки вафельные Вивайли</h3>
-                    <span class="price">45 коп.</span>
-                    <p>Вафельные трубочки с кремовой начинкой</p>
-                    <button class="order-btn" data-id="popular1">Заказать</button>
-                </div>
-                <div class="popular-item" data-id="popular2">
-                    <span class="emoji">🍟</span>
-                    <h3>Чипсы</h3>
-                    <span class="price">1 руб.</span>
-                    <p>Хрустящие картофельные чипсы (паприка)</p>
-                    <button class="order-btn" data-id="popular2">Заказать</button>
-                </div>
-                <div class="popular-item" data-id="popular3">
-                    <span class="emoji">☕</span>
-                    <h3>Кофе</h3>
-                    <span class="price">15 коп.</span>
-                    <p>Чёрный кофе из свежемолотых зёрен</p>
-                    <button class="order-btn" data-id="popular3">Заказать</button>
-                </div>
-                <div class="popular-item" data-id="popular4">
-                    <span class="emoji">☕</span>
-                    <h3>Чай</h3>
-                    <span class="price">20 коп.</span>
-                    <p>Ароматный чёрный чай с бергамотом</p>
-                    <button class="order-btn" data-id="popular4">Заказать</button>
-                </div>
-                <div class="popular-item" data-id="popular5">
-                    <span class="emoji">🥤</span>
-                    <h3>Кола</h3>
-                    <span class="price">20 коп.</span>
-                    <p>Освежающий газированный напиток</p>
-                    <button class="order-btn" data-id="popular5">Заказать</button>
-                </div>
+                <!-- Данные будут вставлены из JS, но для статики продублируем -->
             </div>
         </section>
 
-        <!-- ОСНОВНОЕ МЕНЮ (без популярных позиций) -->
+        <!-- МЕНЮ -->
         <section id="menu" class="section">
             <h2 class="section-title">Наше меню</h2>
-            <div class="menu-grid">
-                <div class="menu-item" data-id="1">
-                    <span class="emoji">🧇</span>
-                    <h3>Вафли</h3>
-                    <span class="price">25 коп.</span>
-                    <p>Хрустящие вафли с варёной сгущёнкой</p>
-                    <button class="order-btn" data-id="1">Заказать</button>
+            <div class="menu-grid" id="menuGrid">
+                <!-- Заполняется из JS -->
+            </div>
+        </section>
+
+        <!-- КОЛЕСО ВКУСА -->
+        <section id="wheel" class="section">
+            <h2 class="section-title">🎡 Колесо Вкуса!</h2>
+            <div class="wheel-container">
+                <div class="wheel-wrapper">
+                    <canvas id="wheelCanvas" width="500" height="500"></canvas>
+                    <button class="spin-btn" id="spinBtn">Крутить!</button>
                 </div>
-                <div class="menu-item" data-id="2">
-                    <span class="emoji">🍬</span>
-                    <h3>Конфеты</h3>
-                    <span class="price">15 коп.</span>
-                    <p>Ассорти шоколадных конфет</p>
-                    <button class="order-btn" data-id="2">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="3">
-                    <span class="emoji">🥪</span>
-                    <h3>Бутерброд с колбасой и батоном</h3>
-                    <span class="price">30 коп.</span>
-                    <p>Классический бутерброд с докторской колбасой</p>
-                    <button class="order-btn" data-id="3">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="4">
-                    <span class="emoji">🍳</span>
-                    <h3>Жареное яйцо</h3>
-                    <span class="price">25 коп.</span>
-                    <p>Яичница-глазунья с зеленью</p>
-                    <button class="order-btn" data-id="4">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="5">
-                    <span class="emoji">💧</span>
-                    <h3>Вода</h3>
-                    <span class="price">10 коп.</span>
-                    <p>Питьевая вода без газа</p>
-                    <button class="order-btn" data-id="5">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="6">
-                    <span class="emoji">🍏</span>
-                    <h3>Яблоко</h3>
-                    <span class="price">20 коп.</span>
-                    <p>Сочное яблоко (сорт «Гренни Смит»)</p>
-                    <button class="order-btn" data-id="6">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="7">
-                    <span class="emoji">🍺</span>
-                    <h3>Квас</h3>
-                    <span class="price">15 коп.</span>
-                    <p>Домашний квас на ржаном хлебе</p>
-                    <button class="order-btn" data-id="7">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="8">
-                    <span class="emoji">🍟</span>
-                    <h3>Картошка фри</h3>
-                    <span class="price">30 коп.</span>
-                    <p>Золотистая картошка фри с солью</p>
-                    <button class="order-btn" data-id="8">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="9">
-                    <span class="emoji">🍞</span>
-                    <h3>Гренки</h3>
-                    <span class="price">20 коп.</span>
-                    <p>Хрустящие гренки с чесноком</p>
-                    <button class="order-btn" data-id="9">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="10">
-                    <span class="emoji">🥟</span>
-                    <h3>Пельмени</h3>
-                    <span class="price">10 коп.</span>
-                    <p>Домашние пельмени с мясом, со сметаной</p>
-                    <button class="order-btn" data-id="10">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="11">
-                    <span class="emoji">🍬</span>
-                    <h3>Жвачка Love is</h3>
-                    <span class="price">10 коп.</span>
-                    <p>Жевательная резинка со вкусом мяты</p>
-                    <button class="order-btn" data-id="11">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="12">
-                    <span class="emoji">🥐</span>
-                    <h3>Булочки</h3>
-                    <span class="price">50 коп.</span>
-                    <p>Сдобные булочки с маком</p>
-                    <button class="order-btn" data-id="12">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="13">
-                    <span class="emoji">🍉</span>
-                    <h3>Жвачка арбузная</h3>
-                    <span class="price">5 коп.</span>
-                    <p>Жевательная резинка со вкусом арбуза</p>
-                    <button class="order-btn" data-id="13">Заказать</button>
-                </div>
-                <div class="menu-item" data-id="14">
-                    <span class="emoji">🧃</span>
-                    <h3>Сок с трубочкой</h3>
-                    <span class="price">30 коп.</span>
-                    <p>Яблочный сок с трубочкой</p>
-                    <button class="order-btn" data-id="14">Заказать</button>
-                </div>
+                <div class="wheel-timer" id="wheelTimer"></div>
             </div>
         </section>
 
@@ -795,7 +860,7 @@
                 <div class="contact-item">
                     <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
                         <span class="social-icon">
-                            <svg viewBox="0 0 24 24" fill="#d4b8a4">
+                            <svg viewBox="0 0 24 24" fill="var(--text-secondary)">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18-.06-.05-.15-.03-.22-.02-.09.01-1.5.95-4.24 2.8-.4.27-.76.4-1.08.39-.36-.01-1.05-.2-1.56-.37-.63-.2-1.13-.31-1.08-.66.03-.18.27-.37.75-.56 2.94-1.28 4.9-2.13 5.88-2.56 2.8-1.22 3.38-1.43 3.76-1.43.08 0 .21.02.3.07.08.05.13.13.14.23.01.1-.01.23-.03.36z"/>
                             </svg>
                         </span>
@@ -806,7 +871,7 @@
                 <div class="contact-item">
                     <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
                         <span class="social-icon">
-                            <svg viewBox="0 0 24 24" fill="#d4b8a4">
+                            <svg viewBox="0 0 24 24" fill="var(--text-secondary)">
                                 <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.44 1.18-2.6 2.6-2.6.26 0 .51.04.74.12v-3.2a5.68 5.68 0 0 0-.74-.06c-3.19 0-5.78 2.59-5.78 5.78s2.59 5.78 5.78 5.78 5.78-2.59 5.78-5.78V9.63c1.2.87 2.69 1.38 4.29 1.38V7.84c-.95 0-1.83-.35-2.51-.93z"/>
                             </svg>
                         </span>
@@ -825,14 +890,14 @@
         <div class="socials">
             <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
                 <span class="social-icon">
-                    <svg viewBox="0 0 24 24" fill="#6b5445">
+                    <svg viewBox="0 0 24 24" fill="var(--text-muted)">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18-.06-.05-.15-.03-.22-.02-.09.01-1.5.95-4.24 2.8-.4.27-.76.4-1.08.39-.36-.01-1.05-.2-1.56-.37-.63-.2-1.13-.31-1.08-.66.03-.18.27-.37.75-.56 2.94-1.28 4.9-2.13 5.88-2.56 2.8-1.22 3.38-1.43 3.76-1.43.08 0 .21.02.3.07.08.05.13.13.14.23.01.1-.01.23-.03.36z"/>
                     </svg>
                 </span>
             </a>
             <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
                 <span class="social-icon">
-                    <svg viewBox="0 0 24 24" fill="#6b5445">
+                    <svg viewBox="0 0 24 24" fill="var(--text-muted)">
                         <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.44 1.18-2.6 2.6-2.6.26 0 .51.04.74.12v-3.2a5.68 5.68 0 0 0-.74-.06c-3.19 0-5.78 2.59-5.78 5.78s2.59 5.78 5.78 5.78 5.78-2.59 5.78-5.78V9.63c1.2.87 2.69 1.38 4.29 1.38V7.84c-.95 0-1.83-.35-2.51-.93z"/>
                     </svg>
                 </span>
@@ -843,27 +908,40 @@
     <!-- Кнопка наверх -->
     <button class="back-to-top" id="backToTop" aria-label="Наверх">↑</button>
 
-    <!-- Модалка заказа -->
-    <div class="modal-overlay" id="orderModal">
+    <!-- МОДАЛКА КОРЗИНЫ -->
+    <div class="modal-overlay cart-modal" id="cartModal">
         <div class="modal">
-            <span class="emoji-big">🍽️</span>
-            <h2>Заказ принят!</h2>
-            <div class="order-dish" id="modalDishName">Название блюда</div>
-            <div class="message">
-                Ожидайте, скоро будет готово!<br>
-                Мы уже начали готовить ваш заказ.
+            <h2>🛒 Корзина</h2>
+            <div class="cart-items" id="cartItems">
+                <!-- Заполняется JS -->
             </div>
-            <div class="thanks">Спасибо, что выбрали «Вкусовщину»!</div>
-            <button class="close-modal-btn" id="closeModalBtn">Отлично!</button>
+            <div class="cart-total" id="cartTotal">Итого: 0 блюд</div>
+            <button class="order-cart-btn" id="orderCartBtn">Оформить заказ</button>
+            <button class="close-modal-btn" id="closeCartBtn" style="margin-top:10px;">Закрыть</button>
         </div>
     </div>
 
-    <!-- Модалка запроса имени -->
+    <!-- МОДАЛКА ЗАКАЗА (для колеса) -->
+    <div class="modal-overlay" id="wheelResultModal">
+        <div class="modal">
+            <span class="emoji-big">🎉</span>
+            <h2>Вам выпало!</h2>
+            <div class="order-dish" id="wheelResultDish">Название блюда</div>
+            <div class="message">Хотите заказать это блюдо?</div>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <button class="close-modal-btn" id="wheelOrderBtn" style="background:var(--accent);">Заказать</button>
+                <button class="close-modal-btn" id="wheelCancelBtn" style="background:var(--border-color); color:var(--text-primary);">Отменить</button>
+            </div>
+            <div style="margin-top:10px; font-size:0.9rem; color:var(--text-muted);">Следующий прокрут через <span id="wheelNextTimer"></span></div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ИМЕНИ -->
     <div class="modal-overlay name-input-modal" id="nameModal">
         <div class="modal">
             <span class="emoji-big">👋</span>
             <h2>Добро пожаловать!</h2>
-            <p style="color: #cbb2a0; margin-bottom: 10px;">Представьтесь, пожалуйста:</p>
+            <p style="color: var(--text-secondary); margin-bottom:10px;">Представьтесь, пожалуйста:</p>
             <input type="text" id="userNameInput" placeholder="Введите ваше имя" autofocus>
             <button class="save-name-btn" id="saveNameBtn">Сохранить</button>
         </div>
@@ -871,50 +949,100 @@
 
     <script>
         (function() {
-            // ===== НАСТРОЙКИ TELEGRAM =====
+            // ===== НАСТРОЙКИ =====
             const TELEGRAM_BOT_TOKEN = '8752139780:AAEIbtDqq2F3FJ2TqFWcINLWg6Zml8UyAQI';
             const TELEGRAM_CHAT_ID = '7892506421';
-            // ==============================
 
-            // ===== РАБОТА С ИМЕНЕМ =====
-            let userName = localStorage.getItem('userName') || '';
+            // ===== ДАННЫЕ БЛЮД =====
+            // Все блюда (для меню, популярных, колеса)
+            const allDishes = [
+                { name: 'Чай', emoji: '☕', price: '20 коп.', desc: 'Ароматный чёрный чай с бергамотом' },
+                { name: 'Вафли', emoji: '🧇', price: '25 коп.', desc: 'Хрустящие вафли с варёной сгущёнкой' },
+                { name: 'Конфеты', emoji: '🍬', price: '15 коп.', desc: 'Ассорти шоколадных конфет' },
+                { name: 'Бутерброд с колбасой и батоном', emoji: '🥪', price: '30 коп.', desc: 'Классический бутерброд с докторской колбасой' },
+                { name: 'Жареное яйцо', emoji: '🍳', price: '25 коп.', desc: 'Яичница-глазунья с зеленью' },
+                { name: 'Вода', emoji: '💧', price: '10 коп.', desc: 'Питьевая вода без газа' },
+                { name: 'Кола', emoji: '🥤', price: '20 коп.', desc: 'Освежающий газированный напиток' },
+                { name: 'Яблоко', emoji: '🍏', price: '20 коп.', desc: 'Сочное яблоко (сорт «Гренни Смит»)' },
+                { name: 'Квас', emoji: '🍺', price: '15 коп.', desc: 'Домашний квас на ржаном хлебе' },
+                { name: 'Кофе', emoji: '☕', price: '15 коп.', desc: 'Чёрный кофе из свежемолотых зёрен' },
+                { name: 'Картошка фри', emoji: '🍟', price: '30 коп.', desc: 'Золотистая картошка фри с солью' },
+                { name: 'Гренки', emoji: '🍞', price: '20 коп.', desc: 'Хрустящие гренки с чесноком' },
+                { name: 'Трубочки вафельные Вивайли', emoji: '🧇', price: '45 коп.', desc: 'Вафельные трубочки с кремовой начинкой' },
+                { name: 'Пельмени', emoji: '🥟', price: '10 коп.', desc: 'Домашние пельмени с мясом, со сметаной' },
+                { name: 'Чипсы', emoji: '🍟', price: '1 руб.', desc: 'Хрустящие картофельные чипсы (паприка)' },
+                { name: 'Жвачка Love is', emoji: '🍬', price: '10 коп.', desc: 'Жевательная резинка со вкусом мяты' },
+                { name: 'Булочки', emoji: '🥐', price: '50 коп.', desc: 'Сдобные булочки с маком' },
+                { name: 'Жвачка арбузная', emoji: '🍉', price: '5 коп.', desc: 'Жевательная резинка со вкусом арбуза' },
+                { name: 'Сок с трубочкой', emoji: '🧃', price: '30 коп.', desc: 'Яблочный сок с трубочкой' }
+            ];
 
-            function askForName() {
-                const modal = document.getElementById('nameModal');
-                const input = document.getElementById('userNameInput');
-                const saveBtn = document.getElementById('saveNameBtn');
+            // Популярные (первые 5)
+            const popularDishes = allDishes.filter(d => ['Трубочки вафельные Вивайли', 'Чипсы', 'Кофе', 'Чай', 'Кола'].includes(d.name));
 
-                modal.classList.add('open');
-                input.focus();
+            // Остальные в меню (все, кроме популярных)
+            const menuDishes = allDishes.filter(d => !popularDishes.includes(d));
 
-                function saveName() {
-                    const name = input.value.trim();
-                    if (name.length < 2) {
-                        alert('Пожалуйста, введите имя (минимум 2 символа)');
-                        return;
-                    }
-                    userName = name;
-                    localStorage.setItem('userName', userName);
-                    modal.classList.remove('open');
-                }
+            // ===== КОРЗИНА =====
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-                saveBtn.addEventListener('click', saveName);
-                input.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter') saveName();
-                });
+            function saveCart() {
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartUI();
             }
 
-            if (!userName) {
-                setTimeout(askForName, 300);
+            function updateCartUI() {
+                document.getElementById('cartCount').textContent = cart.length;
+            }
+
+            function addToCart(dishName) {
+                const dish = allDishes.find(d => d.name === dishName);
+                if (!dish) return;
+                cart.push({ ...dish });
+                saveCart();
+                // Всплывающее уведомление (просто alert, но можно заменить на модалку)
+                // alert(`${dish.name} добавлено в корзину!`);
+                showNotification(`${dish.emoji} ${dish.name} добавлено в корзину!`);
+            }
+
+            function removeFromCart(index) {
+                cart.splice(index, 1);
+                saveCart();
+                renderCartModal();
+            }
+
+            function clearCart() {
+                cart = [];
+                saveCart();
+                renderCartModal();
+            }
+
+            function showNotification(text) {
+                // Простое уведомление через alert, но лучше через модалку
+                // Можно использовать небольшую модалку, но для простоты оставим alert
+                // Но чтобы не раздражать, сделаем красивое всплывающее окно (можно через div)
+                // Я реализую через простой div
+                const notif = document.createElement('div');
+                notif.style.cssText = `
+                    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+                    background: var(--bg-card); color: var(--text-primary);
+                    padding: 12px 24px; border-radius: 30px;
+                    border: 1px solid var(--accent);
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+                    z-index: 999; font-weight: 500;
+                    transition: opacity 0.5s;
+                `;
+                notif.textContent = text;
+                document.body.appendChild(notif);
+                setTimeout(() => {
+                    notif.style.opacity = '0';
+                    setTimeout(() => notif.remove(), 500);
+                }, 2000);
             }
 
             // ===== ОТПРАВКА В TELEGRAM =====
-            function sendTelegramMessage(dishName) {
-                const name = userName || 'Гость';
-                const message = `🆕 Новый заказ!\n\n👤 Имя: ${name}\n🍽️ Блюдо: ${dishName}\n🕒 Время: ${new Date().toLocaleString('ru-RU')}\n\n📋 Статус: ожидает подтверждения.`;
-
+            function sendTelegramMessage(message) {
                 const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-
                 return fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -925,17 +1053,293 @@
                         disable_web_page_preview: true,
                     })
                 })
-                .then(response => {
-                    if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
-                    return response.json();
-                })
+                .then(r => r.json())
                 .then(data => {
-                    if (!data.ok) throw new Error(data.description || 'Неизвестная ошибка');
-                    console.log('✅ Уведомление в Telegram отправлено');
+                    if (!data.ok) throw new Error(data.description);
+                    console.log('✅ Сообщение отправлено');
                 })
-                .catch(error => {
-                    console.error('❌ Ошибка отправки в Telegram:', error);
+                .catch(err => console.error('❌ Ошибка:', err));
+            }
+
+            function sendOrderFromCart() {
+                if (cart.length === 0) {
+                    alert('Корзина пуста!');
+                    return;
+                }
+                const userName = localStorage.getItem('userName') || 'Гость';
+                const dishesList = cart.map((d, i) => `${i+1}. ${d.emoji} ${d.name} (${d.price})`).join('\n');
+                const total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
+                const msg = `🛒 Новый заказ из корзины!\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n\n💰 Итого: ${total} коп.\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
+                sendTelegramMessage(msg);
+                clearCart();
+                alert('Заказ отправлен! Ожидайте, скоро будет готово.');
+                document.getElementById('cartModal').classList.remove('open');
+            }
+
+            // ===== КОРЗИНА МОДАЛКА =====
+            function renderCartModal() {
+                const container = document.getElementById('cartItems');
+                const totalSpan = document.getElementById('cartTotal');
+                if (cart.length === 0) {
+                    container.innerHTML = `<div class="empty-cart">Корзина пуста</div>`;
+                    totalSpan.textContent = 'Итого: 0 блюд';
+                    return;
+                }
+                let html = '';
+                cart.forEach((item, idx) => {
+                    html += `
+                        <div class="cart-item">
+                            <span class="name">${item.emoji} ${item.name} (${item.price})</span>
+                            <button class="remove-btn" data-index="${idx}">✕</button>
+                        </div>
+                    `;
                 });
+                container.innerHTML = html;
+                totalSpan.textContent = `Итого: ${cart.length} блюд`;
+                // Удаление
+                container.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        removeFromCart(idx);
+                    });
+                });
+            }
+
+            // ===== ИНИЦИАЛИЗАЦИЯ МЕНЮ =====
+            function renderMenu() {
+                const container = document.getElementById('menuGrid');
+                container.innerHTML = menuDishes.map(d => `
+                    <div class="menu-item">
+                        <span class="emoji">${d.emoji}</span>
+                        <h3>${d.name}</h3>
+                        <span class="price">${d.price}</span>
+                        <p>${d.desc}</p>
+                        <button class="add-to-cart" data-name="${d.name}">Добавить в корзину</button>
+                    </div>
+                `).join('');
+
+                // Обработчики
+                container.querySelectorAll('.add-to-cart').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const name = this.dataset.name;
+                        addToCart(name);
+                    });
+                });
+            }
+
+            function renderPopular() {
+                const container = document.querySelector('.popular-grid');
+                container.innerHTML = popularDishes.map(d => `
+                    <div class="popular-item">
+                        <span class="emoji">${d.emoji}</span>
+                        <h3>${d.name}</h3>
+                        <span class="price">${d.price}</span>
+                        <p>${d.desc}</p>
+                        <button class="add-to-cart" data-name="${d.name}">Добавить в корзину</button>
+                    </div>
+                `).join('');
+
+                container.querySelectorAll('.add-to-cart').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const name = this.dataset.name;
+                        addToCart(name);
+                    });
+                });
+            }
+
+            // ===== ВЕЧЕРНИЙ РЕЖИМ =====
+            const themeToggle = document.getElementById('themeToggle');
+            let eveningMode = localStorage.getItem('eveningMode') === 'true';
+            if (eveningMode) {
+                document.body.classList.add('evening');
+                themeToggle.textContent = '☀️';
+            }
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('evening');
+                const isEvening = document.body.classList.contains('evening');
+                localStorage.setItem('eveningMode', isEvening);
+                this.textContent = isEvening ? '☀️' : '🌙';
+            });
+
+            // ===== КОЛЕСО ФОРТУНЫ =====
+            const canvas = document.getElementById('wheelCanvas');
+            const ctx = canvas.getContext('2d');
+            const spinBtn = document.getElementById('spinBtn');
+            const timerDiv = document.getElementById('wheelTimer');
+
+            // Все блюда для колеса (все названия)
+            const wheelDishes = allDishes.map(d => ({ name: d.name, emoji: d.emoji }));
+
+            // Состояние колеса
+            let currentRotation = 0;
+            let isSpinning = false;
+            let spinTimeout = null;
+            const LAST_SPIN_KEY = 'lastSpinTime';
+            const SPIN_COOLDOWN = 24 * 60 * 60 * 1000; // 24 часа
+
+            function getLastSpin() {
+                return parseInt(localStorage.getItem(LAST_SPIN_KEY)) || 0;
+            }
+
+            function setLastSpin(time) {
+                localStorage.setItem(LAST_SPIN_KEY, String(time));
+            }
+
+            function getRemainingTime() {
+                const last = getLastSpin();
+                if (last === 0) return 0;
+                const elapsed = Date.now() - last;
+                if (elapsed >= SPIN_COOLDOWN) return 0;
+                return SPIN_COOLDOWN - elapsed;
+            }
+
+            function updateTimerDisplay() {
+                const remaining = getRemainingTime();
+                if (remaining <= 0) {
+                    timerDiv.innerHTML = 'Колесо готово к вращению! 🎡';
+                    spinBtn.disabled = false;
+                    return;
+                }
+                const hours = Math.floor(remaining / (60*60*1000));
+                const mins = Math.floor((remaining % (60*60*1000)) / (60*1000));
+                const secs = Math.floor((remaining % (60*1000)) / 1000);
+                timerDiv.innerHTML = `⏳ Следующий прокрут через <span>${hours}ч ${mins}м ${secs}с</span>`;
+                spinBtn.disabled = true;
+            }
+
+            // Рисование колеса
+            function drawWheel(rotation) {
+                const count = wheelDishes.length;
+                const arc = (2 * Math.PI) / count;
+                const radius = canvas.width / 2 - 10;
+                const cx = canvas.width / 2;
+                const cy = canvas.height / 2;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Рисуем сектора
+                for (let i = 0; i < count; i++) {
+                    const startAngle = i * arc + rotation;
+                    const endAngle = startAngle + arc;
+                    const color = `hsl(${(i * 360 / count) + 20}, 70%, 50%)`;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.arc(cx, cy, radius, startAngle, endAngle);
+                    ctx.closePath();
+                    ctx.fillStyle = color;
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    // Текст
+                    const midAngle = startAngle + arc / 2;
+                    const textRadius = radius * 0.7;
+                    const x = cx + Math.cos(midAngle) * textRadius;
+                    const y = cy + Math.sin(midAngle) * textRadius;
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(midAngle + Math.PI/2);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 14px Roboto';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    const label = wheelDishes[i].emoji + ' ' + wheelDishes[i].name;
+                    // Укоротим длинные названия
+                    const shortLabel = label.length > 20 ? label.slice(0, 18)+'…' : label;
+                    ctx.fillText(shortLabel, 0, 0);
+                    ctx.restore();
+                }
+
+                // Стрелка (треугольник сверху)
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.moveTo(cx, 10);
+                ctx.lineTo(cx - 20, 30);
+                ctx.lineTo(cx + 20, 30);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            function spinWheel() {
+                if (isSpinning) return;
+                if (getRemainingTime() > 0) {
+                    alert('Колесо можно крутить только раз в 24 часа!');
+                    return;
+                }
+
+                isSpinning = true;
+                spinBtn.disabled = true;
+
+                const spins = 5 + Math.random() * 5; // количество полных оборотов
+                const extra = Math.random() * 2 * Math.PI;
+                const targetRotation = currentRotation + spins * 2 * Math.PI + extra;
+
+                const duration = 4000; // 4 секунды
+                const startTime = performance.now();
+                const startRotation = currentRotation;
+
+                function animate(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // easeOutCubic
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const rot = startRotation + (targetRotation - startRotation) * eased;
+                    drawWheel(rot);
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        currentRotation = targetRotation;
+                        isSpinning = false;
+                        spinBtn.disabled = false;
+                        // Определяем выпавшее блюдо
+                        const count = wheelDishes.length;
+                        const arc = (2 * Math.PI) / count;
+                        // Угол стрелки (сверху) = -90 градусов (отрицательная ось Y)
+                        const pointerAngle = -Math.PI / 2;
+                        // Нормализуем угол
+                        let angle = (pointerAngle - currentRotation) % (2 * Math.PI);
+                        if (angle < 0) angle += 2 * Math.PI;
+                        const index = Math.floor(angle / arc) % count;
+                        const selected = wheelDishes[index];
+                        // Сохраняем время вращения
+                        setLastSpin(Date.now());
+                        // Показываем результат
+                        showWheelResult(selected);
+                        // Обновляем таймер
+                        updateTimerDisplay();
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+
+            function showWheelResult(dish) {
+                const modal = document.getElementById('wheelResultModal');
+                const dishSpan = document.getElementById('wheelResultDish');
+                const nextTimerSpan = document.getElementById('wheelNextTimer');
+                dishSpan.textContent = `${dish.emoji} ${dish.name}`;
+                // Таймер до следующего прокрута (24 часа)
+                const remaining = getRemainingTime();
+                const hours = Math.floor(remaining / (60*60*1000));
+                const mins = Math.floor((remaining % (60*60*1000)) / (60*1000));
+                const secs = Math.floor((remaining % (60*1000)) / 1000);
+                nextTimerSpan.textContent = `${hours}ч ${mins}м ${secs}с`;
+                modal.classList.add('open');
+
+                // Кнопки
+                document.getElementById('wheelOrderBtn').onclick = function() {
+                    modal.classList.remove('open');
+                    // Отправляем заказ этого блюда в Telegram
+                    const userName = localStorage.getItem('userName') || 'Гость';
+                    const msg = `🎡 Заказ с Колеса Вкуса!\n\n👤 Имя: ${userName}\n🍽️ Блюдо: ${dish.emoji} ${dish.name}\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
+                    sendTelegramMessage(msg);
+                    alert('Блюдо заказано! Ожидайте, скоро будет готово.');
+                };
+                document.getElementById('wheelCancelBtn').onclick = function() {
+                    modal.classList.remove('open');
+                };
             }
 
             // ===== БУРГЕР =====
@@ -949,14 +1353,12 @@
                     this.classList.toggle('active');
                     links.classList.toggle('open');
                 });
-
-                links.querySelectorAll('a').forEach(function(link) {
+                links.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', function() {
                         toggle.classList.remove('active');
                         links.classList.remove('open');
                     });
                 });
-
                 document.addEventListener('click', function(e) {
                     if (nav && !nav.contains(e.target)) {
                         toggle.classList.remove('active');
@@ -978,61 +1380,63 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
-            // ===== МОДАЛКА ЗАКАЗА =====
-            const modal = document.getElementById('orderModal');
-            const modalDishName = document.getElementById('modalDishName');
-            const closeModalBtn = document.getElementById('closeModalBtn');
+            // ===== КОРЗИНА (открытие/закрытие) =====
+            document.getElementById('cartBtn').addEventListener('click', function() {
+                renderCartModal();
+                document.getElementById('cartModal').classList.add('open');
+            });
+            document.getElementById('closeCartBtn').addEventListener('click', function() {
+                document.getElementById('cartModal').classList.remove('open');
+            });
+            document.getElementById('cartModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('open');
+            });
+            document.getElementById('orderCartBtn').addEventListener('click', sendOrderFromCart);
 
-            function openModal(dishName) {
-                modalDishName.textContent = dishName;
+            // ===== ИМЯ =====
+            let userName = localStorage.getItem('userName') || '';
+            function askForName() {
+                const modal = document.getElementById('nameModal');
+                const input = document.getElementById('userNameInput');
+                const saveBtn = document.getElementById('saveNameBtn');
                 modal.classList.add('open');
-                sendTelegramMessage(dishName);
-            }
+                input.focus();
 
-            function closeModal() {
-                modal.classList.remove('open');
-            }
-
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) closeModal();
-            });
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-            });
-
-            // ===== ИНТЕРАКТИВ ДЛЯ ВСЕХ КАРТОЧЕК (меню + популярное) =====
-            const allItems = document.querySelectorAll('.menu-item, .popular-item');
-
-            allItems.forEach(function(item) {
-                item.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('order-btn')) return;
-                    // Скрываем все кнопки
-                    document.querySelectorAll('.order-btn').forEach(function(btn) {
-                        btn.classList.remove('show');
-                    });
-                    const btn = this.querySelector('.order-btn');
-                    if (btn) btn.classList.add('show');
+                function saveName() {
+                    const name = input.value.trim();
+                    if (name.length < 2) {
+                        alert('Пожалуйста, введите имя (минимум 2 символа)');
+                        return;
+                    }
+                    userName = name;
+                    localStorage.setItem('userName', userName);
+                    modal.classList.remove('open');
+                }
+                saveBtn.addEventListener('click', saveName);
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') saveName();
                 });
+            }
+            if (!userName) {
+                setTimeout(askForName, 300);
+            }
 
-                const orderBtn = item.querySelector('.order-btn');
-                if (orderBtn) {
-                    orderBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const dishName = this.closest('.menu-item, .popular-item').querySelector('h3').textContent;
-                        openModal(dishName);
-                        this.classList.remove('show');
-                    });
-                }
-            });
+            // ===== ИНИЦИАЛИЗАЦИЯ =====
+            renderMenu();
+            renderPopular();
+            updateCartUI();
+            updateTimerDisplay();
 
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.menu-item') && !e.target.closest('.popular-item')) {
-                    document.querySelectorAll('.order-btn').forEach(function(btn) {
-                        btn.classList.remove('show');
-                    });
-                }
-            });
+            // Рисуем колесо при загрузке
+            drawWheel(0);
+            // Кнопка вращения
+            spinBtn.addEventListener('click', spinWheel);
+
+            // Обновляем таймер каждую секунду
+            setInterval(updateTimerDisplay, 1000);
+
+            // При клике на пункт меню "Колесо Вкуса" обновляем таймер
+            document.querySelector('a[href="#wheel"]')?.addEventListener('click', updateTimerDisplay);
 
         })();
     </script>
