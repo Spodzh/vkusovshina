@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Вкусовщина | Ресторан домашней кухни</title>
     <style>
-        /* ===== ПЕРЕМЕННЫЕ ===== */
+        /* ===== ПЕРЕМЕННЫЕ (тёмная тема по умолчанию) ===== */
         :root {
             --bg-primary: #0d0907;
             --bg-secondary: #1a1410;
@@ -17,37 +17,64 @@
             --accent: #c89b7b;
             --accent-hover: #d4a88a;
             --shadow: 0 4px 15px rgba(0,0,0,0.4);
-            --transition: 0.3s;
+            --wheel-colors: #c89b7b, #8b5e3c, #5a3d2b, #b8957a, #a67c5b, #d4a88a, #7a4f3a, #e8c9b0, #9b6b4a, #bf8f6b;
         }
 
-        /* Вечерний режим */
-        body.evening {
-            --bg-primary: #1a0f0a;
-            --bg-secondary: #2a1a12;
-            --bg-card: #2a1a12;
-            --border-color: #4a3020;
-            --text-primary: #f5e6d3;
-            --text-secondary: #d4b8a4;
-            --text-muted: #b8957a;
-            --accent: #e8b88a;
-            --accent-hover: #f0c8a0;
-            --shadow: 0 4px 20px rgba(200, 150, 100, 0.3);
+        /* ===== СВЕТЛАЯ ТЕМА ===== */
+        body.light {
+            --bg-primary: #f5ede4;
+            --bg-secondary: #ede4d8;
+            --bg-card: #f8f0e7;
+            --border-color: #d4c4b0;
+            --text-primary: #2c1f18;
+            --text-secondary: #4d3a2e;
+            --text-muted: #7a6557;
+            --accent: #b88a6a;
+            --accent-hover: #c89b7b;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        body.evening .hero::before {
-            background: rgba(26, 15, 10, 0.8);
+        body.light .hero::before {
+            background: rgba(245, 237, 228, 0.75);
         }
-        body.evening .hero h1,
-        body.evening .hero .subtitle,
-        body.evening .hero .owner {
-            text-shadow: 0 0 30px rgba(200, 150, 100, 0.3);
+        body.light .hero h1,
+        body.light .hero .subtitle,
+        body.light .hero .owner {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        body.evening .menu-item,
-        body.evening .popular-item,
-        body.evening .promo-card,
-        body.evening .contacts-grid,
-        body.evening .modal {
-            border-color: #4a3020;
-            box-shadow: 0 0 20px rgba(200, 150, 100, 0.05);
+        body.light .nav {
+            background: rgba(245, 237, 228, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        body.light .menu-item,
+        body.light .popular-item,
+        body.light .promo-card,
+        body.light .contacts-grid,
+        body.light .modal {
+            background: #f8f0e7;
+            border-color: #d4c4b0;
+        }
+        body.light .menu-item .price,
+        body.light .popular-item .price {
+            color: #2c1f18;
+        }
+        body.light .social-icon svg {
+            fill: #4d3a2e;
+        }
+        body.light .footer {
+            background: #ede4d8;
+            border-color: #d4c4b0;
+        }
+        body.light .wheel-wrapper canvas {
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+        body.light .modal .close-modal-btn {
+            color: #2c1f18;
+        }
+        body.light .modal .order-dish {
+            color: #b88a6a;
+        }
+        body.light .promo-card .badge {
+            color: #2c1f18;
         }
 
         /* ===== БАЗА ===== */
@@ -139,10 +166,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            transition: background 0.5s;
-        }
-        body.evening .nav {
-            background: rgba(26, 15, 10, 0.95);
+            transition: background 0.5s, border-color 0.5s;
         }
         .nav .logo {
             font-family: 'Playfair Display', serif;
@@ -194,6 +218,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        body.light .nav .cart-btn .cart-count {
+            color: #2c1f18;
         }
 
         .nav .menu-toggle {
@@ -328,6 +355,12 @@
             background: var(--accent-hover);
             transform: scale(1.02);
         }
+        body.light .menu-item .add-to-cart,
+        body.light .popular-item .add-to-cart,
+        body.light .menu-item .price,
+        body.light .popular-item .price {
+            color: #2c1f18;
+        }
 
         /* Акции */
         .promo-grid {
@@ -341,6 +374,7 @@
             padding: 25px 20px;
             border: 1px solid var(--border-color);
             text-align: center;
+            position: relative;
             transition: border-color 0.3s, transform 0.2s;
         }
         .promo-card:hover {
@@ -364,6 +398,21 @@
             border-radius: 30px;
             font-size: 0.85rem;
             margin-top: 10px;
+        }
+        .promo-card .new-badge {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #e74c3c;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 30px;
+            transform: rotate(10deg);
+            box-shadow: 0 2px 10px rgba(231, 76, 60, 0.4);
+            letter-spacing: 1px;
+            border: 2px solid #fff;
         }
 
         /* Контакты */
@@ -426,7 +475,7 @@
             border-top: 1px solid var(--border-color);
             color: var(--text-muted);
             font-size: 0.8rem;
-            transition: background 0.5s;
+            transition: background 0.5s, border-color 0.5s;
         }
         .footer span { color: var(--accent); }
         .footer .socials {
@@ -474,6 +523,9 @@
         .back-to-top:hover {
             background: var(--accent-hover);
             transform: scale(1.05);
+        }
+        body.light .back-to-top {
+            color: #2c1f18;
         }
 
         /* ===== МОДАЛКИ ===== */
@@ -548,6 +600,9 @@
             background: var(--accent-hover);
             transform: scale(1.02);
         }
+        body.light .modal .close-modal-btn {
+            color: #2c1f18;
+        }
 
         /* Модалка корзины */
         .cart-modal .modal {
@@ -584,6 +639,7 @@
             text-align: center;
             font-weight: 700;
             margin: 10px 0;
+            color: var(--text-primary);
         }
         .cart-modal .order-cart-btn {
             background: var(--accent);
@@ -606,6 +662,9 @@
             text-align: center;
             color: var(--text-muted);
             padding: 20px 0;
+        }
+        body.light .cart-modal .order-cart-btn {
+            color: #2c1f18;
         }
 
         /* Модалка имени */
@@ -640,6 +699,13 @@
         .name-input-modal .save-name-btn:hover {
             background: var(--accent-hover);
             transform: scale(1.02);
+        }
+        body.light .name-input-modal input {
+            color: #2c1f18;
+            background: #f5ede4;
+        }
+        body.light .name-input-modal .save-name-btn {
+            color: #2c1f18;
         }
 
         /* ===== КОЛЕСО ФОРТУНЫ ===== */
@@ -750,7 +816,7 @@
     <nav class="nav">
         <a href="#home" class="logo">Вкусов<span>щина</span></a>
         <div class="nav-right">
-            <button class="theme-toggle" id="themeToggle" aria-label="Вечерний режим">🌙</button>
+            <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">🌙</button>
             <button class="cart-btn" id="cartBtn" aria-label="Корзина">
                 🛒
                 <span class="cart-count" id="cartCount">0</span>
@@ -784,7 +850,7 @@
         <section id="popular" class="section">
             <h2 class="section-title">⭐ Популярные блюда</h2>
             <div class="popular-grid">
-                <!-- Данные будут вставлены из JS, но для статики продублируем -->
+                <!-- Заполняется из JS -->
             </div>
         </section>
 
@@ -820,9 +886,10 @@
                 </div>
                 <div class="promo-card">
                     <div class="icon">🍽️</div>
-                    <h3>Комбо «Вивайли + Чай + Вафли»</h3>
-                    <p>Трубочки вафельные Вивайли, чай с бергамотом и хрустящие вафли — всего за 60 копеек!</p>
-                    <span class="badge">Ежедневно с 12:00 до 16:00</span>
+                    <h3>Комбо «Вивайли + Кола»</h3>
+                    <p>Трубочки вафельные Вивайли и освежающая кола — идеальное сочетание!</p>
+                    <span class="badge">Ежедневно с 12:00 до 14:00</span>
+                    <span class="new-badge">НОВИНКА</span>
                 </div>
                 <div class="promo-card">
                     <div class="icon">🎂</div>
@@ -850,7 +917,7 @@
                 <div class="contact-item">
                     <div class="icon">🕒</div>
                     <div class="label">Часы работы</div>
-                    <div class="value">8:30 – 23:30 <small>Выходные: понедельник, среда</small></div>
+                    <div class="value">8:30 – 23:30 <small>Выходные: понедельник, среда, четверг</small></div>
                 </div>
                 <div class="contact-item">
                     <div class="icon">👨‍🍳</div>
@@ -926,7 +993,7 @@
         <div class="modal">
             <span class="emoji-big">🎉</span>
             <h2>Вам выпало!</h2>
-            <div class="order-dish" id="wheelResultDish">Название блюда</div>
+            <div class="order-dish" id="wheelResultDish">🍽️ Блюдо</div>
             <div class="message">Хотите заказать это блюдо?</div>
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
                 <button class="close-modal-btn" id="wheelOrderBtn" style="background:var(--accent);">Заказать</button>
@@ -954,7 +1021,6 @@
             const TELEGRAM_CHAT_ID = '7892506421';
 
             // ===== ДАННЫЕ БЛЮД =====
-            // Все блюда (для меню, популярных, колеса)
             const allDishes = [
                 { name: 'Чай', emoji: '☕', price: '20 коп.', desc: 'Ароматный чёрный чай с бергамотом' },
                 { name: 'Вафли', emoji: '🧇', price: '25 коп.', desc: 'Хрустящие вафли с варёной сгущёнкой' },
@@ -980,7 +1046,7 @@
             // Популярные (первые 5)
             const popularDishes = allDishes.filter(d => ['Трубочки вафельные Вивайли', 'Чипсы', 'Кофе', 'Чай', 'Кола'].includes(d.name));
 
-            // Остальные в меню (все, кроме популярных)
+            // Остальные в меню
             const menuDishes = allDishes.filter(d => !popularDishes.includes(d));
 
             // ===== КОРЗИНА =====
@@ -1000,8 +1066,6 @@
                 if (!dish) return;
                 cart.push({ ...dish });
                 saveCart();
-                // Всплывающее уведомление (просто alert, но можно заменить на модалку)
-                // alert(`${dish.name} добавлено в корзину!`);
                 showNotification(`${dish.emoji} ${dish.name} добавлено в корзину!`);
             }
 
@@ -1018,10 +1082,6 @@
             }
 
             function showNotification(text) {
-                // Простое уведомление через alert, но лучше через модалку
-                // Можно использовать небольшую модалку, но для простоты оставим alert
-                // Но чтобы не раздражать, сделаем красивое всплывающее окно (можно через div)
-                // Я реализую через простой div
                 const notif = document.createElement('div');
                 notif.style.cssText = `
                     position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
@@ -1096,7 +1156,6 @@
                 });
                 container.innerHTML = html;
                 totalSpan.textContent = `Итого: ${cart.length} блюд`;
-                // Удаление
                 container.querySelectorAll('.remove-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const idx = parseInt(this.dataset.index);
@@ -1118,7 +1177,6 @@
                     </div>
                 `).join('');
 
-                // Обработчики
                 container.querySelectorAll('.add-to-cart').forEach(btn => {
                     btn.addEventListener('click', function(e) {
                         e.stopPropagation();
@@ -1149,18 +1207,20 @@
                 });
             }
 
-            // ===== ВЕЧЕРНИЙ РЕЖИМ =====
+            // ===== ТЕМА (светлая/тёмная) =====
             const themeToggle = document.getElementById('themeToggle');
-            let eveningMode = localStorage.getItem('eveningMode') === 'true';
-            if (eveningMode) {
-                document.body.classList.add('evening');
+            let lightMode = localStorage.getItem('lightMode') === 'true';
+            if (lightMode) {
+                document.body.classList.add('light');
+                themeToggle.textContent = '🌙';
+            } else {
                 themeToggle.textContent = '☀️';
             }
             themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('evening');
-                const isEvening = document.body.classList.contains('evening');
-                localStorage.setItem('eveningMode', isEvening);
-                this.textContent = isEvening ? '☀️' : '🌙';
+                document.body.classList.toggle('light');
+                const isLight = document.body.classList.contains('light');
+                localStorage.setItem('lightMode', isLight);
+                this.textContent = isLight ? '🌙' : '☀️';
             });
 
             // ===== КОЛЕСО ФОРТУНЫ =====
@@ -1169,13 +1229,19 @@
             const spinBtn = document.getElementById('spinBtn');
             const timerDiv = document.getElementById('wheelTimer');
 
-            // Все блюда для колеса (все названия)
-            const wheelDishes = allDishes.map(d => ({ name: d.name, emoji: d.emoji }));
+            // Все блюда для колеса (только эмодзи)
+            const wheelDishes = allDishes.map(d => ({ emoji: d.emoji }));
 
-            // Состояние колеса
+            // Палитра цветов в стиле ресторана (благородные оттенки)
+            const wheelColors = [
+                '#c89b7b', '#8b5e3c', '#5a3d2b', '#b8957a', '#a67c5b',
+                '#d4a88a', '#7a4f3a', '#e8c9b0', '#9b6b4a', '#bf8f6b',
+                '#8a6b4a', '#c4a88a', '#6a4d3a', '#dbb89a', '#a07a5a',
+                '#b08a6a', '#7a5a40', '#d4b09a', '#9a7a5a', '#c09a7a'
+            ];
+
             let currentRotation = 0;
             let isSpinning = false;
-            let spinTimeout = null;
             const LAST_SPIN_KEY = 'lastSpinTime';
             const SPIN_COOLDOWN = 24 * 60 * 60 * 1000; // 24 часа
 
@@ -1209,7 +1275,6 @@
                 spinBtn.disabled = true;
             }
 
-            // Рисование колеса
             function drawWheel(rotation) {
                 const count = wheelDishes.length;
                 const arc = (2 * Math.PI) / count;
@@ -1219,41 +1284,36 @@
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Рисуем сектора
                 for (let i = 0; i < count; i++) {
                     const startAngle = i * arc + rotation;
                     const endAngle = startAngle + arc;
-                    const color = `hsl(${(i * 360 / count) + 20}, 70%, 50%)`;
                     ctx.beginPath();
                     ctx.moveTo(cx, cy);
                     ctx.arc(cx, cy, radius, startAngle, endAngle);
                     ctx.closePath();
-                    ctx.fillStyle = color;
+                    ctx.fillStyle = wheelColors[i % wheelColors.length];
                     ctx.fill();
                     ctx.strokeStyle = '#fff';
                     ctx.lineWidth = 2;
                     ctx.stroke();
 
-                    // Текст
+                    // Только эмодзи, без названия
                     const midAngle = startAngle + arc / 2;
-                    const textRadius = radius * 0.7;
+                    const textRadius = radius * 0.65;
                     const x = cx + Math.cos(midAngle) * textRadius;
                     const y = cy + Math.sin(midAngle) * textRadius;
                     ctx.save();
                     ctx.translate(x, y);
                     ctx.rotate(midAngle + Math.PI/2);
                     ctx.fillStyle = '#fff';
-                    ctx.font = 'bold 14px Roboto';
+                    ctx.font = 'bold 28px Roboto';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    const label = wheelDishes[i].emoji + ' ' + wheelDishes[i].name;
-                    // Укоротим длинные названия
-                    const shortLabel = label.length > 20 ? label.slice(0, 18)+'…' : label;
-                    ctx.fillText(shortLabel, 0, 0);
+                    ctx.fillText(wheelDishes[i].emoji, 0, 0);
                     ctx.restore();
                 }
 
-                // Стрелка (треугольник сверху)
+                // Стрелка
                 ctx.fillStyle = '#fff';
                 ctx.beginPath();
                 ctx.moveTo(cx, 10);
@@ -1273,18 +1333,17 @@
                 isSpinning = true;
                 spinBtn.disabled = true;
 
-                const spins = 5 + Math.random() * 5; // количество полных оборотов
+                const spins = 5 + Math.random() * 5;
                 const extra = Math.random() * 2 * Math.PI;
                 const targetRotation = currentRotation + spins * 2 * Math.PI + extra;
 
-                const duration = 4000; // 4 секунды
+                const duration = 4000;
                 const startTime = performance.now();
                 const startRotation = currentRotation;
 
                 function animate(now) {
                     const elapsed = now - startTime;
                     const progress = Math.min(elapsed / duration, 1);
-                    // easeOutCubic
                     const eased = 1 - Math.pow(1 - progress, 3);
                     const rot = startRotation + (targetRotation - startRotation) * eased;
                     drawWheel(rot);
@@ -1294,21 +1353,16 @@
                         currentRotation = targetRotation;
                         isSpinning = false;
                         spinBtn.disabled = false;
-                        // Определяем выпавшее блюдо
+                        // Определяем выпавшее блюдо (с эмодзи)
                         const count = wheelDishes.length;
                         const arc = (2 * Math.PI) / count;
-                        // Угол стрелки (сверху) = -90 градусов (отрицательная ось Y)
                         const pointerAngle = -Math.PI / 2;
-                        // Нормализуем угол
                         let angle = (pointerAngle - currentRotation) % (2 * Math.PI);
                         if (angle < 0) angle += 2 * Math.PI;
                         const index = Math.floor(angle / arc) % count;
                         const selected = wheelDishes[index];
-                        // Сохраняем время вращения
                         setLastSpin(Date.now());
-                        // Показываем результат
                         showWheelResult(selected);
-                        // Обновляем таймер
                         updateTimerDisplay();
                     }
                 }
@@ -1319,8 +1373,7 @@
                 const modal = document.getElementById('wheelResultModal');
                 const dishSpan = document.getElementById('wheelResultDish');
                 const nextTimerSpan = document.getElementById('wheelNextTimer');
-                dishSpan.textContent = `${dish.emoji} ${dish.name}`;
-                // Таймер до следующего прокрута (24 часа)
+                dishSpan.textContent = dish.emoji;
                 const remaining = getRemainingTime();
                 const hours = Math.floor(remaining / (60*60*1000));
                 const mins = Math.floor((remaining % (60*60*1000)) / (60*1000));
@@ -1328,12 +1381,13 @@
                 nextTimerSpan.textContent = `${hours}ч ${mins}м ${secs}с`;
                 modal.classList.add('open');
 
-                // Кнопки
+                // Находим полное блюдо по эмодзи (для отправки в Telegram)
+                const fullDish = allDishes.find(d => d.emoji === dish.emoji);
+
                 document.getElementById('wheelOrderBtn').onclick = function() {
                     modal.classList.remove('open');
-                    // Отправляем заказ этого блюда в Telegram
                     const userName = localStorage.getItem('userName') || 'Гость';
-                    const msg = `🎡 Заказ с Колеса Вкуса!\n\n👤 Имя: ${userName}\n🍽️ Блюдо: ${dish.emoji} ${dish.name}\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
+                    const msg = `🎡 Заказ с Колеса Вкуса!\n\n👤 Имя: ${userName}\n🍽️ Блюдо: ${fullDish ? fullDish.emoji + ' ' + fullDish.name : dish.emoji}\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
                     sendTelegramMessage(msg);
                     alert('Блюдо заказано! Ожидайте, скоро будет готово.');
                 };
@@ -1380,7 +1434,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
-            // ===== КОРЗИНА (открытие/закрытие) =====
+            // ===== КОРЗИНА =====
             document.getElementById('cartBtn').addEventListener('click', function() {
                 renderCartModal();
                 document.getElementById('cartModal').classList.add('open');
@@ -1426,17 +1480,11 @@
             renderPopular();
             updateCartUI();
             updateTimerDisplay();
-
-            // Рисуем колесо при загрузке
             drawWheel(0);
-            // Кнопка вращения
             spinBtn.addEventListener('click', spinWheel);
 
             // Обновляем таймер каждую секунду
             setInterval(updateTimerDisplay, 1000);
-
-            // При клике на пункт меню "Колесо Вкуса" обновляем таймер
-            document.querySelector('a[href="#wheel"]')?.addEventListener('click', updateTimerDisplay);
 
         })();
     </script>
