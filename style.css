@@ -673,7 +673,7 @@ body.light .sponsor-item .sponsor-logo {
     transform: scale(1.02);
 }
 
-/* ===== МОДАЛКА УСПЕШНОГО ЗАКАЗА (красивая) ===== */
+/* ===== МОДАЛКА УСПЕШНОГО ЗАКАЗА ===== */
 #orderSuccessModal .modal {
     border: 2px solid #4CAF50;
     background: var(--bg-card);
@@ -799,86 +799,6 @@ body.light #orderSuccessModal h2 {
     font-weight: 700;
 }
 
-/* ===== ОВЕРЛЕЙ ВРЕМЕННОГО ЗАКРЫТИЯ ===== */
-.overlay-closed {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(6px);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    animation: overlayFadeIn 0.5s ease-out;
-}
-.overlay-closed.hidden {
-    display: none;
-}
-@keyframes overlayFadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-.closed-modal {
-    background: var(--bg-card);
-    border: 2px solid var(--accent);
-    border-radius: 30px;
-    padding: 40px 35px;
-    max-width: 460px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-    animation: modalPop 0.4s ease-out;
-}
-.closed-modal .closed-icon {
-    font-size: 4.5rem;
-    display: block;
-    margin-bottom: 10px;
-}
-.closed-modal h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    color: var(--text-primary);
-    margin-bottom: 12px;
-}
-.closed-modal p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 6px;
-}
-.closed-modal .close-overlay-btn {
-    background: var(--accent);
-    color: #0d0907;
-    border: none;
-    padding: 12px 40px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    margin-top: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-.closed-modal .close-overlay-btn:hover {
-    background: var(--accent-hover);
-    transform: scale(1.05);
-}
-body.light .closed-modal {
-    background: #f8f0e7;
-    border-color: #b88a6a;
-}
-body.light .closed-modal h2 {
-    color: #2c1f18;
-}
-body.light .closed-modal p {
-    color: #4d3a2e;
-}
-body.light .closed-modal .close-overlay-btn {
-    color: #2c1f18;
-}
-
 /* Мобильная адаптация */
 @media (max-width: 768px) {
     .hero { min-height: 70vh; background-attachment: scroll; }
@@ -909,7 +829,6 @@ body.light .closed-modal .close-overlay-btn {
     .modal { padding: 30px 20px; }
     .wheel-wrapper .spin-btn { width: 60px; height: 60px; font-size: 0.9rem; }
     .sponsor-item .sponsor-logo { width: 60px; height: 60px; }
-    .closed-modal { padding: 30px 20px; }
 }
 @media (max-width: 480px) {
     .menu-grid, .popular-grid { grid-template-columns: 1fr; }
