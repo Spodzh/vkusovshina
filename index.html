@@ -8,18 +8,7 @@
 </head>
 <body>
 
-    <!-- ОВЕРЛЕЙ ВРЕМЕННОГО ЗАКРЫТИЯ (НЕЗАКРЫВАЕМЫЙ) -->
-    <div class="overlay-closed" id="closedOverlay">
-        <div class="closed-modal">
-            <span class="closed-icon">🚧</span>
-            <h2>Ресторан временно закрыт</h2>
-            <p>Мы работаем над улучшением нашего меню и сервиса.<br>Скоро откроемся с новыми вкусами!</p>
-            <p style="margin-top: 6px; font-size: 0.9rem; color: var(--text-muted);">Следите за обновлениями в соцсетях</p>
-            <!-- Кнопка закрытия УДАЛЕНА -->
-        </div>
-    </div>
-
-    <!-- ВЕСЬ ОСТАЛЬНОЙ КОНТЕНТ (будет скрыт оверлеем) -->
+    <!-- HERO -->
     <section class="hero" id="home">
         <h1>Вкусовщина</h1>
         <div class="subtitle">Ресторан домашней кухни</div>
@@ -27,6 +16,7 @@
         <div class="scroll-down">⌄</div>
     </section>
 
+    <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="#home" class="logo">Вкусов<span>щина</span></a>
         <div class="nav-right">
@@ -50,6 +40,8 @@
     </nav>
 
     <div class="container">
+
+        <!-- О НАС -->
         <section id="about" class="section">
             <h2 class="section-title">О ресторане</h2>
             <div class="about-text">
@@ -58,16 +50,19 @@
             </div>
         </section>
 
+        <!-- ПОПУЛЯРНЫЕ БЛЮДА -->
         <section id="popular" class="section">
             <h2 class="section-title">⭐ Популярные блюда</h2>
             <div class="popular-grid"></div>
         </section>
 
+        <!-- МЕНЮ -->
         <section id="menu" class="section">
             <h2 class="section-title">Наше меню</h2>
             <div class="menu-grid" id="menuGrid"></div>
         </section>
 
+        <!-- КОЛЕСО ВКУСА -->
         <section id="wheel" class="section">
             <h2 class="section-title">🎡 Колесо Вкуса!</h2>
             <div class="wheel-container">
@@ -79,6 +74,7 @@
             </div>
         </section>
 
+        <!-- АКЦИИ -->
         <section id="promo" class="section">
             <h2 class="section-title">Акции и спецпредложения</h2>
             <div class="promo-grid">
@@ -104,6 +100,7 @@
             </div>
         </section>
 
+        <!-- КОНТАКТЫ -->
         <section id="contacts" class="section">
             <h2 class="section-title">Контакты</h2>
             <div class="contacts-grid">
@@ -149,6 +146,7 @@
                     <div class="label">TikTok</div>
                     <div class="value"><a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a></div>
                 </div>
+                <!-- СПОНСОРСКИЙ БЛОК -->
                 <div class="contact-item sponsor-item">
                     <a href="https://spodzh.github.io/spodzhislavia/index.html" target="_blank" rel="noopener noreferrer">
                         <img src="https://i.ibb.co/d4G3b1pc/21312.png" alt="Споджиславие" class="sponsor-logo">
@@ -158,6 +156,7 @@
                 </div>
             </div>
         </section>
+
     </div>
 
     <footer class="footer">
@@ -181,14 +180,58 @@
         </div>
     </footer>
 
+    <!-- Кнопка наверх -->
     <button class="back-to-top" id="backToTop" aria-label="Наверх">↑</button>
 
-    <!-- Модалки и скрипты (они не видны из-за оверлея) -->
-    <div class="modal-overlay cart-modal" id="cartModal">...</div>
-    <div class="modal-overlay" id="orderSuccessModal">...</div>
-    <div class="modal-overlay" id="wheelResultModal">...</div>
-    <div class="modal-overlay name-input-modal" id="nameModal">...</div>
+    <!-- МОДАЛКИ -->
+    <div class="modal-overlay cart-modal" id="cartModal">
+        <div class="modal">
+            <h2>🛒 Корзина</h2>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Итого: 0 блюд</div>
+            <button class="order-cart-btn" id="orderCartBtn">Оформить заказ</button>
+            <button class="close-modal-btn" id="closeCartBtn" style="margin-top:10px;">Закрыть</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="orderSuccessModal">
+        <div class="modal">
+            <span class="emoji-big">✅</span>
+            <h2>Заказ оформлен!</h2>
+            <div class="message">
+                Ваш заказ принят! Мы уже начали готовить.<br>
+                Ожидайте звонка для подтверждения.
+            </div>
+            <div class="thanks">Спасибо, что выбрали «Вкусовщину»!</div>
+            <button class="close-modal-btn" id="closeSuccessBtn">Отлично!</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="wheelResultModal">
+        <div class="modal">
+            <span class="emoji-big">🎉</span>
+            <h2>Вам выпало!</h2>
+            <div class="order-dish" id="wheelResultDish">🍽️ Блюдо</div>
+            <div class="message">Хотите заказать это блюдо?</div>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <button class="close-modal-btn" id="wheelOrderBtn" style="background:var(--accent);">Заказать</button>
+                <button class="close-modal-btn" id="wheelCancelBtn" style="background:var(--border-color); color:var(--text-primary);">Отменить</button>
+            </div>
+            <div style="margin-top:10px; font-size:0.9rem; color:var(--text-muted);">Следующий прокрут через <span id="wheelNextTimer"></span></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay name-input-modal" id="nameModal">
+        <div class="modal">
+            <span class="emoji-big">👋</span>
+            <h2>Добро пожаловать!</h2>
+            <p style="color: var(--text-secondary); margin-bottom:10px;">Представьтесь, пожалуйста:</p>
+            <input type="text" id="userNameInput" placeholder="Введите ваше имя" autofocus>
+            <button class="save-name-btn" id="saveNameBtn">Сохранить</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
+
 </body>
 </html>
