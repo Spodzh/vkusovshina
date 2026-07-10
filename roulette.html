@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Рулетка Вкуса | Вкусовщина</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0a0505;
+            color: #f5efe8;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* НАВИГАЦИЯ */
+        .nav {
+            background: rgba(10, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #2a1a15;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #f5efe8;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+        .nav .logo span { color: #c9a96e; }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        .nav-links a {
+            color: #d4c9c0;
+            text-decoration: none;
+            font-weight: 300;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+            padding: 6px 0;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: #c9a96e;
+            transition: width 0.3s;
+        }
+        .nav-links a:hover { color: #c9a96e; }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* КОНТЕЙНЕР */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .roulette-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 5vw, 3rem);
+            color: #f5efe8;
+            margin-bottom: 10px;
+        }
+        .roulette-subtitle {
+            color: #c9a96e;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        /* РУЛЕТКА */
+        .roulette-wrapper {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            background: rgba(26, 15, 15, 0.85);
+            border-radius: 20px;
+            padding: 30px 20px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+        .roulette-display {
+            background: #0a0505;
+            border-radius: 16px;
+            padding: 30px 20px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #2a1a15;
+            font-size: 4rem;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        .roulette-display.spinning {
+            animation: shake 0.1s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translateX(-3px) rotate(-1deg); }
+            50% { transform: translateX(3px) rotate(1deg); }
+            100% { transform: translateX(-3px) rotate(-1deg); }
+        }
+        .roulette-display .dish-name {
+            font-size: 1.2rem;
+            color: #c9a96e;
+            margin-top: 10px;
+            display: block;
+            font-family: 'Playfair Display', serif;
+        }
+        .roulette-display .empty-text {
+            font-size: 1.2rem;
+            color: #6b5a4a;
+        }
+
+        .roulette-btn {
+            background: #c9a96e;
+            color: #0a0505;
+            border: none;
+            padding: 14px 50px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .roulette-btn:hover:not(:disabled) {
+            background: #e8d5a8;
+            transform: scale(1.03);
+            box-shadow: 0 4px 30px rgba(201, 169, 110, 0.3);
+        }
+        .roulette-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .roulette-timer {
+            color: #a89588;
+            font-size: 1rem;
+            margin-top: 15px;
+        }
+        .roulette-timer span {
+            color: #c9a96e;
+            font-weight: 700;
+        }
+
+        /* МОДАЛКА РЕЗУЛЬТАТА */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: #1a0f0f;
+            border: 2px solid #c9a96e;
+            border-radius: 24px;
+            padding: 35px 30px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            animation: modalPop 0.3s ease-out;
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal .result-emoji {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .modal h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #f5efe8;
+            margin-bottom: 8px;
+        }
+        .modal .result-name {
+            color: #c9a96e;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .modal .result-text {
+            color: #a89588;
+            margin: 12px 0 20px;
+            font-size: 1rem;
+        }
+        .modal .modal-btn {
+            background: #c9a96e;
+            color: #0a0505;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+        .modal .modal-btn:hover {
+            background: #e8d5a8;
+        }
+        .modal .modal-btn.cancel {
+            background: #2a1a15;
+            color: #a89588;
+        }
+        .modal .modal-btn.cancel:hover {
+            background: #3a2a20;
+        }
+
+        /* ФУТЕР */
+        .footer {
+            background: #0a0505;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #1a0f0f;
+            color: #6b5a4a;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+        .footer span { color: #c9a96e; }
+
+        @media (max-width: 768px) {
+            .nav .nav-links { display: none; }
+            .roulette-wrapper { padding: 20px 15px; }
+            .roulette-display { min-height: 100px; font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- НАВИГАЦИЯ -->
+    <nav class="nav">
+        <a href="index.html" class="logo">Вкусов<span>щина</span></a>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="menu.html">Меню</a>
+            <a href="roulette.html">Рулетка Вкуса</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="roulette-title">🎰 Рулетка Вкуса</h1>
+        <p class="roulette-subtitle">Крути и выигрывай блюдо бесплатно!</p>
+
+        <div class="roulette-wrapper">
+            <div class="roulette-display" id="rouletteDisplay">
+                <span class="empty-text">Нажми "Крутить!"</span>
+            </div>
+            <button class="roulette-btn" id="spinBtn">Крутить!</button>
+            <div class="roulette-timer" id="timerDisplay">Доступно: <span>2</span> вращения</div>
+        </div>
+
+        <p style="color:#6b5a4a; font-size:0.85rem; margin-top:10px;">
+            ⚡ 2 вращения в день (каждые 12 часов)<br>
+            🎁 Выпавшее блюдо можно заказать бесплатно!
+        </p>
+    </div>
+
+    <!-- МОДАЛКА РЕЗУЛЬТАТА -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal">
+            <span class="result-emoji" id="resultEmoji">🎉</span>
+            <h2>Вы выиграли!</h2>
+            <div class="result-name" id="resultName">Название блюда</div>
+            <div class="result-text">Вы можете заказать это блюдо бесплатно!</div>
+            <div>
+                <button class="modal-btn" id="orderBtn">Заказать бесплатно</button>
+                <button class="modal-btn cancel" id="cancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 <span>«Вкусовщина»</span> — Премиум-ресторан</p>
+        <p style="margin-top: 4px; font-size: 0.75rem;">Шеф-повар <span>Родион Жуков</span></p>
+    </footer>
+
+    <script>
+        (function() {
+            // ===== ДАННЫЕ =====
+            const allDishes = [
+                { name: 'Чай', emoji: '☕' },
+                { name: 'Вафли', emoji: '🧇' },
+                { name: 'Конфеты', emoji: '🍬' },
+                { name: 'Бутерброд с колбасой и батоном', emoji: '🥪' },
+                { name: 'Жареное яйцо', emoji: '🍳' },
+                { name: 'Вода', emoji: '💧' },
+                { name: 'Кола', emoji: '🥤' },
+                { name: 'Яблоко', emoji: '🍏' },
+                { name: 'Квас', emoji: '🍺' },
+                { name: 'Кофе', emoji: '☕' },
+                { name: 'Картошка фри', emoji: '🍟' },
+                { name: 'Гренки', emoji: '🍞' },
+                { name: 'Трубочки вафельные Вивайли', emoji: '🧇' },
+                { name: 'Пельмени', emoji: '🥟' },
+                { name: 'Чипсы', emoji: '🍟' },
+                { name: 'Жвачка Love is', emoji: '🍬' },
+                { name: 'Булочки', emoji: '🥐' },
+                { name: 'Жвачка арбузная', emoji: '🍉' },
+                { name: 'Сок с трубочкой', emoji: '🧃' }
+            ];
+
+            // ===== СОСТОЯНИЕ =====
+            const SPINS_KEY = 'rouletteSpins';
+            const LAST_SPIN_KEY = 'rouletteLastSpin';
+            const MAX_SPINS = 2;
+            const COOLDOWN = 12 * 60 * 60 * 1000; // 12 часов
+
+            let currentDish = null;
+            let isSpinning = false;
+
+            // ===== ЭЛЕМЕНТЫ =====
+            const display = document.getElementById('rouletteDisplay');
+            const spinBtn = document.getElementById('spinBtn');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const resultModal = document.getElementById('resultModal');
+            const resultEmoji = document.getElementById('resultEmoji');
+            const resultName = document.getElementById('resultName');
+            const orderBtn = document.getElementById('orderBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            // ===== ФУНКЦИИ =====
+            function getSpins() {
+                const data = JSON.parse(localStorage.getItem(SPINS_KEY) || '{"count":2,"date":0}');
+                const now = Date.now();
+                // Сбрасываем если прошло 12 часов
+                if (now - data.date > COOLDOWN) {
+                    return { count: MAX_SPINS, date: now };
+                }
+                return data;
+            }
+
+            function saveSpins(data) {
+                localStorage.setItem(SPINS_KEY, JSON.stringify(data));
+            }
+
+            function getRemainingTime() {
+                const data = JSON.parse(localStorage.getItem(SPINS_KEY) || '{"count":2,"date":0}');
+                const now = Date.now();
+                if (data.count >= MAX_SPINS) return 0;
+                const elapsed = now - data.date;
+                if (elapsed >= COOLDOWN) return 0;
+                return COOLDOWN - elapsed;
+            }
+
+            function updateUI() {
+                const data = getSpins();
+                const remaining = data.count;
+                const timeRemaining = getRemainingTime();
+
+                if (timeRemaining > 0 && remaining < MAX_SPINS) {
+                    const hours = Math.floor(timeRemaining / (60*60*1000));
+                    const mins = Math.floor((timeRemaining % (60*60*1000)) / (60*1000));
+                    timerDisplay.innerHTML = `Следующее вращение через <span>${hours}ч ${mins}м</span>`;
+                    spinBtn.disabled = true;
+                } else if (remaining > 0) {
+                    timerDisplay.innerHTML = `Доступно: <span>${remaining}</span> вращений`;
+                    spinBtn.disabled = false;
+                } else {
+                    timerDisplay.innerHTML = `Вращений сегодня нет. Ждите 12 часов.`;
+                    spinBtn.disabled = true;
+                }
+            }
+
+            function spinRoulette() {
+                if (isSpinning) return;
+                const data = getSpins();
+                if (data.count <= 0) {
+                    alert('У вас закончились вращения! Попробуйте через 12 часов.');
+                    return;
+                }
+
+                isSpinning = true;
+                spinBtn.disabled = true;
+                display.classList.add('spinning');
+
+                // Анимация прокрутки
+                let counter = 0;
+                const totalSteps = 20 + Math.floor(Math.random() * 15);
+                const interval = setInterval(() => {
+                    const randomIdx = Math.floor(Math.random() * allDishes.length);
+                    const dish = allDishes[randomIdx];
+                    display.innerHTML = `
+                        <div style="text-align:center;">
+                            <div style="font-size:3.5rem;">${dish.emoji}</div>
+                            <span class="dish-name">${dish.name}</span>
+                        </div>
+                    `;
+                    counter++;
+                    if (counter >= totalSteps) {
+                        clearInterval(interval);
+                        // Финальный выбор
+                        const finalIdx = Math.floor(Math.random() * allDishes.length);
+                        currentDish = allDishes[finalIdx];
+                        display.innerHTML = `
+                            <div style="text-align:center;">
+                                <div style="font-size:4rem;">${currentDish.emoji}</div>
+                                <span class="dish-name">${currentDish.name}</span>
+                            </div>
+                        `;
+                        display.classList.remove('spinning');
+                        isSpinning = false;
+
+                        // Обновляем количество вращений
+                        data.count--;
+                        if (data.count === 0) {
+                            data.date = Date.now();
+                        }
+                        saveSpins(data);
+                        updateUI();
+
+                        // Показываем результат
+                        showResult(currentDish);
+                    }
+                }, 100);
+            }
+
+            function showResult(dish) {
+                resultEmoji.textContent = dish.emoji;
+                resultName.textContent = dish.name;
+                resultModal.classList.add('open');
+            }
+
+            function closeResult() {
+                resultModal.classList.remove('open');
+            }
+
+            function orderFree() {
+                if (!currentDish) return;
+                alert(`🎉 Вы заказали ${currentDish.name} бесплатно!\nОжидайте, скоро будет готово.`);
+                closeResult();
+                // Отправляем в Telegram (демо)
+                console.log(`Бесплатный заказ: ${currentDish.name}`);
+            }
+
+            // ===== СОБЫТИЯ =====
+            spinBtn.addEventListener('click', spinRoulette);
+            orderBtn.addEventListener('click', orderFree);
+            cancelBtn.addEventListener('click', closeResult);
+            resultModal.addEventListener('click', function(e) {
+                if (e.target === resultModal) closeResult();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && resultModal.classList.contains('open')) closeResult();
+            });
+
+            // ===== ИНИЦИАЛИЗАЦИЯ =====
+            updateUI();
+
+            // Обновляем каждые 30 секунд
+            setInterval(updateUI, 30000);
+
+        })();
+    </script>
+
+</body>
+</html>
