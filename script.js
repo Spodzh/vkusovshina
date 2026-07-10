@@ -67,7 +67,7 @@
             position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
             background: var(--bg-card); color: var(--text-primary);
             padding: 12px 24px; border-radius: 30px;
-            border: 1px solid var(--accent);
+            border: 1px solid var(--gold);
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             z-index: 999; font-weight: 500;
             transition: opacity 0.5s;
@@ -162,27 +162,7 @@
         });
     }
 
-    // ===== ОТРИСОВКА МЕНЮ =====
-    function renderMenu() {
-        const container = document.getElementById('menuGrid');
-        container.innerHTML = menuDishes.map(d => `
-            <div class="menu-item">
-                <span class="emoji">${d.emoji}</span>
-                <h3>${d.name}</h3>
-                <span class="price">${d.price}</span>
-                <p>${d.desc}</p>
-                <button class="add-to-cart" data-name="${d.name}">Добавить в корзину</button>
-            </div>
-        `).join('');
-
-        container.querySelectorAll('.add-to-cart').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                addToCart(this.dataset.name);
-            });
-        });
-    }
-
+    // ===== ОТРИСОВКА ПОПУЛЯРНЫХ =====
     function renderPopular() {
         const container = document.querySelector('.popular-grid');
         container.innerHTML = popularDishes.map(d => `
@@ -200,6 +180,50 @@
                 e.stopPropagation();
                 addToCart(this.dataset.name);
             });
+        });
+    }
+
+    // ===== ОТРИСОВКА МЕНЮ В МОДАЛКЕ =====
+    function renderMenuModal() {
+        const container = document.getElementById('menuModalGrid');
+        container.innerHTML = allDishes.map(d => `
+            <div class="menu-item">
+                <span class="emoji">${d.emoji}</span>
+                <h3>${d.name}</h3>
+                <span class="price">${d.price}</span>
+                <p>${d.desc}</p>
+                <button class="add-to-cart" data-name="${d.name}">Добавить в корзину</button>
+            </div>
+        `).join('');
+
+        container.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                addToCart(this.dataset.name);
+            });
+        });
+    }
+
+    // ===== МОДАЛЬНОЕ ОКНО МЕНЮ =====
+    const menuModal = document.getElementById('menuModal');
+    const openMenuBtn = document.getElementById('openMenuModal');
+    const closeMenuBtn = document.getElementById('closeMenuModal');
+
+    if (openMenuBtn && menuModal && closeMenuBtn) {
+        openMenuBtn.addEventListener('click', function() {
+            renderMenuModal();
+            menuModal.classList.add('open');
+        });
+        closeMenuBtn.addEventListener('click', function() {
+            menuModal.classList.remove('open');
+        });
+        menuModal.addEventListener('click', function(e) {
+            if (e.target === menuModal) menuModal.classList.remove('open');
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && menuModal.classList.contains('open')) {
+                menuModal.classList.remove('open');
+            }
         });
     }
 
@@ -227,10 +251,8 @@
 
     const wheelDishes = allDishes.map(d => ({ emoji: d.emoji }));
     const wheelColors = [
-        '#c89b7b', '#8b5e3c', '#5a3d2b', '#b8957a', '#a67c5b',
-        '#d4a88a', '#7a4f3a', '#e8c9b0', '#9b6b4a', '#bf8f6b',
-        '#8a6b4a', '#c4a88a', '#6a4d3a', '#dbb89a', '#a07a5a',
-        '#b08a6a', '#7a5a40', '#d4b09a', '#9a7a5a', '#c09a7a'
+        '#c9a96e', '#a8884a', '#8a6a40', '#b8957a', '#d4b88a',
+        '#a67c5b', '#8b5e3c', '#e8d5a8', '#9b6b4a', '#bf8f6b'
     ];
 
     let currentRotation = 0;
@@ -285,7 +307,7 @@
             ctx.fillStyle = wheelColors[i % wheelColors.length];
             ctx.fill();
             ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
 
             const midAngle = startAngle + arc / 2;
@@ -463,7 +485,6 @@
     }
 
     // ===== ИНИЦИАЛИЗАЦИЯ =====
-    renderMenu();
     renderPopular();
     updateCartUI();
     updateTimerDisplay();
