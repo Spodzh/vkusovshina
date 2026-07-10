@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Вкусовщина | Ресторан домашней кухни</title>
+    <title>Вкусовщина | Премиум-ресторан</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- HERO -->
     <section class="hero" id="home">
-        <h1>Вкусовщина</h1>
-        <div class="subtitle">Ресторан домашней кухни</div>
-        <div class="owner">✦ Основан Родионом ✦</div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">✦ EST. 2026 ✦</div>
+            <h1>Вкусовщина</h1>
+            <div class="subtitle">Ресторан высокой кухни</div>
+            <div class="owner">Основатель Родион</div>
+            <div class="hero-line"></div>
+            <a href="#about" class="hero-btn">Исследовать</a>
+        </div>
         <div class="scroll-down">⌄</div>
     </section>
 
@@ -43,28 +49,59 @@
 
         <!-- О НАС -->
         <section id="about" class="section">
-            <h2 class="section-title">О ресторане</h2>
+            <div class="section-header">
+                <span class="section-subtitle">О ресторане</span>
+                <h2 class="section-title">Искусство вкуса</h2>
+                <div class="section-line"></div>
+            </div>
             <div class="about-text">
                 <p>Добро пожаловать в <strong>«Вкусовщину»</strong> — ресторан, где каждая деталь пропитана заботой и страстью к кулинарии. Основатель <strong>Родион</strong> лично контролирует качество каждого блюда. У нас вы почувствуете атмосферу уюта и настоящий вкус жизни.</p>
-                <p style="margin-top: 12px; color: var(--text-muted);">Мы готовим с душой, используя только свежие продукты. Приходите — убедитесь сами!</p>
+                <p style="margin-top: 16px;">Мы готовим с душой, используя только свежие продукты. Приходите — убедитесь сами!</p>
+                <div class="about-signature">Родион Жуков<br><span>Шеф-повар</span></div>
             </div>
         </section>
 
         <!-- ПОПУЛЯРНЫЕ БЛЮДА -->
         <section id="popular" class="section">
-            <h2 class="section-title">⭐ Популярные блюда</h2>
+            <div class="section-header">
+                <span class="section-subtitle">Избранное</span>
+                <h2 class="section-title">Популярные блюда</h2>
+                <div class="section-line"></div>
+            </div>
             <div class="popular-grid"></div>
         </section>
 
-        <!-- МЕНЮ -->
-        <section id="menu" class="section">
-            <h2 class="section-title">Наше меню</h2>
-            <div class="menu-grid" id="menuGrid"></div>
+        <!-- КНОПКА ДЛЯ ОТКРЫТИЯ МЕНЮ (НОВОЕ ОКНО) -->
+        <section id="menu" class="section menu-section">
+            <div class="section-header">
+                <span class="section-subtitle">Наше меню</span>
+                <h2 class="section-title">Гастрономическое путешествие</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="menu-preview">
+                <p>Откройте для себя изысканные блюда, созданные с любовью и мастерством.</p>
+                <button class="menu-open-btn" id="openMenuModal">Открыть меню</button>
+            </div>
         </section>
+
+        <!-- МОДАЛЬНОЕ ОКНО МЕНЮ (НОВОЕ) -->
+        <div class="modal-overlay menu-modal" id="menuModal">
+            <div class="modal modal-large">
+                <button class="modal-close-btn" id="closeMenuModal">✕</button>
+                <h2>Наше меню</h2>
+                <div class="menu-modal-grid" id="menuModalGrid">
+                    <!-- Заполняется из JS -->
+                </div>
+            </div>
+        </div>
 
         <!-- КОЛЕСО ВКУСА -->
         <section id="wheel" class="section">
-            <h2 class="section-title">🎡 Колесо Вкуса!</h2>
+            <div class="section-header">
+                <span class="section-subtitle">Удача</span>
+                <h2 class="section-title">🎡 Колесо Вкуса!</h2>
+                <div class="section-line"></div>
+            </div>
             <div class="wheel-container">
                 <div class="wheel-wrapper">
                     <canvas id="wheelCanvas" width="500" height="500"></canvas>
@@ -76,83 +113,84 @@
 
         <!-- АКЦИИ -->
         <section id="promo" class="section">
-            <h2 class="section-title">Акции и спецпредложения</h2>
+            <div class="section-header">
+                <span class="section-subtitle">Специально для вас</span>
+                <h2 class="section-title">Акции</h2>
+                <div class="section-line"></div>
+            </div>
             <div class="promo-grid">
                 <div class="promo-card">
-                    <div class="icon">🎁</div>
-                    <h3>Скидка 40% на первый заказ дня</h3>
-                    <p>Первый заказ в нашем ресторане — скидка 40% на всё меню!</p>
-                    <span class="badge">Действует ежедневно</span>
+                    <div class="promo-icon">🎁</div>
+                    <h3>Скидка 40% на первый заказ</h3>
+                    <p>Для новых гостей — скидка на весь счёт при первом визите</p>
+                    <span class="promo-badge">Действует ежедневно</span>
                 </div>
                 <div class="promo-card">
-                    <div class="icon">🍽️</div>
+                    <div class="promo-icon">🍽️</div>
                     <h3>Комбо «Вивайли + Кола»</h3>
-                    <p>Трубочки вафельные Вивайли и освежающая кола — идеальное сочетание!</p>
-                    <span class="badge">Ежедневно с 12:00 до 14:00</span>
-                    <span class="new-badge">НОВИНКА</span>
+                    <p>Трубочки вафельные Вивайли и освежающая кола — идеальное сочетание</p>
+                    <span class="promo-badge">С 12:00 до 14:00</span>
+                    <span class="promo-new">НОВИНКА</span>
                 </div>
                 <div class="promo-card">
-                    <div class="icon">🎂</div>
+                    <div class="promo-icon">🎂</div>
                     <h3>Скидка 50% для именинников</h3>
-                    <p>В день рождения — скидка 50% на весь заказ. Не забудьте паспорт!</p>
-                    <span class="badge">По предъявлению документа</span>
+                    <p>В день рождения — скидка 50% на весь заказ</p>
+                    <span class="promo-badge">По предъявлению документа</span>
                 </div>
             </div>
         </section>
 
-        <!-- КОНТАКТЫ -->
+        <!-- КОНТАКТЫ (без Споджиславие) -->
         <section id="contacts" class="section">
-            <h2 class="section-title">Контакты</h2>
+            <div class="section-header">
+                <span class="section-subtitle">Связь</span>
+                <h2 class="section-title">Контакты</h2>
+                <div class="section-line"></div>
+            </div>
             <div class="contacts-grid">
                 <div class="contact-item">
-                    <div class="icon">📍</div>
-                    <div class="label">Адрес</div>
-                    <div class="value">ул. Белого, 16</div>
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-label">Адрес</div>
+                    <div class="contact-value">ул. Белого, 16</div>
                 </div>
                 <div class="contact-item">
-                    <div class="icon">📞</div>
-                    <div class="label">Телефон</div>
-                    <div class="value">+375 (44) 722-30-19</div>
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-label">Телефон</div>
+                    <div class="contact-value">+375 (44) 722-30-19</div>
                 </div>
                 <div class="contact-item">
-                    <div class="icon">🕒</div>
-                    <div class="label">Часы работы</div>
-                    <div class="value">8:30 – 23:30 <small>Выходные: понедельник, среда, четверг</small></div>
+                    <div class="contact-icon">🕒</div>
+                    <div class="contact-label">Часы работы</div>
+                    <div class="contact-value">8:30 – 23:30</div>
+                    <div class="contact-note">Выходные: понедельник, среда, четверг</div>
                 </div>
                 <div class="contact-item">
-                    <div class="icon">👨‍🍳</div>
-                    <div class="label">Шеф-повар</div>
-                    <div class="value">Родион Жуков</div>
+                    <div class="contact-icon">👨‍🍳</div>
+                    <div class="contact-label">Шеф-повар</div>
+                    <div class="contact-value">Родион Жуков</div>
                 </div>
                 <div class="contact-item">
                     <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
                         <span class="social-icon">
-                            <svg viewBox="0 0 24 24" fill="var(--text-secondary)">
+                            <svg viewBox="0 0 24 24" fill="var(--gold)">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18-.06-.05-.15-.03-.22-.02-.09.01-1.5.95-4.24 2.8-.4.27-.76.4-1.08.39-.36-.01-1.05-.2-1.56-.37-.63-.2-1.13-.31-1.08-.66.03-.18.27-.37.75-.56 2.94-1.28 4.9-2.13 5.88-2.56 2.8-1.22 3.38-1.43 3.76-1.43.08 0 .21.02.3.07.08.05.13.13.14.23.01.1-.01.23-.03.36z"/>
                             </svg>
                         </span>
                     </a>
-                    <div class="label">Telegram</div>
-                    <div class="value"><a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer">@dnevnikrodiona</a></div>
+                    <div class="contact-label">Telegram</div>
+                    <div class="contact-value"><a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer">@dnevnikrodiona</a></div>
                 </div>
                 <div class="contact-item">
                     <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">
                         <span class="social-icon">
-                            <svg viewBox="0 0 24 24" fill="var(--text-secondary)">
+                            <svg viewBox="0 0 24 24" fill="var(--gold)">
                                 <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.44 1.18-2.6 2.6-2.6.26 0 .51.04.74.12v-3.2a5.68 5.68 0 0 0-.74-.06c-3.19 0-5.78 2.59-5.78 5.78s2.59 5.78 5.78 5.78 5.78-2.59 5.78-5.78V9.63c1.2.87 2.69 1.38 4.29 1.38V7.84c-.95 0-1.83-.35-2.51-.93z"/>
                             </svg>
                         </span>
                     </a>
-                    <div class="label">TikTok</div>
-                    <div class="value"><a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a></div>
-                </div>
-                <!-- СПОНСОРСКИЙ БЛОК -->
-                <div class="contact-item sponsor-item">
-                    <a href="https://spodzh.github.io/spodzhislavia/index.html" target="_blank" rel="noopener noreferrer">
-                        <img src="https://i.ibb.co/d4G3b1pc/21312.png" alt="Споджиславие" class="sponsor-logo">
-                    </a>
-                    <div class="label">При поддержке</div>
-                    <div class="value">Споджиславие</div>
+                    <div class="contact-label">TikTok</div>
+                    <div class="contact-value"><a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer">@rodimisimus</a></div>
                 </div>
             </div>
         </section>
@@ -160,23 +198,25 @@
     </div>
 
     <footer class="footer">
-        <p>© 2026 <span>«Вкусовщина»</span> — Ресторан домашней кухни. Все права защищены.</p>
-        <p style="margin-top: 4px; font-size: 0.75rem;">Шеф-повар <span>Родион Жуков</span></p>
-        <div class="socials">
-            <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-                <span class="social-icon">
-                    <svg viewBox="0 0 24 24" fill="var(--text-muted)">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18-.06-.05-.15-.03-.22-.02-.09.01-1.5.95-4.24 2.8-.4.27-.76.4-1.08.39-.36-.01-1.05-.2-1.56-.37-.63-.2-1.13-.31-1.08-.66.03-.18.27-.37.75-.56 2.94-1.28 4.9-2.13 5.88-2.56 2.8-1.22 3.38-1.43 3.76-1.43.08 0 .21.02.3.07.08.05.13.13.14.23.01.1-.01.23-.03.36z"/>
-                    </svg>
-                </span>
-            </a>
-            <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-                <span class="social-icon">
-                    <svg viewBox="0 0 24 24" fill="var(--text-muted)">
-                        <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.44 1.18-2.6 2.6-2.6.26 0 .51.04.74.12v-3.2a5.68 5.68 0 0 0-.74-.06c-3.19 0-5.78 2.59-5.78 5.78s2.59 5.78 5.78 5.78 5.78-2.59 5.78-5.78V9.63c1.2.87 2.69 1.38 4.29 1.38V7.84c-.95 0-1.83-.35-2.51-.93z"/>
-                    </svg>
-                </span>
-            </a>
+        <div class="footer-content">
+            <p>© 2026 <span>«Вкусовщина»</span> — Премиум-ресторан</p>
+            <p style="margin-top: 4px; font-size: 0.75rem;">Шеф-повар <span>Родион Жуков</span></p>
+            <div class="footer-socials">
+                <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+                    <span class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="var(--gold-dark)">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.13-.05-.18-.06-.05-.15-.03-.22-.02-.09.01-1.5.95-4.24 2.8-.4.27-.76.4-1.08.39-.36-.01-1.05-.2-1.56-.37-.63-.2-1.13-.31-1.08-.66.03-.18.27-.37.75-.56 2.94-1.28 4.9-2.13 5.88-2.56 2.8-1.22 3.38-1.43 3.76-1.43.08 0 .21.02.3.07.08.05.13.13.14.23.01.1-.01.23-.03.36z"/>
+                        </svg>
+                    </span>
+                </a>
+                <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                    <span class="social-icon">
+                        <svg viewBox="0 0 24 24" fill="var(--gold-dark)">
+                            <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.44 1.18-2.6 2.6-2.6.26 0 .51.04.74.12v-3.2a5.68 5.68 0 0 0-.74-.06c-3.19 0-5.78 2.59-5.78 5.78s2.59 5.78 5.78 5.78 5.78-2.59 5.78-5.78V9.63c1.2.87 2.69 1.38 4.29 1.38V7.84c-.95 0-1.83-.35-2.51-.93z"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -186,11 +226,11 @@
     <!-- МОДАЛКИ -->
     <div class="modal-overlay cart-modal" id="cartModal">
         <div class="modal">
+            <button class="modal-close-btn" id="closeCartBtn">✕</button>
             <h2>🛒 Корзина</h2>
             <div class="cart-items" id="cartItems"></div>
             <div class="cart-total" id="cartTotal">Итого: 0 блюд</div>
             <button class="order-cart-btn" id="orderCartBtn">Оформить заказ</button>
-            <button class="close-modal-btn" id="closeCartBtn" style="margin-top:10px;">Закрыть</button>
         </div>
     </div>
 
@@ -198,10 +238,7 @@
         <div class="modal">
             <span class="emoji-big">✅</span>
             <h2>Заказ оформлен!</h2>
-            <div class="message">
-                Ваш заказ принят! Мы уже начали готовить.<br>
-                Ожидайте звонка для подтверждения.
-            </div>
+            <div class="message">Ваш заказ принят! Мы уже начали готовить.<br>Ожидайте звонка для подтверждения.</div>
             <div class="thanks">Спасибо, что выбрали «Вкусовщину»!</div>
             <button class="close-modal-btn" id="closeSuccessBtn">Отлично!</button>
         </div>
@@ -214,7 +251,7 @@
             <div class="order-dish" id="wheelResultDish">🍽️ Блюдо</div>
             <div class="message">Хотите заказать это блюдо?</div>
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                <button class="close-modal-btn" id="wheelOrderBtn" style="background:var(--accent);">Заказать</button>
+                <button class="close-modal-btn" id="wheelOrderBtn" style="background:var(--gold);">Заказать</button>
                 <button class="close-modal-btn" id="wheelCancelBtn" style="background:var(--border-color); color:var(--text-primary);">Отменить</button>
             </div>
             <div style="margin-top:10px; font-size:0.9rem; color:var(--text-muted);">Следующий прокрут через <span id="wheelNextTimer"></span></div>
