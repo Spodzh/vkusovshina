@@ -432,11 +432,14 @@
         <p style="margin-top: 4px;">Шеф-повар <span>Родион Жуков</span></p>
     </footer>
 
-    <!-- Подключаем cart.js -->
-    <script src="cart.js"></script>
-
     <script>
-        // ===== ДАННЫЕ =====
+        // ===== ВСЯ ЛОГИКА ВНУТРИ =====
+
+        // ----- НАСТРОЙКИ TELEGRAM -----
+        const TELEGRAM_BOT_TOKEN = '8752139780:AAEIbtDqq2F3FJ2TqFWcINLWg6Zml8UyAQI';
+        const TELEGRAM_CHAT_ID = '7892506421';
+
+        // ----- ДАННЫЕ БЛЮД -----
         const allDishes = [
             { name: 'Чай', emoji: '☕', price: '20 коп.', desc: 'Ароматный чёрный чай с бергамотом' },
             { name: 'Вафли', emoji: '🧇', price: '25 коп.', desc: 'Хрустящие вафли с варёной сгущёнкой' },
@@ -463,9 +466,143 @@
         const popularDishes = allDishes.filter(d => popularNames.includes(d.name));
         const menuDishes = allDishes.filter(d => !popularNames.includes(d.name));
 
-        // Делаем allDishes глобальной для cart.js
-        window.allDishes = allDishes;
+        // ----- КОРЗИНА -----
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const countElements = document.querySelectorAll('.cart-count');
+            countElements.forEach(el => el.textContent = cart.length);
+        }
+
+        function addToCart(dishName) {
+            const dish = allDishes.find(d => d.name === dishName);
+            if (!dish) return;
+            cart.push({ ...dish });
+            saveCart();
+            showNotification(`${dish.emoji} ${dish.name} добавлено в корзину!`);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            renderCartModal();
+        }
+
+        function clearCart() {
+            cart = [];
+            saveCart();
+            renderCartModal();
+        }
+
+        function showNotification(text) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+                background: #1a0f0f; color: #f5efe8;
+                padding: 14px 24px; border-radius: 30px;
+                border: 1px solid #c9a96e;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+                z-index: 999; font-weight: 500;
+                transition: opacity 0.5s;
+                max-width: 90%;
+                text-align: center;
+                font-size: 1rem;
+            `;
+            notif.textContent = text;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                setTimeout(() => notif.remove(), 500);
+            }, 2500);
+        }
+
+        // ----- TELEGRAM -----
+        function sendTelegramMessage(message) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            return fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: message,
+                    parse_mode: 'HTML',
+                    disable_web_page_preview: true,
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.ok) throw new Error(data.description);
+                console.log('✅ Сообщение отправлено');
+            })
+            .catch(err => console.error('❌ Ошибка:', err));
+        }
+
+        // ----- МОДАЛКА КОРЗИНЫ -----
+        function renderCartModal() {
+            const container = document.getElementById('cartItems');
+            const totalSpan = document.getElementById('cartTotal');
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="empty-cart">Корзина пуста</div>`;
+                totalSpan.textContent = 'Итого: 0 блюд';
+                return;
+            }
+            let html = '';
+            cart.forEach((item, idx) => {
+                html += `
+                    <div class="cart-item">
+                        <span class="name">${item.emoji} ${item.name} (${item.price})</span>
+                        <button class="remove-btn" data-index="${idx}">✕</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            totalSpan.textContent = `Итого: ${cart.length} блюд`;
+            container.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index);
+                    removeFromCart(idx);
+                });
+            });
+        }
+
+        function sendOrderFromCart() {
+            if (cart.length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+            const userName = localStorage.getItem('userName') || 'Гость';
+            const dishesList = cart.map((d, i) => `${i+1}. ${d.emoji} ${d.name} (${d.price})`).join('\n');
+            const total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
+            const msg = `🛒 Новый заказ из корзины!\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n\n💰 Итого: ${total} коп.\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
+            sendTelegramMessage(msg);
+            clearCart();
+            document.getElementById('cartModal').classList.remove('open');
+            showOrderSuccess();
+        }
+
+        function showOrderSuccess() {
+            const modal = document.getElementById('orderSuccessModal');
+            modal.classList.add('open');
+            document.getElementById('closeSuccessBtn').onclick = function() {
+                modal.classList.remove('open');
+            };
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.classList.remove('open');
+            };
+            document.addEventListener('keydown', function esc(e) {
+                if (e.key === 'Escape' && modal.classList.contains('open')) {
+                    modal.classList.remove('open');
+                    document.removeEventListener('keydown', esc);
+                }
+            });
+        }
+
+        // ----- ИНИЦИАЛИЗАЦИЯ МЕНЮ -----
         function renderDishes(containerId, dishes, isPopular = false) {
             const container = document.getElementById(containerId);
             container.innerHTML = dishes.map(d => `
@@ -482,15 +619,12 @@
             container.querySelectorAll('.add-to-cart').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const name = this.dataset.name;
-                    window.addToCart(name, allDishes);
+                    addToCart(name);
                 });
             });
         }
 
-        renderDishes('popularGrid', popularDishes, true);
-        renderDishes('menuGrid', menuDishes, false);
-
-        // Бургер
+        // ----- БУРГЕР -----
         const toggle = document.getElementById('menuToggle');
         const links = document.getElementById('navLinks');
         toggle.addEventListener('click', function() {
@@ -503,6 +637,24 @@
                 links.classList.remove('open');
             });
         });
+
+        // ----- КОРЗИНА (кнопки) -----
+        document.getElementById('cartBtn').addEventListener('click', function() {
+            renderCartModal();
+            document.getElementById('cartModal').classList.add('open');
+        });
+        document.getElementById('closeCartBtn').addEventListener('click', function() {
+            document.getElementById('cartModal').classList.remove('open');
+        });
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+        document.getElementById('orderCartBtn').addEventListener('click', sendOrderFromCart);
+
+        // ----- ЗАПУСК -----
+        renderDishes('popularGrid', popularDishes, true);
+        renderDishes('menuGrid', menuDishes, false);
+        updateCartUI();
     </script>
 
 </body>
