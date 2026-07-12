@@ -19,7 +19,6 @@
             flex-direction: column;
         }
 
-        /* ===== НАВИГАЦИЯ (бургер) ===== */
         .nav {
             background: rgba(10, 5, 5, 0.95);
             backdrop-filter: blur(10px);
@@ -75,9 +74,7 @@
             border-bottom: 1px solid #2a1a15;
             gap: 12px;
         }
-        .nav .nav-links.open {
-            display: flex;
-        }
+        .nav .nav-links.open { display: flex; }
         .nav .nav-links a {
             color: #d4c9c0;
             text-decoration: none;
@@ -92,7 +89,6 @@
         .nav .nav-links a:last-child { border-bottom: none; }
         .nav .nav-links a:hover { color: #c9a96e; }
 
-        /* ===== HERO ===== */
         .hero {
             position: relative;
             min-height: 70vh;
@@ -185,7 +181,6 @@
             transform: scale(1.02);
         }
 
-        /* ===== КОНТАКТЫ ===== */
         .contacts {
             background: #0a0505;
             padding: 30px 16px;
@@ -271,7 +266,6 @@
 </head>
 <body>
 
-    <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="index.html" class="logo">Вкусов<span>щина</span></a>
         <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
@@ -284,7 +278,6 @@
         </div>
     </nav>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-badge">✦ EST. 2026 ✦</div>
@@ -301,7 +294,6 @@
         </div>
     </section>
 
-    <!-- КОНТАКТЫ -->
     <section class="contacts">
         <h2 class="contacts-title">Контакты</h2>
         <div class="contacts-grid">
@@ -342,14 +334,12 @@
     </footer>
 
     <script>
-        // Бургер-меню
         const toggle = document.getElementById('menuToggle');
         const links = document.getElementById('navLinks');
         toggle.addEventListener('click', function() {
             this.classList.toggle('active');
             links.classList.toggle('open');
         });
-        // Закрыть при клике на ссылку
         links.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 toggle.classList.remove('active');
