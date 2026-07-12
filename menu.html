@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Меню | Вкусовщина</title>
     <style>
+        /* ===== Все стили как раньше, плюс модалка пожелания ===== */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,6 +44,19 @@
             align-items: center;
             gap: 12px;
         }
+        .nav .bonus-display {
+            color: #c9a96e;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(201, 169, 110, 0.15);
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+        .nav .bonus-display .icon { font-size: 1.1rem; }
+        .nav .bonus-display .count { font-weight: 700; color: #f5efe8; }
         .nav .cart-btn {
             position: relative;
             background: none;
@@ -325,6 +339,26 @@
         .cart-modal .order-cart-btn:hover { background: #e8d5a8; }
         .cart-modal .empty-cart { color: #a89588; padding: 20px 0; }
 
+        /* Модалка пожелания */
+        .wish-modal textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #2a1a15;
+            background: #0a0505;
+            color: #f5efe8;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+            margin: 10px 0 16px;
+            font-family: inherit;
+        }
+        .wish-modal textarea:focus { border-color: #c9a96e; outline: none; }
+        .wish-modal .wish-label {
+            color: #d4c9c0;
+            font-size: 0.9rem;
+        }
+
         /* Модалка успеха */
         #orderSuccessModal .modal { border-color: #4CAF50; }
         #orderSuccessModal .emoji-big { font-size: 3.5rem; display: block; margin-bottom: 6px; }
@@ -374,6 +408,10 @@
     <nav class="nav">
         <a href="index.html" class="logo">Вкусов<span>щина</span></a>
         <div class="nav-right">
+            <div class="bonus-display" id="bonusDisplay">
+                <span class="icon">🎁</span>
+                <span class="count" id="bonusCount">0</span>
+            </div>
             <button class="cart-btn" id="cartBtn" aria-label="Корзина">
                 🛒
                 <span class="cart-count" id="cartCount">0</span>
@@ -385,6 +423,7 @@
         <div class="nav-links" id="navLinks">
             <a href="index.html">Главная</a>
             <a href="menu.html">Меню</a>
+            <a href="status.html">Панель ожидания</a>
             <a href="roulette.html">Рулетка Вкуса</a>
         </div>
     </nav>
@@ -416,12 +455,23 @@
         </div>
     </div>
 
+    <!-- МОДАЛКА ПОЖЕЛАНИЯ (появляется при оформлении) -->
+    <div class="modal-overlay wish-modal" id="wishModal">
+        <div class="modal">
+            <button class="modal-close-btn" id="closeWishBtn">✕</button>
+            <h2>📝 Пожелание к заказу</h2>
+            <p class="wish-label">Оставьте комментарий для повара (необязательно)</p>
+            <textarea id="wishText" placeholder="Например: без лука, побольше соуса..."></textarea>
+            <button class="close-modal-btn" id="confirmOrderBtn">Отправить заказ</button>
+        </div>
+    </div>
+
     <!-- МОДАЛКА УСПЕШНОГО ЗАКАЗА -->
     <div class="modal-overlay" id="orderSuccessModal">
         <div class="modal">
             <span class="emoji-big">✅</span>
             <h2>Заказ оформлен!</h2>
-            <div class="message">Ваш заказ принят! Мы уже начали готовить.<br>Ожидайте звонка для подтверждения.</div>
+            <div class="message">Ваш заказ принят! Мы уже начали готовить.<br>Следите за статусом в <strong>Панели ожидания</strong>.</div>
             <div class="thanks">Спасибо, что выбрали «Вкусовщину»!</div>
             <button class="close-modal-btn" id="closeSuccessBtn">Отлично!</button>
         </div>
@@ -433,7 +483,7 @@
     </footer>
 
     <script>
-        // ===== ВСЯ ЛОГИКА ВНУТРИ =====
+        // ===== ВСЯ ЛОГИКА =====
 
         // ----- НАСТРОЙКИ TELEGRAM -----
         const TELEGRAM_BOT_TOKEN = '8752139780:AAEIbtDqq2F3FJ2TqFWcINLWg6Zml8UyAQI';
@@ -466,17 +516,22 @@
         const popularDishes = allDishes.filter(d => popularNames.includes(d.name));
         const menuDishes = allDishes.filter(d => !popularNames.includes(d.name));
 
-        // ----- КОРЗИНА -----
+        // ----- КОРЗИНА, БОНУСЫ, ЗАКАЗЫ -----
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         function saveCart() {
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartUI();
+            updateBonusUI();
         }
 
         function updateCartUI() {
-            const countElements = document.querySelectorAll('.cart-count');
-            countElements.forEach(el => el.textContent = cart.length);
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        function updateBonusUI() {
+            const bonus = parseInt(localStorage.getItem('bonus')) || 0;
+            document.getElementById('bonusCount').textContent = bonus;
         }
 
         function addToCart(dishName) {
@@ -521,7 +576,7 @@
             }, 2500);
         }
 
-        // ----- TELEGRAM -----
+        // ----- TELEGRAM ОТПРАВКА -----
         function sendTelegramMessage(message) {
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
             return fetch(url, {
@@ -540,6 +595,69 @@
                 console.log('✅ Сообщение отправлено');
             })
             .catch(err => console.error('❌ Ошибка:', err));
+        }
+
+        // ----- СОЗДАНИЕ ЗАКАЗА (с пожеланием) -----
+        function createOrder(wish) {
+            if (cart.length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+            const userName = localStorage.getItem('userName') || 'Гость';
+            const orderId = Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+            const total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
+            const dishesList = cart.map((d, i) => `${i+1}. ${d.emoji} ${d.name} (${d.price})`).join('\n');
+
+            // Сохраняем заказ в localStorage для панели ожидания
+            const order = {
+                id: orderId,
+                items: cart.map(d => ({ name: d.name, emoji: d.emoji, price: d.price })),
+                total: total,
+                wish: wish || 'Без пожеланий',
+                createdAt: Date.now(),
+                status: 'готовится', // 'готовится' или 'выполнен'
+                userName: userName
+            };
+            // Сохраняем в массив заказов (текущий + история)
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+
+            // Начисляем бонусы (10% от суммы в копейках)
+            const bonusEarned = Math.floor(total * 0.1);
+            let currentBonus = parseInt(localStorage.getItem('bonus')) || 0;
+            currentBonus += bonusEarned;
+            localStorage.setItem('bonus', currentBonus);
+
+            // Отправляем в Telegram
+            const msg = `🆕 <b>Новый заказ #${orderId}</b>\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n💰 Сумма: ${total} коп.\n📝 Пожелание: ${wish || 'Нет'}\n\n🕒 Статус: готовится (10 минут)\n\n🔔 Для подтверждения заказа перейдите в <a href="https://ваш-сайт/status.html">Панель ожидания</a> и нажмите «Подтвердить заказ».`;
+            sendTelegramMessage(msg);
+
+            // Очищаем корзину
+            clearCart();
+
+            // Показываем модалку успеха
+            showOrderSuccess();
+
+            // Закрываем модалку пожелания
+            document.getElementById('wishModal').classList.remove('open');
+        }
+
+        function showOrderSuccess() {
+            const modal = document.getElementById('orderSuccessModal');
+            modal.classList.add('open');
+            document.getElementById('closeSuccessBtn').onclick = function() {
+                modal.classList.remove('open');
+            };
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.classList.remove('open');
+            };
+            document.addEventListener('keydown', function esc(e) {
+                if (e.key === 'Escape' && modal.classList.contains('open')) {
+                    modal.classList.remove('open');
+                    document.removeEventListener('keydown', esc);
+                }
+            });
         }
 
         // ----- МОДАЛКА КОРЗИНЫ -----
@@ -570,36 +688,14 @@
             });
         }
 
-        function sendOrderFromCart() {
+        // ----- ОФОРМЛЕНИЕ ЗАКАЗА (открывает модалку пожелания) -----
+        function openWishModal() {
             if (cart.length === 0) {
                 alert('Корзина пуста!');
                 return;
             }
-            const userName = localStorage.getItem('userName') || 'Гость';
-            const dishesList = cart.map((d, i) => `${i+1}. ${d.emoji} ${d.name} (${d.price})`).join('\n');
-            const total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
-            const msg = `🛒 Новый заказ из корзины!\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n\n💰 Итого: ${total} коп.\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
-            sendTelegramMessage(msg);
-            clearCart();
-            document.getElementById('cartModal').classList.remove('open');
-            showOrderSuccess();
-        }
-
-        function showOrderSuccess() {
-            const modal = document.getElementById('orderSuccessModal');
-            modal.classList.add('open');
-            document.getElementById('closeSuccessBtn').onclick = function() {
-                modal.classList.remove('open');
-            };
-            modal.onclick = function(e) {
-                if (e.target === modal) modal.classList.remove('open');
-            };
-            document.addEventListener('keydown', function esc(e) {
-                if (e.key === 'Escape' && modal.classList.contains('open')) {
-                    modal.classList.remove('open');
-                    document.removeEventListener('keydown', esc);
-                }
-            });
+            document.getElementById('wishModal').classList.add('open');
+            document.getElementById('wishText').value = '';
         }
 
         // ----- ИНИЦИАЛИЗАЦИЯ МЕНЮ -----
@@ -624,7 +720,8 @@
             });
         }
 
-        // ----- БУРГЕР -----
+        // ===== СОБЫТИЯ =====
+        // Бургер
         const toggle = document.getElementById('menuToggle');
         const links = document.getElementById('navLinks');
         toggle.addEventListener('click', function() {
@@ -638,7 +735,7 @@
             });
         });
 
-        // ----- КОРЗИНА (кнопки) -----
+        // Корзина
         document.getElementById('cartBtn').addEventListener('click', function() {
             renderCartModal();
             document.getElementById('cartModal').classList.add('open');
@@ -649,12 +746,36 @@
         document.getElementById('cartModal').addEventListener('click', function(e) {
             if (e.target === this) this.classList.remove('open');
         });
-        document.getElementById('orderCartBtn').addEventListener('click', sendOrderFromCart);
+        document.getElementById('orderCartBtn').addEventListener('click', openWishModal);
+
+        // Модалка пожелания
+        document.getElementById('closeWishBtn').addEventListener('click', function() {
+            document.getElementById('wishModal').classList.remove('open');
+        });
+        document.getElementById('wishModal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+        document.getElementById('confirmOrderBtn').addEventListener('click', function() {
+            const wish = document.getElementById('wishText').value.trim();
+            createOrder(wish);
+        });
 
         // ----- ЗАПУСК -----
         renderDishes('popularGrid', popularDishes, true);
         renderDishes('menuGrid', menuDishes, false);
         updateCartUI();
+        updateBonusUI();
+
+        // Синхронизация при изменении localStorage в других вкладках
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'cart') {
+                cart = JSON.parse(e.newValue) || [];
+                updateCartUI();
+            }
+            if (e.key === 'bonus') {
+                updateBonusUI();
+            }
+        });
     </script>
 
 </body>
