@@ -4,41 +4,421 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Панель ожидания | Вкусовщина</title>
+    <!-- Подключаем шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* стили такие же, как в предыдущем ответе, я их не дублирую */
+        /* Базовые стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0a0505;
+            color: #f5efe8;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Навигация */
+        .nav {
+            background: rgba(10, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #2a1a15;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #f5efe8;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+        .nav .logo span {
+            color: #c9a96e;
+        }
+
+        .nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav .bonus-display {
+            color: #c9a96e;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(201, 169, 110, 0.15);
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+        .nav .bonus-display .icon {
+            font-size: 1.1rem;
+        }
+        .nav .bonus-display .count {
+            font-weight: 700;
+            color: #f5efe8;
+        }
+
+        .nav .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+            gap: 5px;
+        }
+        .nav .menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: #d4c9c0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        .nav .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .nav .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .nav .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .nav .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 5, 5, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-bottom: 1px solid #2a1a15;
+            gap: 12px;
+            z-index: 200;
+        }
+        .nav .nav-links.open {
+            display: flex;
+        }
+        .nav .nav-links a {
+            color: #d4c9c0;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a0f0f;
+            text-align: center;
+        }
+        .nav .nav-links a:last-child {
+            border-bottom: none;
+        }
+        .nav .nav-links a:hover {
+            color: #c9a96e;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 24px;
+            color: #f5efe8;
+            letter-spacing: 2px;
+        }
+
+        /* Секции статусов */
+        .status-section {
+            background: rgba(26, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px 20px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .status-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: #c9a96e;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-section .empty {
+            color: #a89588;
+            text-align: center;
+            padding: 30px 0;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        /* Карточка заказа */
+        .order-card {
+            background: #0a0505;
+            border-radius: 16px;
+            padding: 18px 16px;
+            border: 1px solid #2a1a15;
+            margin-bottom: 14px;
+            transition: border-color 0.3s;
+        }
+        .order-card:last-child {
+            margin-bottom: 0;
+        }
+        .order-card:hover {
+            border-color: #c9a96e;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .order-id {
+            font-size: 0.8rem;
+            color: #c9a96e;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .order-status {
+            font-size: 0.75rem;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .order-status.in-progress {
+            background: #e67e22;
+            color: #fff;
+        }
+        .order-status.completed {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .order-items {
+            color: #d4c9c0;
+            font-size: 0.95rem;
+            margin: 6px 0;
+        }
+        .order-items span {
+            display: inline-block;
+            margin-right: 6px;
+            background: rgba(201, 169, 110, 0.08);
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-bottom: 4px;
+        }
+
+        .order-total {
+            color: #f5efe8;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+        .order-wish {
+            color: #a89588;
+            font-size: 0.85rem;
+            margin-top: 4px;
+            font-style: italic;
+            border-top: 1px dashed #2a1a15;
+            padding-top: 8px;
+        }
+        .order-timer {
+            color: #c9a96e;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .confirm-btn {
+            background: #c9a96e;
+            color: #0a0505;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 12px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .confirm-btn:hover {
+            background: #e8d5a8;
+            transform: scale(1.02);
+        }
+        .confirm-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Подвал */
+        .footer {
+            background: #0a0505;
+            text-align: center;
+            padding: 18px;
+            border-top: 1px solid #1a0f0f;
+            color: #6b5a4a;
+            font-size: 0.75rem;
+            margin-top: 30px;
+        }
+        .footer span {
+            color: #c9a96e;
+        }
+
+        /* Адаптив для планшетов и десктопов */
+        @media (min-width: 768px) {
+            .nav .menu-toggle {
+                display: none;
+            }
+            .nav .nav-links {
+                display: flex !important;
+                flex-direction: row;
+                position: static;
+                background: none;
+                backdrop-filter: none;
+                padding: 0;
+                border: none;
+                gap: 30px;
+            }
+            .nav .nav-links a {
+                font-size: 0.85rem;
+                padding: 6px 0;
+                border-bottom: none;
+                text-align: left;
+            }
+            .container {
+                max-width: 800px;
+                padding: 30px 24px;
+            }
+            .order-card {
+                padding: 20px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .status-section {
+                padding: 16px 14px;
+            }
+            .page-title {
+                font-size: 1.6rem;
+            }
+            .order-header {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .order-items span {
+                font-size: 0.85rem;
+                padding: 2px 6px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- навигация та же -->
-    <!-- ... -->
+
+    <!-- НАВИГАЦИЯ -->
+    <nav class="nav">
+        <a href="index.html" class="logo">Вкусов<span>щина</span></a>
+        <div class="nav-right">
+            <div class="bonus-display">
+                <span class="icon">🎁</span>
+                <span class="count" id="bonusCount">0</span>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Главная</a>
+            <a href="menu.html">Меню</a>
+            <a href="status.html">Панель ожидания</a>
+            <a href="roulette.html">Рулетка Вкуса</a>
+        </div>
+    </nav>
 
     <div class="container">
-        <h1 style="font-family:'Playfair Display',serif; font-size:2rem; text-align:center; margin-bottom:24px; color:#f5efe8;">⏳ Панель ожидания</h1>
+        <h1 class="page-title">⏳ Панель ожидания</h1>
 
+        <!-- ТЕКУЩИЙ ЗАКАЗ -->
         <div class="status-section" id="currentOrderSection">
             <h2>📦 Текущий заказ</h2>
-            <div id="currentOrderContainer"><div class="empty">Нет активных заказов</div></div>
+            <div id="currentOrderContainer">
+                <div class="empty">Нет активных заказов</div>
+            </div>
         </div>
 
+        <!-- ВЫПОЛНЕННЫЕ ЗАКАЗЫ -->
         <div class="status-section">
             <h2>✅ Выполненные заказы</h2>
-            <div id="completedOrdersContainer"><div class="empty">История пуста</div></div>
+            <div id="completedOrdersContainer">
+                <div class="empty">История пуста</div>
+            </div>
         </div>
     </div>
 
-    <footer class="footer">...</footer>
+    <footer class="footer">
+        <p>© 2026 <span>«Вкусовщина»</span> — Премиум-ресторан</p>
+        <p style="margin-top: 4px;">Шеф-повар <span>Родион Жуков</span></p>
+    </footer>
 
     <script>
+        // ===== ЛОГИКА =====
         const SERVER_URL = 'https://vkusovshina-server.onrender.com';
+
+        function updateBonusUI() {
+            const bonus = parseInt(localStorage.getItem('bonus')) || 0;
+            document.getElementById('bonusCount').textContent = bonus;
+        }
 
         function loadOrdersFromServer() {
             fetch(`${SERVER_URL}/orders`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) throw new Error('Ошибка загрузки');
+                    return response.json();
+                })
                 .then(orders => {
                     renderOrders(orders);
                 })
                 .catch(error => {
                     console.error('Ошибка загрузки заказов:', error);
+                    // При ошибке показываем заглушку
+                    document.getElementById('currentOrderContainer').innerHTML = `<div class="empty">Не удалось загрузить заказы</div>`;
                 });
         }
 
@@ -46,6 +426,7 @@
             const currentOrder = orders.find(o => o.status === 'готовится');
             const completedOrders = orders.filter(o => o.status === 'выполнен');
 
+            // Текущий заказ
             const currentContainer = document.getElementById('currentOrderContainer');
             if (currentOrder) {
                 const elapsed = Math.floor((Date.now() - currentOrder.createdAt) / 1000);
@@ -53,8 +434,8 @@
                 const mins = Math.floor(remaining / 60);
                 const secs = remaining % 60;
 
+                // Если время вышло, автоматически подтверждаем
                 if (remaining === 0 && currentOrder.status === 'готовится') {
-                    // Автоматически подтверждаем по таймауту
                     fetch(`${SERVER_URL}/orders/confirm`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -89,6 +470,7 @@
                     .catch(console.error);
                 });
 
+                // Обновляем каждые 5 секунд
                 if (window.timerInterval) clearInterval(window.timerInterval);
                 window.timerInterval = setInterval(loadOrdersFromServer, 5000);
             } else {
@@ -99,6 +481,7 @@
                 }
             }
 
+            // Выполненные заказы
             const completedContainer = document.getElementById('completedOrdersContainer');
             if (completedOrders.length === 0) {
                 completedContainer.innerHTML = `<div class="empty">История пуста</div>`;
@@ -122,11 +505,30 @@
             }
         }
 
-        // Загружаем при старте и по таймеру
+        // ===== БУРГЕР =====
+        const toggle = document.getElementById('menuToggle');
+        const links = document.getElementById('navLinks');
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            links.classList.toggle('open');
+        });
+        links.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggle.classList.remove('active');
+                links.classList.remove('open');
+            });
+        });
+
+        // ===== ЗАПУСК =====
+        updateBonusUI();
         loadOrdersFromServer();
         setInterval(loadOrdersFromServer, 5000);
 
-        // Бургер и прочее (код из предыдущего status.html)
+        // Синхронизация при изменении данных
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'bonus') updateBonusUI();
+        });
     </script>
+
 </body>
 </html>
