@@ -338,7 +338,7 @@
         .cart-modal .order-cart-btn:hover { background: #e8d5a8; }
         .cart-modal .empty-cart { color: #a89588; padding: 20px 0; }
 
-        /* Модалка пожелания */
+        /* Модалка пожелания + бонусы */
         .wish-modal textarea {
             width: 100%;
             padding: 10px;
@@ -349,13 +349,33 @@
             font-size: 1rem;
             resize: vertical;
             min-height: 80px;
-            margin: 10px 0 16px;
+            margin: 10px 0 12px;
             font-family: inherit;
         }
         .wish-modal textarea:focus { border-color: #c9a96e; outline: none; }
         .wish-modal .wish-label {
             color: #d4c9c0;
             font-size: 0.9rem;
+        }
+        .wish-modal .bonus-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            margin: 10px 0 6px;
+            color: #d4c9c0;
+            font-size: 0.95rem;
+        }
+        .wish-modal .bonus-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #c9a96e;
+            cursor: pointer;
+        }
+        .wish-modal .bonus-info {
+            font-size: 0.8rem;
+            color: #a89588;
+            margin-bottom: 8px;
         }
 
         /* Модалка успеха */
@@ -403,7 +423,6 @@
 </head>
 <body>
 
-    <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="index.html" class="logo">Вкусов<span>щина</span></a>
         <div class="nav-right">
@@ -454,13 +473,20 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ПОЖЕЛАНИЯ -->
+    <!-- МОДАЛКА ПОЖЕЛАНИЯ + БОНУСЫ -->
     <div class="modal-overlay wish-modal" id="wishModal">
         <div class="modal">
             <button class="modal-close-btn" id="closeWishBtn">✕</button>
             <h2>📝 Пожелание к заказу</h2>
             <p class="wish-label">Оставьте комментарий для повара (необязательно)</p>
             <textarea id="wishText" placeholder="Например: без лука, побольше соуса..."></textarea>
+
+            <div class="bonus-checkbox">
+                <input type="checkbox" id="useBonusCheck">
+                <label for="useBonusCheck">🎁 Использовать бонусы (<span id="bonusAvailableLabel">0</span> баллов = <span id="bonusAmountLabel">0</span> коп.)</label>
+            </div>
+            <div class="bonus-info">После списания бонусов сумма заказа уменьшится</div>
+
             <button class="close-modal-btn" id="confirmOrderBtn">Отправить заказ</button>
         </div>
     </div>
@@ -486,7 +512,7 @@
 
         const TELEGRAM_BOT_TOKEN = '8752139780:AAEIbtDqq2F3FJ2TqFWcINLWg6Zml8UyAQI';
         const TELEGRAM_CHAT_ID = '7892506421';
-        const SERVER_URL = 'https://vkusovshina-server.onrender.com'; // твой сервер
+        const SERVER_URL = 'https://vkusovshina-server.onrender.com';
 
         // ----- ДАННЫЕ БЛЮД -----
         const allDishes = [
@@ -531,6 +557,13 @@
         function updateBonusUI() {
             const bonus = parseInt(localStorage.getItem('bonus')) || 0;
             document.getElementById('bonusCount').textContent = bonus;
+            // Также обновляем подписи в модалке, если она открыта
+            const availableLabel = document.getElementById('bonusAvailableLabel');
+            const amountLabel = document.getElementById('bonusAmountLabel');
+            if (availableLabel && amountLabel) {
+                availableLabel.textContent = bonus;
+                amountLabel.textContent = bonus;
+            }
         }
 
         function addToCart(dishName) {
@@ -597,15 +630,29 @@
             .catch(err => console.error('❌ Ошибка:', err));
         }
 
-        // ----- СОЗДАНИЕ ЗАКАЗА -----
-        function createOrder(wish) {
+        // ----- СОЗДАНИЕ ЗАКАЗА (с учётом бонусов) -----
+        function createOrder(wish, useBonus) {
             if (cart.length === 0) {
                 alert('Корзина пуста!');
                 return;
             }
+
             const userName = localStorage.getItem('userName') || 'Гость';
             const orderId = Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
-            const total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
+            let total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
+            let bonusUsed = 0;
+            let currentBonus = parseInt(localStorage.getItem('bonus')) || 0;
+
+            // Если решено использовать бонусы
+            if (useBonus && currentBonus > 0) {
+                // Можно потратить все бонусы, но не больше суммы заказа
+                bonusUsed = Math.min(currentBonus, total);
+                total = total - bonusUsed;
+                currentBonus = currentBonus - bonusUsed;
+                // Сохраняем новый баланс
+                localStorage.setItem('bonus', currentBonus);
+            }
+
             const dishesList = cart.map((d, i) => `${i+1}. ${d.emoji} ${d.name} (${d.price})`).join('\n');
 
             const orderData = {
@@ -614,7 +661,8 @@
                 total: total,
                 wish: wish || 'Без пожеланий',
                 userName: userName,
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                bonusUsed: bonusUsed
             };
 
             fetch(`${SERVER_URL}/orders`, {
@@ -625,14 +673,20 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Заказ сохранён на сервере:', data);
-                // Бонусы
-                const bonusEarned = Math.floor(total * 0.1);
-                let currentBonus = parseInt(localStorage.getItem('bonus')) || 0;
+                // Начисляем бонусы за заказ (10% от итоговой суммы, но только если не использовали бонусы, или можно и так)
+                // Обычно бонусы начисляются на полную сумму, но я начислю на итоговую, чтобы не было бесконечного цикла
+                // Начислим на полную сумму до списания бонусов, чтобы поощрять заказы
+                const bonusEarned = Math.floor((total + bonusUsed) * 0.1);
                 currentBonus += bonusEarned;
                 localStorage.setItem('bonus', currentBonus);
+                updateBonusUI();
 
-                // Сообщение в Telegram с кнопкой
-                const msg = `🆕 <b>Новый заказ #${orderId}</b>\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n💰 Сумма: ${total} коп.\n📝 Пожелание: ${wish || 'Нет'}\n\n🕒 Статус: готовится (10 минут)`;
+                // Сообщение в Telegram с кнопкой и информацией о бонусах
+                let msg = `🆕 <b>Новый заказ #${orderId}</b>\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n💰 Сумма: ${total + bonusUsed} коп.`;
+                if (bonusUsed > 0) {
+                    msg += `\n🎁 Списанные бонусы: ${bonusUsed} коп.\n💳 Итоговая сумма: ${total} коп.`;
+                }
+                msg += `\n📝 Пожелание: ${wish || 'Нет'}\n\n🕒 Статус: готовится (10 минут)`;
                 const inlineKeyboard = {
                     inline_keyboard: [
                         [{ text: '✅ Подтвердить заказ', callback_data: `confirm_${orderId}` }]
@@ -700,6 +754,9 @@
                 alert('Корзина пуста!');
                 return;
             }
+            // Обновляем информацию о бонусах в модалке перед открытием
+            updateBonusUI();
+            document.getElementById('useBonusCheck').checked = false;
             document.getElementById('wishModal').classList.add('open');
             document.getElementById('wishText').value = '';
         }
@@ -755,7 +812,7 @@
         });
         document.getElementById('orderCartBtn').addEventListener('click', openWishModal);
 
-        // Модалка пожелания
+        // Модалка пожелания и бонусов
         document.getElementById('closeWishBtn').addEventListener('click', function() {
             document.getElementById('wishModal').classList.remove('open');
         });
@@ -764,7 +821,8 @@
         });
         document.getElementById('confirmOrderBtn').addEventListener('click', function() {
             const wish = document.getElementById('wishText').value.trim();
-            createOrder(wish);
+            const useBonus = document.getElementById('useBonusCheck').checked;
+            createOrder(wish, useBonus);
         });
 
         // ----- ЗАПУСК -----
