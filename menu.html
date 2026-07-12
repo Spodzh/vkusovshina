@@ -5,77 +5,577 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Меню | Вкусовщина</title>
     <style>
-        /* все стили как в предыдущем ответе, они не изменились */
-        /* Я не буду повторять их здесь, чтобы не раздувать ответ, но в финальном файле они должны быть */
-        /* Скопируйте стили из предыдущего полного menu.html */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0a0505;
+            color: #f5efe8;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .nav {
+            background: rgba(10, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #2a1a15;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #f5efe8;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+        .nav .logo span { color: #c9a96e; }
+
+        .nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav .bonus-display {
+            color: #c9a96e;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(201, 169, 110, 0.15);
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+        .nav .bonus-display .icon { font-size: 1.1rem; }
+        .nav .bonus-display .count { font-weight: 700; color: #f5efe8; }
+        .nav .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #d4c9c0;
+            padding: 4px;
+        }
+        .nav .cart-btn .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #c9a96e;
+            color: #0a0505;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+            gap: 5px;
+        }
+        .nav .menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: #d4c9c0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        .nav .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .nav .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .nav .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 5, 5, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-bottom: 1px solid #2a1a15;
+            gap: 12px;
+        }
+        .nav .nav-links.open { display: flex; }
+        .nav .nav-links a {
+            color: #d4c9c0;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a0f0f;
+            text-align: center;
+        }
+        .nav .nav-links a:last-child { border-bottom: none; }
+        .nav .nav-links a:hover { color: #c9a96e; }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section-header .subtitle {
+            font-size: 0.65rem;
+            color: #c9a96e;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .section-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 5vw, 2.4rem);
+            color: #f5efe8;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .section-line {
+            width: 40px;
+            height: 2px;
+            background: #c9a96e;
+            margin: 8px auto 0;
+        }
+
+        .popular-section {
+            margin-bottom: 35px;
+        }
+        .popular-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #c9a96e;
+            text-align: center;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .menu-item {
+            background: rgba(26, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px 16px;
+            border: 1px solid rgba(201, 169, 110, 0.15);
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+        }
+        .menu-item .emoji {
+            font-size: 2.6rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .menu-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #f5efe8;
+            margin-bottom: 2px;
+        }
+        .menu-item .price {
+            display: inline-block;
+            background: #c9a96e;
+            color: #0a0505;
+            font-weight: 700;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin: 4px 0 6px;
+        }
+        .menu-item p {
+            color: #a89588;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        .menu-item .add-to-cart {
+            margin-top: 10px;
+            background: #c9a96e;
+            color: #0a0505;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        .menu-item .add-to-cart:hover {
+            background: #e8d5a8;
+        }
+
+        .popular-badge {
+            display: inline-block;
+            background: #c9a96e;
+            color: #0a0505;
+            font-size: 0.55rem;
+            font-weight: 700;
+            padding: 2px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+        }
+
+        /* Модалки */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: #1a0f0f;
+            border: 2px solid #c9a96e;
+            border-radius: 24px;
+            padding: 30px 20px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            animation: modalPop 0.3s ease-out;
+            position: relative;
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal .close-modal-btn {
+            background: #c9a96e;
+            color: #0a0505;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .modal .close-modal-btn:hover { background: #e8d5a8; }
+        .modal .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            font-size: 1.5rem;
+            color: #a89588;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal .modal-close-btn:hover { color: #f5efe8; }
+
+        .cart-modal .cart-items {
+            margin: 15px 0;
+            max-height: 250px;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .cart-modal .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #2a1a15;
+        }
+        .cart-modal .cart-item .name { font-size: 0.95rem; }
+        .cart-modal .cart-item .remove-btn {
+            background: none;
+            border: none;
+            color: #a89588;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .cart-modal .cart-item .remove-btn:hover { color: #e74c3c; }
+        .cart-modal .cart-total {
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .cart-modal .order-cart-btn {
+            background: #c9a96e;
+            color: #0a0505;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .cart-modal .order-cart-btn:hover { background: #e8d5a8; }
+        .cart-modal .empty-cart { color: #a89588; padding: 20px 0; }
+
+        /* Модалка пожелания */
+        .wish-modal textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #2a1a15;
+            background: #0a0505;
+            color: #f5efe8;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+            margin: 10px 0 16px;
+            font-family: inherit;
+        }
+        .wish-modal textarea:focus { border-color: #c9a96e; outline: none; }
+        .wish-modal .wish-label {
+            color: #d4c9c0;
+            font-size: 0.9rem;
+        }
+
+        /* Модалка успеха */
+        #orderSuccessModal .modal { border-color: #4CAF50; }
+        #orderSuccessModal .emoji-big { font-size: 3.5rem; display: block; margin-bottom: 6px; }
+        #orderSuccessModal h2 { color: #4CAF50; font-family: 'Playfair Display', serif; font-size: 1.6rem; }
+        #orderSuccessModal .message { color: #d4c9c0; margin: 10px 0; }
+        #orderSuccessModal .thanks { color: #c9a96e; font-weight: 700; margin-bottom: 10px; }
+
+        .footer {
+            background: #0a0505;
+            text-align: center;
+            padding: 18px;
+            border-top: 1px solid #1a0f0f;
+            color: #6b5a4a;
+            font-size: 0.75rem;
+            margin-top: 30px;
+        }
+        .footer span { color: #c9a96e; }
+
+        @media (min-width: 500px) {
+            .menu-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (min-width: 768px) {
+            .nav .menu-toggle { display: none; }
+            .nav .nav-links {
+                display: flex !important;
+                flex-direction: row;
+                position: static;
+                background: none;
+                backdrop-filter: none;
+                padding: 0;
+                border: none;
+                gap: 30px;
+            }
+            .nav .nav-links a {
+                font-size: 0.85rem;
+                padding: 6px 0;
+                border-bottom: none;
+                text-align: left;
+            }
+            .container { max-width: 900px; }
+        }
     </style>
 </head>
 <body>
-    <!-- навигация и контент те же, что были -->
-    <!-- ... -->
+
+    <!-- НАВИГАЦИЯ -->
+    <nav class="nav">
+        <a href="index.html" class="logo">Вкусов<span>щина</span></a>
+        <div class="nav-right">
+            <div class="bonus-display" id="bonusDisplay">
+                <span class="icon">🎁</span>
+                <span class="count" id="bonusCount">0</span>
+            </div>
+            <button class="cart-btn" id="cartBtn" aria-label="Корзина">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Главная</a>
+            <a href="menu.html">Меню</a>
+            <a href="status.html">Панель ожидания</a>
+            <a href="roulette.html">Рулетка Вкуса</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section-header">
+            <span class="subtitle">Наше меню</span>
+            <h1>Гастрономическое путешествие</h1>
+            <div class="section-line"></div>
+        </div>
+
+        <div class="popular-section">
+            <h2>⭐ Популярные блюда</h2>
+            <div class="menu-grid" id="popularGrid"></div>
+        </div>
+
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#f5efe8;text-align:center;margin-bottom:18px;letter-spacing:1px;">Полное меню</h2>
+        <div class="menu-grid" id="menuGrid"></div>
+    </div>
+
+    <!-- МОДАЛКА КОРЗИНЫ -->
+    <div class="modal-overlay cart-modal" id="cartModal">
+        <div class="modal">
+            <button class="modal-close-btn" id="closeCartBtn">✕</button>
+            <h2 style="text-align:center;">🛒 Корзина</h2>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Итого: 0 блюд</div>
+            <button class="order-cart-btn" id="orderCartBtn">Оформить заказ</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ПОЖЕЛАНИЯ -->
+    <div class="modal-overlay wish-modal" id="wishModal">
+        <div class="modal">
+            <button class="modal-close-btn" id="closeWishBtn">✕</button>
+            <h2>📝 Пожелание к заказу</h2>
+            <p class="wish-label">Оставьте комментарий для повара (необязательно)</p>
+            <textarea id="wishText" placeholder="Например: без лука, побольше соуса..."></textarea>
+            <button class="close-modal-btn" id="confirmOrderBtn">Отправить заказ</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА УСПЕШНОГО ЗАКАЗА -->
+    <div class="modal-overlay" id="orderSuccessModal">
+        <div class="modal">
+            <span class="emoji-big">✅</span>
+            <h2>Заказ оформлен!</h2>
+            <div class="message">Ваш заказ принят! Мы уже начали готовить.<br>Следите за статусом в <strong>Панели ожидания</strong>.</div>
+            <div class="thanks">Спасибо, что выбрали «Вкусовщину»!</div>
+            <button class="close-modal-btn" id="closeSuccessBtn">Отлично!</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 <span>«Вкусовщина»</span> — Премиум-ресторан</p>
+        <p style="margin-top: 4px;">Шеф-повар <span>Родион Жуков</span></p>
+    </footer>
 
     <script>
         // ===== ВСЯ ЛОГИКА =====
+
         const TELEGRAM_BOT_TOKEN = '8752139780:AAEIbtDqq2F3FJ2TqFWcINLWg6Zml8UyAQI';
         const TELEGRAM_CHAT_ID = '7892506421';
-        const SERVER_URL = 'https://vkusovshina-server.onrender.com'; // <-- ВАШ URL
+        const SERVER_URL = 'https://vkusovshina-server.onrender.com'; // твой сервер
 
-        // ... (все функции, кроме createOrder, остаются без изменений)
+        // ----- ДАННЫЕ БЛЮД -----
+        const allDishes = [
+            { name: 'Чай', emoji: '☕', price: '20 коп.', desc: 'Ароматный чёрный чай с бергамотом' },
+            { name: 'Вафли', emoji: '🧇', price: '25 коп.', desc: 'Хрустящие вафли с варёной сгущёнкой' },
+            { name: 'Конфеты', emoji: '🍬', price: '15 коп.', desc: 'Ассорти шоколадных конфет' },
+            { name: 'Бутерброд с колбасой и батоном', emoji: '🥪', price: '30 коп.', desc: 'Классический бутерброд с докторской колбасой' },
+            { name: 'Жареное яйцо', emoji: '🍳', price: '25 коп.', desc: 'Яичница-глазунья с зеленью' },
+            { name: 'Вода', emoji: '💧', price: '10 коп.', desc: 'Питьевая вода без газа' },
+            { name: 'Кола', emoji: '🥤', price: '20 коп.', desc: 'Освежающий газированный напиток' },
+            { name: 'Яблоко', emoji: '🍏', price: '20 коп.', desc: 'Сочное яблоко (сорт «Гренни Смит»)' },
+            { name: 'Квас', emoji: '🍺', price: '15 коп.', desc: 'Домашний квас на ржаном хлебе' },
+            { name: 'Кофе', emoji: '☕', price: '15 коп.', desc: 'Чёрный кофе из свежемолотых зёрен' },
+            { name: 'Картошка фри', emoji: '🍟', price: '30 коп.', desc: 'Золотистая картошка фри с солью' },
+            { name: 'Гренки', emoji: '🍞', price: '20 коп.', desc: 'Хрустящие гренки с чесноком' },
+            { name: 'Трубочки вафельные Вивайли', emoji: '🧇', price: '45 коп.', desc: 'Вафельные трубочки с кремовой начинкой' },
+            { name: 'Пельмени', emoji: '🥟', price: '10 коп.', desc: 'Домашние пельмени с мясом, со сметаной' },
+            { name: 'Чипсы', emoji: '🍟', price: '1 руб.', desc: 'Хрустящие картофельные чипсы (паприка)' },
+            { name: 'Жвачка Love is', emoji: '🍬', price: '10 коп.', desc: 'Жевательная резинка со вкусом мяты' },
+            { name: 'Булочки', emoji: '🥐', price: '50 коп.', desc: 'Сдобные булочки с маком' },
+            { name: 'Жвачка арбузная', emoji: '🍉', price: '5 коп.', desc: 'Жевательная резинка со вкусом арбуза' },
+            { name: 'Сок с трубочкой', emoji: '🧃', price: '30 коп.', desc: 'Яблочный сок с трубочкой' }
+        ];
 
-        // ----- СОЗДАНИЕ ЗАКАЗА (с отправкой на сервер) -----
-        function createOrder(wish) {
-            if (cart.length === 0) {
-                alert('Корзина пуста!');
-                return;
-            }
-            const userName = localStorage.getItem('userName') || 'Гость';
-            const orderId = Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
-            const total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
-            const dishesList = cart.map((d, i) => `${i+1}. ${d.emoji} ${d.name} (${d.price})`).join('\n');
+        const popularNames = ['Трубочки вафельные Вивайли', 'Чипсы', 'Кофе', 'Чай', 'Кола'];
+        const popularDishes = allDishes.filter(d => popularNames.includes(d.name));
+        const menuDishes = allDishes.filter(d => !popularNames.includes(d.name));
 
-            const orderData = {
-                id: orderId,
-                items: cart.map(d => ({ name: d.name, emoji: d.emoji, price: d.price })),
-                total: total,
-                wish: wish || 'Без пожеланий',
-                userName: userName,
-                createdAt: Date.now()
-            };
+        // ----- КОРЗИНА, БОНУСЫ -----
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Отправляем на сервер
-            fetch(`${SERVER_URL}/orders`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Заказ сохранён на сервере:', data);
-                // Начисляем бонусы локально
-                const bonusEarned = Math.floor(total * 0.1);
-                let currentBonus = parseInt(localStorage.getItem('bonus')) || 0;
-                currentBonus += bonusEarned;
-                localStorage.setItem('bonus', currentBonus);
-
-                // Отправляем в Telegram с кнопкой
-                const msg = `🆕 <b>Новый заказ #${orderId}</b>\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n💰 Сумма: ${total} коп.\n📝 Пожелание: ${wish || 'Нет'}\n\n🕒 Статус: готовится (10 минут)`;
-                const inlineKeyboard = {
-                    inline_keyboard: [
-                        [{ text: '✅ Подтвердить заказ', callback_data: `confirm_${orderId}` }]
-                    ]
-                };
-                sendTelegramMessageWithButton(msg, inlineKeyboard);
-
-                clearCart();
-                showOrderSuccess();
-                document.getElementById('wishModal').classList.remove('open');
-            })
-            .catch(error => {
-                console.error('Ошибка отправки заказа:', error);
-                alert('Не удалось создать заказ. Попробуйте позже.');
-            });
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartUI();
+            updateBonusUI();
         }
 
+        function updateCartUI() {
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        function updateBonusUI() {
+            const bonus = parseInt(localStorage.getItem('bonus')) || 0;
+            document.getElementById('bonusCount').textContent = bonus;
+        }
+
+        function addToCart(dishName) {
+            const dish = allDishes.find(d => d.name === dishName);
+            if (!dish) return;
+            cart.push({ ...dish });
+            saveCart();
+            showNotification(`${dish.emoji} ${dish.name} добавлено в корзину!`);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            renderCartModal();
+        }
+
+        function clearCart() {
+            cart = [];
+            saveCart();
+            renderCartModal();
+        }
+
+        function showNotification(text) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+                background: #1a0f0f; color: #f5efe8;
+                padding: 14px 24px; border-radius: 30px;
+                border: 1px solid #c9a96e;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+                z-index: 999; font-weight: 500;
+                transition: opacity 0.5s;
+                max-width: 90%;
+                text-align: center;
+                font-size: 1rem;
+            `;
+            notif.textContent = text;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                setTimeout(() => notif.remove(), 500);
+            }, 2500);
+        }
+
+        // ----- TELEGRAM (с кнопкой) -----
         function sendTelegramMessageWithButton(text, keyboard) {
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
             return fetch(url, {
@@ -97,7 +597,191 @@
             .catch(err => console.error('❌ Ошибка:', err));
         }
 
-        // ... остальной код (рендер меню, бургер, обработчики) без изменений
+        // ----- СОЗДАНИЕ ЗАКАЗА -----
+        function createOrder(wish) {
+            if (cart.length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+            const userName = localStorage.getItem('userName') || 'Гость';
+            const orderId = Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+            const total = cart.reduce((sum, d) => sum + parseFloat(d.price.replace(/\D/g,'')) || 0, 0);
+            const dishesList = cart.map((d, i) => `${i+1}. ${d.emoji} ${d.name} (${d.price})`).join('\n');
+
+            const orderData = {
+                id: orderId,
+                items: cart.map(d => ({ name: d.name, emoji: d.emoji, price: d.price })),
+                total: total,
+                wish: wish || 'Без пожеланий',
+                userName: userName,
+                createdAt: Date.now()
+            };
+
+            fetch(`${SERVER_URL}/orders`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Заказ сохранён на сервере:', data);
+                // Бонусы
+                const bonusEarned = Math.floor(total * 0.1);
+                let currentBonus = parseInt(localStorage.getItem('bonus')) || 0;
+                currentBonus += bonusEarned;
+                localStorage.setItem('bonus', currentBonus);
+
+                // Сообщение в Telegram с кнопкой
+                const msg = `🆕 <b>Новый заказ #${orderId}</b>\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n💰 Сумма: ${total} коп.\n📝 Пожелание: ${wish || 'Нет'}\n\n🕒 Статус: готовится (10 минут)`;
+                const inlineKeyboard = {
+                    inline_keyboard: [
+                        [{ text: '✅ Подтвердить заказ', callback_data: `confirm_${orderId}` }]
+                    ]
+                };
+                sendTelegramMessageWithButton(msg, inlineKeyboard);
+
+                clearCart();
+                showOrderSuccess();
+                document.getElementById('wishModal').classList.remove('open');
+            })
+            .catch(error => {
+                console.error('Ошибка отправки заказа:', error);
+                alert('Не удалось создать заказ. Попробуйте позже.');
+            });
+        }
+
+        function showOrderSuccess() {
+            const modal = document.getElementById('orderSuccessModal');
+            modal.classList.add('open');
+            document.getElementById('closeSuccessBtn').onclick = function() {
+                modal.classList.remove('open');
+            };
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.classList.remove('open');
+            };
+            document.addEventListener('keydown', function esc(e) {
+                if (e.key === 'Escape' && modal.classList.contains('open')) {
+                    modal.classList.remove('open');
+                    document.removeEventListener('keydown', esc);
+                }
+            });
+        }
+
+        // ----- МОДАЛКА КОРЗИНЫ -----
+        function renderCartModal() {
+            const container = document.getElementById('cartItems');
+            const totalSpan = document.getElementById('cartTotal');
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="empty-cart">Корзина пуста</div>`;
+                totalSpan.textContent = 'Итого: 0 блюд';
+                return;
+            }
+            let html = '';
+            cart.forEach((item, idx) => {
+                html += `
+                    <div class="cart-item">
+                        <span class="name">${item.emoji} ${item.name} (${item.price})</span>
+                        <button class="remove-btn" data-index="${idx}">✕</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            totalSpan.textContent = `Итого: ${cart.length} блюд`;
+            container.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const idx = parseInt(this.dataset.index);
+                    removeFromCart(idx);
+                });
+            });
+        }
+
+        function openWishModal() {
+            if (cart.length === 0) {
+                alert('Корзина пуста!');
+                return;
+            }
+            document.getElementById('wishModal').classList.add('open');
+            document.getElementById('wishText').value = '';
+        }
+
+        // ----- ОТРИСОВКА МЕНЮ -----
+        function renderDishes(containerId, dishes, isPopular = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = dishes.map(d => `
+                <div class="menu-item">
+                    ${isPopular ? '<span class="popular-badge">Популярное</span>' : ''}
+                    <span class="emoji">${d.emoji}</span>
+                    <h3>${d.name}</h3>
+                    <span class="price">${d.price}</span>
+                    <p>${d.desc}</p>
+                    <button class="add-to-cart" data-name="${d.name}">Добавить в корзину</button>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.add-to-cart').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const name = this.dataset.name;
+                    addToCart(name);
+                });
+            });
+        }
+
+        // ===== СОБЫТИЯ =====
+
+        // Бургер
+        const toggle = document.getElementById('menuToggle');
+        const links = document.getElementById('navLinks');
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            links.classList.toggle('open');
+        });
+        links.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggle.classList.remove('active');
+                links.classList.remove('open');
+            });
+        });
+
+        // Корзина
+        document.getElementById('cartBtn').addEventListener('click', function() {
+            renderCartModal();
+            document.getElementById('cartModal').classList.add('open');
+        });
+        document.getElementById('closeCartBtn').addEventListener('click', function() {
+            document.getElementById('cartModal').classList.remove('open');
+        });
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+        document.getElementById('orderCartBtn').addEventListener('click', openWishModal);
+
+        // Модалка пожелания
+        document.getElementById('closeWishBtn').addEventListener('click', function() {
+            document.getElementById('wishModal').classList.remove('open');
+        });
+        document.getElementById('wishModal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+        document.getElementById('confirmOrderBtn').addEventListener('click', function() {
+            const wish = document.getElementById('wishText').value.trim();
+            createOrder(wish);
+        });
+
+        // ----- ЗАПУСК -----
+        renderDishes('popularGrid', popularDishes, true);
+        renderDishes('menuGrid', menuDishes, false);
+        updateCartUI();
+        updateBonusUI();
+
+        // Синхронизация при изменении localStorage
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'cart') {
+                cart = JSON.parse(e.newValue) || [];
+                updateCartUI();
+            }
+            if (e.key === 'bonus') updateBonusUI();
+        });
     </script>
+
 </body>
 </html>
