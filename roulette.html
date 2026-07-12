@@ -17,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* НАВИГАЦИЯ (бургер) */
         .nav {
             background: rgba(10, 5, 5, 0.95);
             backdrop-filter: blur(10px);
@@ -39,6 +38,35 @@
         }
         .nav .logo span { color: #c9a96e; }
 
+        .nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #d4c9c0;
+            padding: 4px;
+        }
+        .nav .cart-btn .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #c9a96e;
+            color: #0a0505;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .nav .menu-toggle {
             display: flex;
             flex-direction: column;
@@ -88,7 +116,6 @@
         .nav .nav-links a:last-child { border-bottom: none; }
         .nav .nav-links a:hover { color: #c9a96e; }
 
-        /* ОСНОВНОЙ КОНТЕЙНЕР */
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -109,7 +136,6 @@
             margin-bottom: 20px;
         }
 
-        /* ===== ГОРИЗОНТАЛЬНАЯ РУЛЕТКА ===== */
         .roulette-wrapper {
             background: rgba(26, 15, 15, 0.85);
             border-radius: 20px;
@@ -193,7 +219,7 @@
             font-weight: 700;
         }
 
-        /* МОДАЛКА РЕЗУЛЬТАТА */
+        /* Модалки */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -215,11 +241,37 @@
             width: 100%;
             text-align: center;
             animation: modalPop 0.3s ease-out;
+            position: relative;
         }
         @keyframes modalPop {
             0% { transform: scale(0.95); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
+        .modal .close-modal-btn {
+            background: #c9a96e;
+            color: #0a0505;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .modal .close-modal-btn:hover { background: #e8d5a8; }
+        .modal .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            font-size: 1.5rem;
+            color: #a89588;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal .modal-close-btn:hover { color: #f5efe8; }
+
         .modal .result-emoji { font-size: 4rem; display: block; margin-bottom: 8px; }
         .modal h2 {
             font-family: 'Playfair Display', serif;
@@ -248,6 +300,13 @@
             color: #a89588;
         }
         .modal .modal-btn.cancel:hover { background: #3a2a20; }
+
+        /* Модалка успеха */
+        #orderSuccessModal .modal { border-color: #4CAF50; }
+        #orderSuccessModal .emoji-big { font-size: 3.5rem; display: block; margin-bottom: 6px; }
+        #orderSuccessModal h2 { color: #4CAF50; font-family: 'Playfair Display', serif; font-size: 1.6rem; }
+        #orderSuccessModal .message { color: #d4c9c0; margin: 10px 0; }
+        #orderSuccessModal .thanks { color: #c9a96e; font-weight: 700; margin-bottom: 10px; }
 
         .footer {
             background: #0a0505;
@@ -293,9 +352,15 @@
     <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="index.html" class="logo">Вкусов<span>щина</span></a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
-            <span></span><span></span><span></span>
-        </button>
+        <div class="nav-right">
+            <button class="cart-btn" id="cartBtn" aria-label="Корзина">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
         <div class="nav-links" id="navLinks">
             <a href="index.html">Главная</a>
             <a href="menu.html">Меню</a>
@@ -336,10 +401,35 @@
         </div>
     </div>
 
+    <!-- МОДАЛКА КОРЗИНЫ -->
+    <div class="modal-overlay cart-modal" id="cartModal">
+        <div class="modal">
+            <button class="modal-close-btn" id="closeCartBtn">✕</button>
+            <h2 style="text-align:center;">🛒 Корзина</h2>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Итого: 0 блюд</div>
+            <button class="order-cart-btn" id="orderCartBtn">Оформить заказ</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА УСПЕШНОГО ЗАКАЗА -->
+    <div class="modal-overlay" id="orderSuccessModal">
+        <div class="modal">
+            <span class="emoji-big">✅</span>
+            <h2>Заказ оформлен!</h2>
+            <div class="message">Ваш заказ принят! Мы уже начали готовить.<br>Ожидайте звонка для подтверждения.</div>
+            <div class="thanks">Спасибо, что выбрали «Вкусовщину»!</div>
+            <button class="close-modal-btn" id="closeSuccessBtn">Отлично!</button>
+        </div>
+    </div>
+
     <footer class="footer">
         <p>© 2026 <span>«Вкусовщина»</span> — Премиум-ресторан</p>
         <p style="margin-top: 4px;">Шеф-повар <span>Родион Жуков</span></p>
     </footer>
+
+    <!-- Подключаем cart.js -->
+    <script src="cart.js"></script>
 
     <script>
         (function() {
@@ -380,15 +470,13 @@
                 { name: 'Сок', emoji: '🧃' }
             ];
 
-            // ===== СОСТОЯНИЕ =====
+            // ===== СОСТОЯНИЕ РУЛЕТКИ =====
             const SPINS_KEY = 'rouletteSpins';
-            const LAST_SPIN_KEY = 'rouletteLastSpin';
             const MAX_SPINS = 2;
             const COOLDOWN = 12 * 60 * 60 * 1000; // 12 часов
 
             let currentDish = null;
             let isSpinning = false;
-            let animationId = null;
 
             // ===== ЭЛЕМЕНТЫ =====
             const track = document.getElementById('rouletteTrack');
@@ -442,7 +530,6 @@
                 }
             }
 
-            // ===== ОТРИСОВКА РУЛЕТКИ =====
             function renderRoulette() {
                 track.innerHTML = allDishes.map(d => `
                     <div class="roulette-item" data-name="${d.name}">
@@ -453,7 +540,6 @@
             }
             renderRoulette();
 
-            // ===== ГОРИЗОНТАЛЬНАЯ ПРОКРУТКА =====
             function startSpin() {
                 if (isSpinning) return;
                 const data = getSpins();
@@ -465,33 +551,25 @@
                 isSpinning = true;
                 spinBtn.disabled = true;
 
-                // Получаем все элементы
                 const items = track.querySelectorAll('.roulette-item');
                 const totalItems = items.length;
-                const itemWidth = items[0].offsetWidth + 10; // ширина + gap
+                const itemWidth = items[0].offsetWidth + 10;
                 const totalWidth = totalItems * itemWidth;
 
-                // Определяем случайную позицию остановки (индекс)
                 const targetIndex = Math.floor(Math.random() * totalItems);
-                // Смещение, чтобы целевой элемент оказался в центре
                 const containerWidth = track.parentElement.offsetWidth;
                 const targetOffset = targetIndex * itemWidth + itemWidth/2 - containerWidth/2;
 
-                // Начальное смещение (можно сдвинуть вправо)
                 let currentOffset = 0;
-
-                // Длительность анимации (чем больше скорость, тем дольше)
                 const duration = 3000 + Math.random() * 2000;
                 const startTime = performance.now();
                 const startOffset = currentOffset;
-                // Дополнительное прокручивание для эффекта
-                const extraScroll = 5 * totalWidth; // 5 полных оборотов
+                const extraScroll = 5 * totalWidth;
                 const targetOffsetFinal = targetOffset + extraScroll;
 
                 function animate(now) {
                     const elapsed = now - startTime;
                     const progress = Math.min(elapsed / duration, 1);
-                    // EaseOutCubic для плавной остановки
                     const eased = 1 - Math.pow(1 - progress, 3);
                     const offset = startOffset + (targetOffsetFinal - startOffset) * eased;
                     track.style.transform = `translateX(-${offset}px)`;
@@ -499,24 +577,20 @@
                     if (progress < 1) {
                         requestAnimationFrame(animate);
                     } else {
-                        // Остановка
                         track.style.transform = `translateX(-${targetOffset}px)`;
                         isSpinning = false;
                         spinBtn.disabled = false;
 
-                        // Подсветка выигрышного элемента
                         items.forEach((el, idx) => {
                             el.classList.toggle('active', idx === targetIndex);
                         });
 
-                        // Сохраняем блюдо
                         const dishName = items[targetIndex].dataset.name;
                         currentDish = allDishes.find(d => d.name === dishName);
                         if (!currentDish) {
                             currentDish = { name: dishName, emoji: '🍽️' };
                         }
 
-                        // Обновляем количество вращений
                         data.count--;
                         if (data.count === 0) {
                             data.date = Date.now();
@@ -524,7 +598,6 @@
                         saveSpins(data);
                         updateUI();
 
-                        // Показываем модалку
                         showResult(currentDish);
                     }
                 }
@@ -539,16 +612,17 @@
 
             function closeResult() {
                 resultModal.classList.remove('open');
-                // Сброс подсветки
                 track.querySelectorAll('.roulette-item').forEach(el => el.classList.remove('active'));
             }
 
             function orderFree() {
                 if (!currentDish) return;
-                alert(`🎉 Вы заказали ${currentDish.name} бесплатно!\nОжидайте, скоро будет готово.`);
+                const userName = localStorage.getItem('userName') || 'Гость';
+                const msg = `🎡 Бесплатный заказ из рулетки!\n\n👤 Имя: ${userName}\n🍽️ Блюдо: ${currentDish.emoji} ${currentDish.name}\n🕒 Время: ${new Date().toLocaleString('ru-RU')}`;
+                window.sendTelegramMessage(msg);
                 closeResult();
-                // Отправляем в Telegram (демо)
-                console.log(`Бесплатный заказ: ${currentDish.name}`);
+                // Показываем красивое уведомление
+                window.showNotification('🎉 Блюдо заказано бесплатно! Ожидайте.');
             }
 
             // ===== СОБЫТИЯ =====
@@ -565,12 +639,6 @@
             // ===== ИНИЦИАЛИЗАЦИЯ =====
             updateUI();
             setInterval(updateUI, 30000);
-
-            // При ресайзе пересчитываем ширину (опционально)
-            window.addEventListener('resize', () => {
-                // Можно перерисовать, но оставим как есть
-            });
-
         })();
     </script>
 
