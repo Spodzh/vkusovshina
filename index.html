@@ -7,11 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Roboto', sans-serif;
@@ -23,7 +19,80 @@
             flex-direction: column;
         }
 
-        /* HERO */
+        /* ===== НАВИГАЦИЯ (бургер) ===== */
+        .nav {
+            background: rgba(10, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #2a1a15;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #f5efe8;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+        .nav .logo span { color: #c9a96e; }
+
+        .nav .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+            gap: 5px;
+        }
+        .nav .menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: #d4c9c0;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        .nav .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .nav .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .nav .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .nav .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 5, 5, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-bottom: 1px solid #2a1a15;
+            gap: 12px;
+        }
+        .nav .nav-links.open {
+            display: flex;
+        }
+        .nav .nav-links a {
+            color: #d4c9c0;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a0f0f;
+            text-align: center;
+        }
+        .nav .nav-links a:last-child { border-bottom: none; }
+        .nav .nav-links a:hover { color: #c9a96e; }
+
+        /* ===== HERO ===== */
         .hero {
             position: relative;
             min-height: 70vh;
@@ -32,7 +101,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             background-image: url('https://i.ibb.co/N61v7gZB/image.png');
             background-size: cover;
             background-position: center;
@@ -50,9 +119,10 @@
             position: relative;
             z-index: 2;
             max-width: 800px;
+            padding: 0 10px;
         }
         .hero-badge {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             letter-spacing: 4px;
             color: #c9a96e;
             margin-bottom: 16px;
@@ -60,115 +130,65 @@
         }
         .hero h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(3.5rem, 12vw, 6rem);
+            font-size: clamp(2.8rem, 12vw, 4.5rem);
             font-weight: 700;
             color: #fff;
-            letter-spacing: 6px;
+            letter-spacing: 4px;
             margin-bottom: 0.05em;
             text-shadow: 0 4px 30px rgba(0,0,0,0.5);
         }
         .hero .subtitle {
-            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            font-size: clamp(1rem, 4vw, 1.4rem);
             color: #e8d5a8;
-            letter-spacing: 6px;
+            letter-spacing: 4px;
             text-transform: uppercase;
             font-weight: 300;
         }
         .hero .owner {
-            margin-top: 12px;
-            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            margin-top: 10px;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
             color: #a89588;
             font-style: italic;
         }
         .hero-line {
-            width: 60px;
+            width: 50px;
             height: 2px;
             background: #c9a96e;
-            margin: 20px auto;
+            margin: 18px auto;
         }
         .hero-desc {
-            font-size: 1.05rem;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
             color: #d4c9c0;
             max-width: 600px;
-            margin: 0 auto 30px;
-            line-height: 1.8;
+            margin: 0 auto 25px;
+            line-height: 1.7;
         }
         .hero-btn {
             display: inline-block;
-            padding: 14px 45px;
+            padding: 14px 40px;
             background: #c9a96e;
             color: #0a0505;
             text-decoration: none;
             text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 3px;
-            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.95rem;
             border-radius: 50px;
             transition: all 0.3s;
             border: none;
             cursor: pointer;
+            width: 90%;
+            max-width: 300px;
         }
         .hero-btn:hover {
             background: #e8d5a8;
-            transform: scale(1.03);
-            box-shadow: 0 4px 20px rgba(201, 169, 110, 0.3);
+            transform: scale(1.02);
         }
 
-        /* НАВИГАЦИЯ */
-        .nav {
-            background: rgba(10, 5, 5, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 12px 24px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #2a1a15;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: #f5efe8;
-            letter-spacing: 2px;
-            text-decoration: none;
-        }
-        .nav .logo span { color: #c9a96e; }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-        .nav-links a {
-            color: #d4c9c0;
-            text-decoration: none;
-            font-weight: 300;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: color 0.3s;
-            padding: 6px 0;
-            position: relative;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0;
-            height: 1px;
-            background: #c9a96e;
-            transition: width 0.3s;
-        }
-        .nav-links a:hover { color: #c9a96e; }
-        .nav-links a:hover::after { width: 100%; }
-
-        /* КОНТАКТЫ */
+        /* ===== КОНТАКТЫ ===== */
         .contacts {
             background: #0a0505;
-            padding: 30px 20px;
+            padding: 30px 16px;
             border-top: 1px solid #2a1a15;
             text-align: center;
         }
@@ -180,9 +200,9 @@
         }
         .contacts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
-            max-width: 900px;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            max-width: 600px;
             margin: 0 auto;
         }
         .contact-item {
@@ -196,53 +216,56 @@
         .contact-item .label {
             color: #c9a96e;
             text-transform: uppercase;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
         }
         .contact-item .value {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #d4c9c0;
             text-decoration: none;
+            word-break: break-word;
         }
         .contact-item .value a {
             color: #d4c9c0;
             text-decoration: none;
         }
         .contact-item .value small {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: #a89588;
             display: block;
-        }
-        .social-icon {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            margin-top: 4px;
-        }
-        .social-icon svg {
-            width: 100%;
-            height: 100%;
-            fill: #c9a96e;
         }
 
         .footer {
             background: #0a0505;
             text-align: center;
-            padding: 20px;
+            padding: 18px;
             border-top: 1px solid #1a0f0f;
             color: #6b5a4a;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         .footer span { color: #c9a96e; }
 
-        /* Адаптация */
-        @media (max-width: 768px) {
-            .nav .nav-links { display: none; }
-            .hero { min-height: 60vh; background-attachment: scroll; }
-            .contacts-grid { grid-template-columns: 1fr 1fr; }
+        @media (min-width: 600px) {
+            .contacts-grid { grid-template-columns: repeat(3, 1fr); }
         }
-        @media (max-width: 480px) {
-            .contacts-grid { grid-template-columns: 1fr; }
+        @media (min-width: 768px) {
+            .nav .menu-toggle { display: none; }
+            .nav .nav-links {
+                display: flex !important;
+                flex-direction: row;
+                position: static;
+                background: none;
+                backdrop-filter: none;
+                padding: 0;
+                border: none;
+                gap: 30px;
+            }
+            .nav .nav-links a {
+                font-size: 0.85rem;
+                padding: 6px 0;
+                border-bottom: none;
+                text-align: left;
+            }
         }
     </style>
 </head>
@@ -251,7 +274,10 @@
     <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="index.html" class="logo">Вкусов<span>щина</span></a>
-        <div class="nav-links">
+        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="navLinks">
             <a href="index.html">Главная</a>
             <a href="menu.html">Меню</a>
             <a href="roulette.html">Рулетка Вкуса</a>
@@ -292,8 +318,7 @@
             <div class="contact-item">
                 <span class="icon">🕒</span>
                 <div class="label">Часы работы</div>
-                <div class="value">8:30 – 23:30</div>
-                <div class="value"><small>Выходные: понедельник, среда, четверг</small></div>
+                <div class="value">8:30 – 23:30 <small>Выходные: пн, ср, чт</small></div>
             </div>
             <div class="contact-item">
                 <span class="icon">👨‍🍳</span>
@@ -302,19 +327,36 @@
             </div>
             <div class="contact-item">
                 <div class="label">Telegram</div>
-                <a href="https://t.me/dnevnikrodiona" target="_blank" rel="noopener noreferrer" class="value">@dnevnikrodiona</a>
+                <div class="value"><a href="https://t.me/dnevnikrodiona" target="_blank">@dnevnikrodiona</a></div>
             </div>
             <div class="contact-item">
                 <div class="label">TikTok</div>
-                <a href="https://www.tiktok.com/@rodimisimus" target="_blank" rel="noopener noreferrer" class="value">@rodimisimus</a>
+                <div class="value"><a href="https://www.tiktok.com/@rodimisimus" target="_blank">@rodimisimus</a></div>
             </div>
         </div>
     </section>
 
     <footer class="footer">
         <p>© 2026 <span>«Вкусовщина»</span> — Премиум-ресторан</p>
-        <p style="margin-top: 4px; font-size: 0.75rem;">Шеф-повар <span>Родион Жуков</span></p>
+        <p style="margin-top: 4px;">Шеф-повар <span>Родион Жуков</span></p>
     </footer>
+
+    <script>
+        // Бургер-меню
+        const toggle = document.getElementById('menuToggle');
+        const links = document.getElementById('navLinks');
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            links.classList.toggle('open');
+        });
+        // Закрыть при клике на ссылку
+        links.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggle.classList.remove('active');
+                links.classList.remove('open');
+            });
+        });
+    </script>
 
 </body>
 </html>
