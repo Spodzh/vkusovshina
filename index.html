@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Вкусовщина | Премиум-ресторан</title>
     <style>
+        /* ===== Стили такие же, как были, но с добавлением бонуса в шапку ===== */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #0a0505;
@@ -18,7 +17,6 @@
             display: flex;
             flex-direction: column;
         }
-
         .nav {
             background: rgba(10, 5, 5, 0.95);
             backdrop-filter: blur(10px);
@@ -39,7 +37,48 @@
             text-decoration: none;
         }
         .nav .logo span { color: #c9a96e; }
-
+        .nav .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav .bonus-display {
+            color: #c9a96e;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(201, 169, 110, 0.15);
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(201, 169, 110, 0.2);
+        }
+        .nav .bonus-display .icon { font-size: 1.1rem; }
+        .nav .bonus-display .count { font-weight: 700; color: #f5efe8; }
+        .nav .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #d4c9c0;
+            padding: 4px;
+        }
+        .nav .cart-btn .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #c9a96e;
+            color: #0a0505;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .nav .menu-toggle {
             display: flex;
             flex-direction: column;
@@ -60,7 +99,6 @@
         .nav .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
         .nav .menu-toggle.active span:nth-child(2) { opacity: 0; }
         .nav .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
         .nav .nav-links {
             display: none;
             flex-direction: column;
@@ -88,7 +126,6 @@
         }
         .nav .nav-links a:last-child { border-bottom: none; }
         .nav .nav-links a:hover { color: #c9a96e; }
-
         .hero {
             position: relative;
             min-height: 70vh;
@@ -180,7 +217,6 @@
             background: #e8d5a8;
             transform: scale(1.02);
         }
-
         .contacts {
             background: #0a0505;
             padding: 30px 16px;
@@ -229,7 +265,6 @@
             color: #a89588;
             display: block;
         }
-
         .footer {
             background: #0a0505;
             text-align: center;
@@ -239,7 +274,6 @@
             font-size: 0.75rem;
         }
         .footer span { color: #c9a96e; }
-
         @media (min-width: 600px) {
             .contacts-grid { grid-template-columns: repeat(3, 1fr); }
         }
@@ -266,18 +300,32 @@
 </head>
 <body>
 
+    <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="index.html" class="logo">Вкусов<span>щина</span></a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
-            <span></span><span></span><span></span>
-        </button>
+        <div class="nav-right">
+            <!-- Бонусы -->
+            <div class="bonus-display" id="bonusDisplay">
+                <span class="icon">🎁</span>
+                <span class="count" id="bonusCount">0</span>
+            </div>
+            <button class="cart-btn" id="cartBtn" aria-label="Корзина">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
         <div class="nav-links" id="navLinks">
             <a href="index.html">Главная</a>
             <a href="menu.html">Меню</a>
+            <a href="status.html">Панель ожидания</a>
             <a href="roulette.html">Рулетка Вкуса</a>
         </div>
     </nav>
 
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
             <div class="hero-badge">✦ EST. 2026 ✦</div>
@@ -294,6 +342,7 @@
         </div>
     </section>
 
+    <!-- КОНТАКТЫ -->
     <section class="contacts">
         <h2 class="contacts-title">Контакты</h2>
         <div class="contacts-grid">
@@ -334,6 +383,7 @@
     </footer>
 
     <script>
+        // Бургер
         const toggle = document.getElementById('menuToggle');
         const links = document.getElementById('navLinks');
         toggle.addEventListener('click', function() {
@@ -346,6 +396,23 @@
                 links.classList.remove('open');
             });
         });
+
+        // Обновление бонусов и корзины (синхронизация)
+        function updateBonusUI() {
+            const bonus = parseInt(localStorage.getItem('bonus')) || 0;
+            document.getElementById('bonusCount').textContent = bonus;
+        }
+        function updateCartUI() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+        // При загрузке и при изменениях в localStorage (для других вкладок)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'bonus') updateBonusUI();
+            if (e.key === 'cart') updateCartUI();
+        });
+        updateBonusUI();
+        updateCartUI();
     </script>
 
 </body>
