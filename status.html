@@ -530,5 +530,30 @@
         });
     </script>
 
+// ===== ЗАГРУЗКА СТИЛЯ С СЕРВЕРА =====
+const SERVER_URL = 'https://vkusovshina-server.onrender.com';
+
+async function loadStyle() {
+    try {
+        const response = await fetch(`${SERVER_URL}/style`);
+        const data = await response.json();
+        const style = data.style || 'light';
+        document.body.className = 'style-' + style;
+        localStorage.setItem('siteStyle', style);
+    } catch (e) {
+        console.error('Ошибка загрузки стиля:', e);
+        const saved = localStorage.getItem('siteStyle');
+        if (saved) document.body.className = 'style-' + saved;
+    }
+}
+
+loadStyle();
+
+window.addEventListener('storage', function(e) {
+    if (e.key === 'siteStyle') {
+        document.body.className = 'style-' + e.newValue;
+    }
+});
+    
 </body>
 </html>
