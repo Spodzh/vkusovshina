@@ -180,3 +180,45 @@ body.style-eco .popular-item .price {
     background: #6a9a6a;
     color: #fff;
 }
+
+/* 6. Классический (премиум) – исходная тёмная тема */
+body.style-classic {
+    /* Переменные уже заданы в :root, поэтому ничего не переопределяем */
+    /* Можно оставить пустым, чтобы использовались значения из :root */
+}
+/* Но чтобы быть уверенным, можно явно указать */
+body.style-classic {
+    --bg-primary: #0a0505;
+    --bg-secondary: #1a0a0a;
+    --bg-card: #1a0f0f;
+    --border-color: #2a1a15;
+    --text-primary: #f5efe8;
+    --text-secondary: #d4c9c0;
+    --text-muted: #a89588;
+    --gold: #c9a96e;
+    --gold-light: #e8d5a8;
+    --gold-dark: #a8884a;
+    --shadow: 0 8px 32px rgba(0,0,0,0.6);
+    --glass-bg: rgba(26, 15, 15, 0.85);
+    --glass-border: rgba(201, 169, 110, 0.2);
+}
+body.style-classic .hero::before {
+    background: rgba(13, 9, 7, 0.7);
+}
+body.style-classic .hero h1 {
+    color: #f5efe8;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+body.style-classic .nav {
+    background: rgba(10, 5, 5, 0.95);
+    border-color: #2a1a15;
+}
+body.style-classic .nav .logo,
+body.style-classic .nav .nav-links a {
+    color: #f5efe8;
+}
+body.style-classic .menu-item .price,
+body.style-classic .popular-item .price {
+    background: #c9a96e;
+    color: #0a0505;
+}
