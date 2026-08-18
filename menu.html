@@ -338,7 +338,7 @@
         .cart-modal .order-cart-btn:hover { background: #e8d5a8; }
         .cart-modal .empty-cart { color: #a89588; padding: 20px 0; }
 
-        /* Модалка пожелания + бонусы */
+        /* Модалка пожелания */
         .wish-modal textarea {
             width: 100%;
             padding: 10px;
@@ -423,10 +423,11 @@
 </head>
 <body>
 
+    <!-- НАВИГАЦИЯ -->
     <nav class="nav">
         <a href="index.html" class="logo">Вкусов<span>щина</span></a>
         <div class="nav-right">
-            <div class="bonus-display" id="bonusDisplay">
+            <div class="bonus-display">
                 <span class="icon">🎁</span>
                 <span class="count" id="bonusCount">0</span>
             </div>
@@ -508,42 +509,16 @@
     </footer>
 
     <script>
-        // ===== ВСЯ ЛОГИКА =====
-
+        // ===== ГЛОБАЛЬНЫЕ НАСТРОЙКИ =====
+        const SERVER_URL = 'https://vkusovshina-server.onrender.com';
         const TELEGRAM_BOT_TOKEN = '8752139780:AAEIbtDqq2F3FJ2TqFWcINLWg6Zml8UyAQI';
         const TELEGRAM_CHAT_ID = '7892506421';
-        const SERVER_URL = 'https://vkusovshina-server.onrender.com';
 
-        // ----- ДАННЫЕ БЛЮД -----
-        const allDishes = [
-            { name: 'Чай', emoji: '☕', price: '20 коп.', desc: 'Ароматный чёрный чай с бергамотом' },
-            { name: 'Вафли', emoji: '🧇', price: '25 коп.', desc: 'Хрустящие вафли с варёной сгущёнкой' },
-            { name: 'Конфеты', emoji: '🍬', price: '15 коп.', desc: 'Ассорти шоколадных конфет' },
-            { name: 'Бутерброд с колбасой и батоном', emoji: '🥪', price: '30 коп.', desc: 'Классический бутерброд с докторской колбасой' },
-            { name: 'Жареное яйцо', emoji: '🍳', price: '25 коп.', desc: 'Яичница-глазунья с зеленью' },
-            { name: 'Вода', emoji: '💧', price: '10 коп.', desc: 'Питьевая вода без газа' },
-            { name: 'Кола', emoji: '🥤', price: '20 коп.', desc: 'Освежающий газированный напиток' },
-            { name: 'Яблоко', emoji: '🍏', price: '20 коп.', desc: 'Сочное яблоко (сорт «Гренни Смит»)' },
-            { name: 'Квас', emoji: '🍺', price: '15 коп.', desc: 'Домашний квас на ржаном хлебе' },
-            { name: 'Кофе', emoji: '☕', price: '15 коп.', desc: 'Чёрный кофе из свежемолотых зёрен' },
-            { name: 'Картошка фри', emoji: '🍟', price: '30 коп.', desc: 'Золотистая картошка фри с солью' },
-            { name: 'Гренки', emoji: '🍞', price: '20 коп.', desc: 'Хрустящие гренки с чесноком' },
-            { name: 'Трубочки вафельные Вивайли', emoji: '🧇', price: '45 коп.', desc: 'Вафельные трубочки с кремовой начинкой' },
-            { name: 'Пельмени', emoji: '🥟', price: '10 коп.', desc: 'Домашние пельмени с мясом, со сметаной' },
-            { name: 'Чипсы', emoji: '🍟', price: '1 руб.', desc: 'Хрустящие картофельные чипсы (паприка)' },
-            { name: 'Жвачка Love is', emoji: '🍬', price: '10 коп.', desc: 'Жевательная резинка со вкусом мяты' },
-            { name: 'Булочки', emoji: '🥐', price: '50 коп.', desc: 'Сдобные булочки с маком' },
-            { name: 'Жвачка арбузная', emoji: '🍉', price: '5 коп.', desc: 'Жевательная резинка со вкусом арбуза' },
-            { name: 'Сок с трубочкой', emoji: '🧃', price: '30 коп.', desc: 'Яблочный сок с трубочкой' }
-        ];
-
-        const popularNames = ['Трубочки вафельные Вивайли', 'Чипсы', 'Кофе', 'Чай', 'Кола'];
-        const popularDishes = allDishes.filter(d => popularNames.includes(d.name));
-        const menuDishes = allDishes.filter(d => !popularNames.includes(d.name));
-
-        // ----- КОРЗИНА, БОНУСЫ -----
+        // ===== ПЕРЕМЕННЫЕ =====
+        let allDishes = [];
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+        // ===== КОРЗИНА И БОНУСЫ =====
         function saveCart() {
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartUI();
@@ -557,7 +532,6 @@
         function updateBonusUI() {
             const bonus = parseInt(localStorage.getItem('bonus')) || 0;
             document.getElementById('bonusCount').textContent = bonus;
-            // Также обновляем подписи в модалке, если она открыта
             const availableLabel = document.getElementById('bonusAvailableLabel');
             const amountLabel = document.getElementById('bonusAmountLabel');
             if (availableLabel && amountLabel) {
@@ -608,7 +582,7 @@
             }, 2500);
         }
 
-        // ----- TELEGRAM (с кнопкой) -----
+        // ===== TELEGRAM (с кнопкой) =====
         function sendTelegramMessageWithButton(text, keyboard) {
             const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
             return fetch(url, {
@@ -630,7 +604,7 @@
             .catch(err => console.error('❌ Ошибка:', err));
         }
 
-        // ----- СОЗДАНИЕ ЗАКАЗА (с учётом бонусов) -----
+        // ===== СОЗДАНИЕ ЗАКАЗА =====
         function createOrder(wish, useBonus) {
             if (cart.length === 0) {
                 alert('Корзина пуста!');
@@ -643,13 +617,10 @@
             let bonusUsed = 0;
             let currentBonus = parseInt(localStorage.getItem('bonus')) || 0;
 
-            // Если решено использовать бонусы
             if (useBonus && currentBonus > 0) {
-                // Можно потратить все бонусы, но не больше суммы заказа
                 bonusUsed = Math.min(currentBonus, total);
                 total = total - bonusUsed;
                 currentBonus = currentBonus - bonusUsed;
-                // Сохраняем новый баланс
                 localStorage.setItem('bonus', currentBonus);
             }
 
@@ -673,15 +644,11 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Заказ сохранён на сервере:', data);
-                // Начисляем бонусы за заказ (10% от итоговой суммы, но только если не использовали бонусы, или можно и так)
-                // Обычно бонусы начисляются на полную сумму, но я начислю на итоговую, чтобы не было бесконечного цикла
-                // Начислим на полную сумму до списания бонусов, чтобы поощрять заказы
                 const bonusEarned = Math.floor((total + bonusUsed) * 0.1);
                 currentBonus += bonusEarned;
                 localStorage.setItem('bonus', currentBonus);
                 updateBonusUI();
 
-                // Сообщение в Telegram с кнопкой и информацией о бонусах
                 let msg = `🆕 <b>Новый заказ #${orderId}</b>\n\n👤 Имя: ${userName}\n📋 Блюда:\n${dishesList}\n💰 Сумма: ${total + bonusUsed} коп.`;
                 if (bonusUsed > 0) {
                     msg += `\n🎁 Списанные бонусы: ${bonusUsed} коп.\n💳 Итоговая сумма: ${total} коп.`;
@@ -721,7 +688,7 @@
             });
         }
 
-        // ----- МОДАЛКА КОРЗИНЫ -----
+        // ===== МОДАЛКА КОРЗИНЫ =====
         function renderCartModal() {
             const container = document.getElementById('cartItems');
             const totalSpan = document.getElementById('cartTotal');
@@ -754,23 +721,43 @@
                 alert('Корзина пуста!');
                 return;
             }
-            // Обновляем информацию о бонусах в модалке перед открытием
             updateBonusUI();
             document.getElementById('useBonusCheck').checked = false;
             document.getElementById('wishModal').classList.add('open');
             document.getElementById('wishText').value = '';
         }
 
-        // ----- ОТРИСОВКА МЕНЮ -----
+        // ===== ЗАГРУЗКА МЕНЮ С СЕРВЕРА =====
+        async function loadMenu() {
+            try {
+                const response = await fetch(`${SERVER_URL}/menu`);
+                allDishes = await response.json();
+
+                const popResponse = await fetch(`${SERVER_URL}/popular`);
+                const popularDishes = await popResponse.json();
+
+                renderDishes('popularGrid', popularDishes, true);
+                renderDishes('menuGrid', allDishes, false);
+            } catch (e) {
+                console.error('Ошибка загрузки меню:', e);
+                document.getElementById('menuGrid').innerHTML = '<p style="text-align:center;color:#a89588;">Не удалось загрузить меню</p>';
+            }
+        }
+
         function renderDishes(containerId, dishes, isPopular = false) {
             const container = document.getElementById(containerId);
+            if (!container) return;
+            if (!dishes || dishes.length === 0) {
+                container.innerHTML = `<div style="text-align:center;color:#a89588;padding:20px;">Нет блюд</div>`;
+                return;
+            }
             container.innerHTML = dishes.map(d => `
                 <div class="menu-item">
                     ${isPopular ? '<span class="popular-badge">Популярное</span>' : ''}
                     <span class="emoji">${d.emoji}</span>
                     <h3>${d.name}</h3>
                     <span class="price">${d.price}</span>
-                    <p>${d.desc}</p>
+                    <p>${d.desc || ''}</p>
                     <button class="add-to-cart" data-name="${d.name}">Добавить в корзину</button>
                 </div>
             `).join('');
@@ -812,7 +799,7 @@
         });
         document.getElementById('orderCartBtn').addEventListener('click', openWishModal);
 
-        // Модалка пожелания и бонусов
+        // Модалка пожелания
         document.getElementById('closeWishBtn').addEventListener('click', function() {
             document.getElementById('wishModal').classList.remove('open');
         });
@@ -825,13 +812,12 @@
             createOrder(wish, useBonus);
         });
 
-        // ----- ЗАПУСК -----
-        renderDishes('popularGrid', popularDishes, true);
-        renderDishes('menuGrid', menuDishes, false);
+        // ===== ЗАПУСК =====
+        loadMenu();
         updateCartUI();
         updateBonusUI();
 
-        // Синхронизация при изменении localStorage
+        // Синхронизация при изменении localStorage в других вкладках
         window.addEventListener('storage', function(e) {
             if (e.key === 'cart') {
                 cart = JSON.parse(e.newValue) || [];
