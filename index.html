@@ -4,19 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Вкусовщина | Премиум-ресторан</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Roboto:wght@300;400;700&display=swap');
+    <!-- ===== ДИНАМИЧЕСКИЕ СТИЛИ (ВСЕ 5 СТИЛЕЙ) ===== -->
+    <style id="dynamicStyles">
+        /* Базовые переменные */
+        :root {
+            --bg-primary: #0a0505;
+            --bg-secondary: #1a0a0a;
+            --bg-card: #1a0f0f;
+            --border-color: #2a1a15;
+            --text-primary: #f5efe8;
+            --text-secondary: #d4c9c0;
+            --text-muted: #a89588;
+            --accent: #c9a96e;
+            --accent-hover: #e8d5a8;
+            --shadow: 0 8px 32px rgba(0,0,0,0.6);
+            --glass-bg: rgba(26, 15, 15, 0.85);
+        }
 
+        /* ===== СТИЛИ ===== */
+        /* 1. Лёгкий и воздушный (скандинавский) */
+        body.style-light {
+            --bg-primary: #f8f4f0;
+            --bg-secondary: #f0ebe4;
+            --bg-card: #ffffff;
+            --border-color: #e0d6cc;
+            --text-primary: #2c241c;
+            --text-secondary: #5a4a3a;
+            --text-muted: #8a7a6a;
+            --accent: #8baa8a;
+            --accent-hover: #a8c4a7;
+            --shadow: 0 8px 32px rgba(0,0,0,0.08);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+        }
+        body.style-light .hero::before {
+            background: rgba(248, 244, 240, 0.7);
+        }
+        body.style-light .hero h1,
+        body.style-light .hero .subtitle,
+        body.style-light .hero .owner {
+            color: #2c241c;
+            text-shadow: none;
+        }
+        body.style-light .nav {
+            background: rgba(248, 244, 240, 0.95);
+            border-color: #e0d6cc;
+        }
+        body.style-light .nav .logo,
+        body.style-light .nav .nav-links a {
+            color: #2c241c;
+        }
+
+        /* 2. Яркий и дерзкий (молодёжный) */
+        body.style-modern {
+            --bg-primary: #0a0a12;
+            --bg-secondary: #12121f;
+            --bg-card: #1a1a2e;
+            --border-color: #2a2a4a;
+            --text-primary: #ffffff;
+            --text-secondary: #c8c8f0;
+            --text-muted: #8888aa;
+            --accent: #ff6b6b;
+            --accent-hover: #ff8a8a;
+            --shadow: 0 8px 32px rgba(255, 107, 107, 0.2);
+            --glass-bg: rgba(26, 26, 46, 0.9);
+        }
+        body.style-modern .hero::before {
+            background: linear-gradient(135deg, rgba(10, 10, 18, 0.8), rgba(255, 107, 107, 0.3));
+        }
+        body.style-modern .hero h1 {
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        body.style-modern .nav {
+            background: rgba(10, 10, 18, 0.95);
+            border-color: #2a2a4a;
+        }
+        body.style-modern .nav .logo span,
+        body.style-modern .nav .nav-links a:hover {
+            color: #ff6b6b;
+        }
+
+        /* 3. Классический французский */
+        body.style-french {
+            --bg-primary: #f5ede4;
+            --bg-secondary: #ede4d8;
+            --bg-card: #f8f3ec;
+            --border-color: #d4c4b0;
+            --text-primary: #2c1f18;
+            --text-secondary: #4d3a2e;
+            --text-muted: #7a6557;
+            --accent: #b88a5a;
+            --accent-hover: #d4b088;
+            --shadow: 0 8px 32px rgba(0,0,0,0.1);
+            --glass-bg: rgba(248, 243, 236, 0.92);
+        }
+        body.style-french .hero::before {
+            background: rgba(245, 237, 228, 0.75);
+        }
+        body.style-french .hero h1 {
+            color: #2c1f18;
+            text-shadow: none;
+        }
+        body.style-french .nav {
+            background: rgba(245, 237, 228, 0.95);
+            border-color: #d4c4b0;
+        }
+        body.style-french .nav .logo span {
+            color: #b88a5a;
+        }
+
+        /* 4. Минималистичный японский */
+        body.style-japanese {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-card: #2a2a2a;
+            --border-color: #3a3a3a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #c0c0c0;
+            --text-muted: #888888;
+            --accent: #d4a373;
+            --accent-hover: #e8c8a0;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --glass-bg: rgba(42, 42, 42, 0.9);
+        }
+        body.style-japanese .hero::before {
+            background: rgba(26, 26, 26, 0.8);
+        }
+        body.style-japanese .hero h1 {
+            color: #f0f0f0;
+            text-shadow: none;
+        }
+        body.style-japanese .nav {
+            background: rgba(26, 26, 26, 0.95);
+            border-color: #3a3a3a;
+        }
+
+        /* 5. Эко-стиль */
+        body.style-eco {
+            --bg-primary: #f0f5ec;
+            --bg-secondary: #e4ece0;
+            --bg-card: #f8faf5;
+            --border-color: #c8d8b8;
+            --text-primary: #2a3a2a;
+            --text-secondary: #4a5a4a;
+            --text-muted: #7a8a7a;
+            --accent: #6a9a6a;
+            --accent-hover: #8ab88a;
+            --shadow: 0 8px 32px rgba(0,0,0,0.06);
+            --glass-bg: rgba(248, 250, 245, 0.92);
+        }
+        body.style-eco .hero::before {
+            background: rgba(240, 245, 236, 0.8);
+        }
+        body.style-eco .hero h1 {
+            color: #2a3a2a;
+            text-shadow: none;
+        }
+        body.style-eco .nav {
+            background: rgba(240, 245, 236, 0.95);
+            border-color: #c8d8b8;
+        }
+        body.style-eco .nav .logo span {
+            color: #6a9a6a;
+        }
+    </style>
+
+    <!-- ===== ОСНОВНЫЕ СТИЛИ ===== -->
+    <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #0a0505;
-            color: #f5efe8;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.5s, color 0.5s;
         }
 
         .nav {
@@ -26,19 +192,21 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid #2a1a15;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background 0.5s, border-color 0.5s;
         }
         .nav .logo {
             font-family: 'Playfair Display', serif;
             font-size: 1.4rem;
-            color: #f5efe8;
+            color: var(--text-primary);
             letter-spacing: 2px;
             text-decoration: none;
+            transition: color 0.5s;
         }
-        .nav .logo span { color: #c9a96e; }
+        .nav .logo span { color: var(--accent); transition: color 0.5s; }
 
         .nav .nav-right {
             display: flex;
@@ -46,7 +214,7 @@
             gap: 12px;
         }
         .nav .bonus-display {
-            color: #c9a96e;
+            color: var(--accent);
             font-size: 0.85rem;
             display: flex;
             align-items: center;
@@ -55,23 +223,25 @@
             padding: 4px 12px;
             border-radius: 30px;
             border: 1px solid rgba(201, 169, 110, 0.2);
+            transition: background 0.5s, border-color 0.5s;
         }
         .nav .bonus-display .icon { font-size: 1.1rem; }
-        .nav .bonus-display .count { font-weight: 700; color: #f5efe8; }
+        .nav .bonus-display .count { font-weight: 700; color: var(--text-primary); }
         .nav .cart-btn {
             position: relative;
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #d4c9c0;
+            color: var(--text-secondary);
             padding: 4px;
+            transition: color 0.5s;
         }
         .nav .cart-btn .cart-count {
             position: absolute;
             top: -6px;
             right: -8px;
-            background: #c9a96e;
+            background: var(--accent);
             color: #0a0505;
             font-size: 0.65rem;
             font-weight: 700;
@@ -81,6 +251,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.5s;
         }
         .nav .menu-toggle {
             display: flex;
@@ -95,9 +266,9 @@
             display: block;
             width: 28px;
             height: 2px;
-            background: #d4c9c0;
+            background: var(--text-secondary);
             border-radius: 2px;
-            transition: 0.3s;
+            transition: 0.3s, background 0.5s;
         }
         .nav .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
         .nav .menu-toggle.active span:nth-child(2) { opacity: 0; }
@@ -113,23 +284,25 @@
             background: rgba(10, 5, 5, 0.98);
             backdrop-filter: blur(10px);
             padding: 20px;
-            border-bottom: 1px solid #2a1a15;
+            border-bottom: 1px solid var(--border-color);
             gap: 12px;
+            transition: background 0.5s, border-color 0.5s;
         }
         .nav .nav-links.open { display: flex; }
         .nav .nav-links a {
-            color: #d4c9c0;
+            color: var(--text-secondary);
             text-decoration: none;
             font-weight: 400;
             font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             padding: 12px 0;
-            border-bottom: 1px solid #1a0f0f;
+            border-bottom: 1px solid var(--border-color);
             text-align: center;
+            transition: color 0.5s, border-color 0.5s;
         }
         .nav .nav-links a:last-child { border-bottom: none; }
-        .nav .nav-links a:hover { color: #c9a96e; }
+        .nav .nav-links a:hover { color: var(--accent); }
 
         .hero {
             position: relative;
@@ -150,53 +323,45 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(10, 5, 5, 0.8) 0%, rgba(10, 5, 5, 0.4) 50%, rgba(10, 5, 5, 0.9) 100%);
+            background: rgba(13, 9, 7, 0.7);
             z-index: 1;
+            transition: background 0.5s;
         }
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            padding: 0 10px;
-        }
-        .hero-badge {
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            color: #c9a96e;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-        }
+        .hero * { position: relative; z-index: 2; }
         .hero h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.8rem, 12vw, 4.5rem);
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
             letter-spacing: 4px;
             margin-bottom: 0.05em;
             text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            transition: color 0.5s;
         }
         .hero .subtitle {
             font-size: clamp(1rem, 4vw, 1.4rem);
-            color: #e8d5a8;
+            color: var(--accent);
             letter-spacing: 4px;
             text-transform: uppercase;
             font-weight: 300;
+            transition: color 0.5s;
         }
         .hero .owner {
             margin-top: 10px;
             font-size: clamp(0.8rem, 2.5vw, 1rem);
-            color: #a89588;
+            color: var(--text-muted);
             font-style: italic;
         }
         .hero-line {
             width: 50px;
             height: 2px;
-            background: #c9a96e;
+            background: var(--accent);
             margin: 18px auto;
+            transition: background 0.5s;
         }
         .hero-desc {
             font-size: clamp(0.95rem, 2.5vw, 1.1rem);
-            color: #d4c9c0;
+            color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto 25px;
             line-height: 1.7;
@@ -204,7 +369,7 @@
         .hero-btn {
             display: inline-block;
             padding: 14px 40px;
-            background: #c9a96e;
+            background: var(--accent);
             color: #0a0505;
             text-decoration: none;
             text-transform: uppercase;
@@ -217,20 +382,21 @@
             max-width: 300px;
         }
         .hero-btn:hover {
-            background: #e8d5a8;
+            background: var(--accent-hover);
             transform: scale(1.02);
         }
 
         .contacts {
-            background: #0a0505;
+            background: var(--bg-primary);
             padding: 30px 16px;
-            border-top: 1px solid #2a1a15;
+            border-top: 1px solid var(--border-color);
             text-align: center;
+            transition: background 0.5s, border-color 0.5s;
         }
         .contacts-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.6rem;
-            color: #f5efe8;
+            color: var(--text-primary);
             margin-bottom: 20px;
         }
         .contacts-grid {
@@ -249,36 +415,37 @@
             margin-bottom: 4px;
         }
         .contact-item .label {
-            color: #c9a96e;
+            color: var(--accent);
             text-transform: uppercase;
             font-size: 0.6rem;
             letter-spacing: 1.5px;
         }
         .contact-item .value {
             font-size: 0.85rem;
-            color: #d4c9c0;
+            color: var(--text-secondary);
             text-decoration: none;
             word-break: break-word;
         }
         .contact-item .value a {
-            color: #d4c9c0;
+            color: var(--text-secondary);
             text-decoration: none;
         }
         .contact-item .value small {
             font-size: 0.65rem;
-            color: #a89588;
+            color: var(--text-muted);
             display: block;
         }
 
         .footer {
-            background: #0a0505;
+            background: var(--bg-primary);
             text-align: center;
             padding: 18px;
-            border-top: 1px solid #1a0f0f;
-            color: #6b5a4a;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 0.75rem;
+            transition: background 0.5s, border-color 0.5s, color 0.5s;
         }
-        .footer span { color: #c9a96e; }
+        .footer span { color: var(--accent); }
 
         /* Оверлей закрытия */
         .overlay-closed {
@@ -294,25 +461,26 @@
         }
         .overlay-closed.show { display: flex; }
         .closed-modal {
-            background: #1a0f0f;
-            border: 2px solid #c9a96e;
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
             border-radius: 30px;
             padding: 40px 35px;
             max-width: 460px;
             width: 100%;
             text-align: center;
             animation: modalPop 0.4s ease-out;
+            transition: background 0.5s, border-color 0.5s;
         }
         .closed-modal .closed-icon { font-size: 4.5rem; display: block; margin-bottom: 10px; }
         .closed-modal h2 {
             font-family: 'Playfair Display', serif;
             font-size: 2rem;
-            color: #f5efe8;
+            color: var(--text-primary);
             margin-bottom: 12px;
         }
         .closed-modal p {
             font-size: 1.1rem;
-            color: #d4c9c0;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
         @keyframes modalPop {
@@ -346,13 +514,13 @@
 </head>
 <body>
 
-    <!-- ОВЕРЛЕЙ ЗАКРЫТИЯ (управляется с сервера) -->
+    <!-- ОВЕРЛЕЙ ЗАКРЫТИЯ -->
     <div class="overlay-closed" id="closedOverlay">
         <div class="closed-modal">
             <span class="closed-icon">🚧</span>
             <h2>Ресторан временно закрыт</h2>
             <p>Мы работаем над улучшением нашего меню и сервиса.<br>Скоро откроемся с новыми вкусами!</p>
-            <p style="margin-top: 6px; font-size:0.9rem; color:#a89588;">Следите за обновлениями</p>
+            <p style="margin-top: 6px; font-size:0.9rem; color:var(--text-muted);">Следите за обновлениями</p>
         </div>
     </div>
 
@@ -390,7 +558,7 @@
             <div class="hero-line"></div>
             <p class="hero-desc">
                 Добро пожаловать в ресторан, где каждая деталь пропитана заботой и страстью к кулинарии.
-                Основатель <strong style="color:#c9a96e;">Родион</strong> лично контролирует качество каждого блюда.
+                Основатель <strong style="color:var(--accent);">Родион</strong> лично контролирует качество каждого блюда.
                 У нас вы почувствуете атмосферу уюта и настоящий вкус жизни.
             </p>
             <a href="menu.html" class="hero-btn">Перейти в меню</a>
@@ -438,9 +606,33 @@
     </footer>
 
     <script>
-        // ===== ПРОВЕРКА СТАТУСА РЕСТОРАНА =====
+        // ===== ЗАГРУЗКА СТИЛЯ С СЕРВЕРА =====
         const SERVER_URL = 'https://vkusovshina-server.onrender.com';
 
+        async function loadStyle() {
+            try {
+                const response = await fetch(`${SERVER_URL}/style`);
+                const data = await response.json();
+                const style = data.style || 'light';
+                document.body.className = 'style-' + style;
+                localStorage.setItem('siteStyle', style);
+            } catch (e) {
+                console.error('Ошибка загрузки стиля:', e);
+                const saved = localStorage.getItem('siteStyle');
+                if (saved) document.body.className = 'style-' + saved;
+            }
+        }
+
+        loadStyle();
+
+        // Обновляем стиль при изменении в localStorage (для синхронизации вкладок)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'siteStyle') {
+                document.body.className = 'style-' + e.newValue;
+            }
+        });
+
+        // ===== ПРОВЕРКА СТАТУСА РЕСТОРАНА =====
         async function checkRestaurantStatus() {
             try {
                 const response = await fetch(`${SERVER_URL}/status`);
@@ -456,9 +648,7 @@
             }
         }
 
-        // Проверяем при загрузке
         checkRestaurantStatus();
-        // И каждые 30 секунд
         setInterval(checkRestaurantStatus, 30000);
 
         // ===== БУРГЕР =====
@@ -475,7 +665,7 @@
             });
         });
 
-        // ===== БОНУСЫ И КОРЗИНА (обновление UI) =====
+        // ===== БОНУСЫ И КОРЗИНА =====
         function updateBonusUI() {
             const bonus = parseInt(localStorage.getItem('bonus')) || 0;
             document.getElementById('bonusCount').textContent = bonus;
